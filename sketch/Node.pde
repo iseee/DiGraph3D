@@ -1,8 +1,9 @@
 class Node {
 
-	int radius = 5;
+	int radius = 0;
 	PVector position;
 	int id;
+	float inStartX;
 
 	Node(int id) {
 		position = new PVector(0,0,0);
@@ -11,6 +12,7 @@ class Node {
 
 	void setPosition(float x, float y) {
 		position.set(x,y,0);
+		inStartX = position.x+(position.x/2);
 	}
 
 	float getX() {
@@ -30,7 +32,27 @@ class Node {
 		fill(255, 0, 0);
 		pushMatrix();
 		translate(position.x, position.y, 0);
-		sphere(radius);
+		sphere(radius==0?5:radius);
+		popMatrix();
+	
+		int steps = 150;
+		float t = (frameCount % steps)/float(steps);
+		float dx = t*(inStartX-position.x);
+		pushMatrix();
+		translate(inStartX,position.y,0);
+		fill(255);
+		if(radius != 0)
+			sphere(radius);
+		popMatrix();
+		pushMatrix();
+		if(position.x < 0) {
+			translate(inStartX-dx,position.y,0);
+		}
+		else {
+			translate(position.x+dx,position.y,0);
+		}
+		if(radius != 0)
+			sphere(radius);
 		popMatrix();
 	}
 

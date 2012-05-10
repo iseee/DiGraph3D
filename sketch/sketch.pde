@@ -13,6 +13,7 @@ int selectedNodeId = -1;
 void setup() {
 	size(WIDTH, HEIGHT, P3D);
 	font = createFont("Arial", 10);
+	sphereDetail(15);
 	_graph = new Graph();
 	
 	// generate some random graph

@@ -36,10 +36,34 @@ class Arc {
 	}
 
 	void draw() {
-		stroke(255);
+		//stroke(255);
 		noFill();
-//		bezier(x1,y1,0, ctrlPt1_x, y1,0, x2, ctrlPt2_y,0, x2,y2,0);
-		drawCylinder(x1,y1,x2,y2, radius);
+		stroke( 0, map(radius,5,25,0,255), 255);
+		bezier(x1,y1,0, ctrlPt1_x, y1,0, x2, ctrlPt2_y,0, x2,y2,0);
+		noStroke();
+		fill( 0, map(radius,5,25,0,255), 255);
+		int steps = 300;
+		float t = (frameCount % steps)/float(steps);
+		float x = bezierPoint(x1, ctrlPt1_x, x2, x2, t);
+		float y = bezierPoint(y1, y1, ctrlPt2_y, y2, t);
+		float z = 0;
+		pushMatrix();
+		translate(x,y,z);
+		sphere(radius);
+		popMatrix();
+
+		/*
+		for (int i = 0; i < steps; i++) {
+			float t = i / float(steps);
+			float x = bezierPoint(x1, ctrlPt1_x, x2, x2, t);
+			float y = bezierPoint(y1, y1, ctrlPt2_y, y2, t);
+			float z = 0;
+			pushMatrix();
+			translate(x,y,z);
+			sphere(radius);
+			popMatrix();
+		}*/
+		//drawCylinder(x1,y1,x2,y2, radius);
 	}
 
 	void drawCylinder(float fromX, float fromY, float toX, float toY, float rad) {

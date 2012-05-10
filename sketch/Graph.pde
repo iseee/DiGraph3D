@@ -57,6 +57,13 @@ class Graph {
 
 	}
 
+	Node getNode(int id) {
+		Node n = (Node)sources.get(id);
+		if(null == n)
+			n = (Node)sinks.get(id);
+		return n;
+	}
+
 	// height and width of canvas
 	void draw(int width, int height) {
 		pushMatrix();

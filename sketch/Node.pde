@@ -21,6 +21,10 @@ class Node {
 		return position.y;
 	}
 
+	void increaseRadius(float delta) {
+		radius += delta;	
+	}
+
 	void draw() {
 		noStroke();
 		fill(255, 0, 0);

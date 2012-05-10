@@ -18,6 +18,8 @@ class Arc {
 		this.source = source;
 		this.dest = dest;
 		setFlow(flow);
+		source.increaseRadius(radius);
+		dest.increaseRadius(radius);
 		x1 = source.getX();
 		x2 = dest.getX();
 		y1 = source.getY();

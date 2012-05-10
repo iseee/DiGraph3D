@@ -8,7 +8,7 @@ int y_rotation = 0;
 
 PFont font;
 Graph _graph;
-int selectedNode = -1;
+int selectedNodeId = -1;
 
 void setup() {
 	size(WIDTH, HEIGHT, P3D);
@@ -17,7 +17,7 @@ void setup() {
 	
 	// generate some random graph
 	int numSource = int(random(1,5));
-	int numSink = int(random(1,10));
+	int numSink = int(random(1,5));
 	for(int i = 0; i < numSink; i++) {
 		Node dst = new Node((i+1)*10);
 		_graph.addSink(dst);
@@ -30,7 +30,7 @@ void setup() {
 		for(int j = 0; j < numSink; j++) {
 			// add some random edges
 			int rnd = int(random(0,1000));
-			if(rnd<300 || rnd>600)
+			if(rnd<500)
 				_graph.addArc(i+1,(j+1)*10,rnd%20+5);
 		}
 	}
@@ -52,8 +52,9 @@ void draw() {
 	fill(255);
 	textSize(15);
 	noStroke();
-	if(selectedNode != -1) {
-		text("Node: "+ selectedNode, -WIDTH/2+10,-HEIGHT/2+20);
+	if(selectedNodeId != -1) {
+		text("Node: "+ selectedNodeId, -WIDTH/2+10,-HEIGHT/2+20);
+		text("Radius: "+ _graph.getNode(selectedNodeId).radius, -WIDTH/2+10, -HEIGHT/2+45); 
 	}
 
 	rotateX(x_rotation * PI/500);
@@ -65,12 +66,12 @@ void draw() {
 	for(int i=0; i<nodes.size(); i++) {
 		n = nodes.get(i);
 		if(n.selected()) {
-			selectedNode = n.id;
+			selectedNodeId = n.id;
 			found = true;
 		}
 	}
 	if(!found)
-		selectedNode = -1;
+		selectedNodeId = -1;
 
 _graph.draw(WIDTH, HEIGHT);
 }

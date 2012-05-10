@@ -32,7 +32,7 @@ class Node {
 		fill(255, 0, 0);
 		pushMatrix();
 		translate(position.x, position.y, 0);
-		sphere(radius==0?5:radius);
+		sphere(radius==0?5:radius); // draw node even if no incoming/outcoming edges
 		popMatrix();
 	
 		int steps = 150;
@@ -41,7 +41,7 @@ class Node {
 		pushMatrix();
 		translate(inStartX,position.y,0);
 		fill(255);
-		if(radius != 0)
+		if(radius != 0) // processing.js renders a small sphere even if call sphere(0), so explicitly check
 			sphere(radius);
 		popMatrix();
 		pushMatrix();

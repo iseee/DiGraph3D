@@ -4,10 +4,12 @@ class Node {
 	PVector position;
 	int id;
 	float inStartX;
+	ArrayList assocArcPositions;
 
 	Node(int id) {
 		position = new PVector(0,0,0);
 		this.id = id;
+		assocArcPositions = new ArrayList();
 	}
 
 	void setPosition(float x, float y) {
@@ -27,11 +29,47 @@ class Node {
 		radius += delta;	
 	}
 
+	// when associating new arc, add the width of that arc
+	// to the positions list. This will tell the subsequent
+	// arc it's y coordinate later on. 
+	// Tell the arc its position in the list
+	int associateArc(float flowIncrease) {
+		increaseRadius(flowIncrease);
+		if(assocArcPositions.size() > 0) {
+			float prevElem = (Float) assocArcPositions.get(assocArcPositions.size()-1);
+			assocArcPositions.add(prevElem+flowIncrease*2);
+		}
+		else {
+			assocArcPositions.add(flowIncrease*2);	
+		}
+		
+		return assocArcPositions.size() - 1;
+
+	}
+
+	float getArcPosition(int index) {
+		// should give the value in index -1, or zero if first arc
+		if(index == 0) {
+			return 0;
+		}
+
+		if(index < 0 || index > assocArcPositions.size()-1) {
+			return -1;
+		}
+
+		return (Float) assocArcPositions.get(index-1);
+	}
+
+	int getRadius() {
+		return radius;
+	}
+
 	void draw() {
 		noStroke();
 		fill(255, 0, 0);
 		pushMatrix();
 		translate(position.x, position.y, 0);
+		// draw a hexahedron to represent the node
 		//sides
 		beginShape(QUAD_STRIP);
 		vertex(-radius/4, radius, -radius/4); 	//1
@@ -88,8 +126,6 @@ class Node {
 	boolean selected() {
 		float screen_x = screenX(position.x, position.y, position.z);
 		float screen_y = screenY(position.x, position.y, position.z);
-		//float screen_x = position.x;
-		//float screen_y = position.y;
 		return ( (mouseX > screen_x-radius && mouseX < screen_x+radius) && (mouseY < screen_y+radius && mouseY > screen_y-radius) );
 	}
 }

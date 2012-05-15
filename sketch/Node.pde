@@ -32,9 +32,37 @@ class Node {
 		fill(255, 0, 0);
 		pushMatrix();
 		translate(position.x, position.y, 0);
-		sphere(radius==0?5:radius); // draw node even if no incoming/outcoming edges
+		//sides
+		beginShape(QUAD_STRIP);
+		vertex(-radius/4, radius, -radius/4); 	//1
+		vertex(-radius/4, -radius, -radius/4); //2
+		vertex(radius/4, radius, -radius/4); 	//3
+		vertex(radius/4,-radius, -radius/4); 	//4
+		vertex(radius/4, radius, radius/4);		//5
+		vertex(radius/4, -radius, radius/4);	//6
+		vertex(-radius/4, radius, radius/4);	//7
+		vertex(-radius/4, -radius, radius/4);	//8
+		vertex(-radius/4, radius, -radius/4);	
+		vertex(-radius/4, -radius, -radius/4);
+		endShape();
+		//top
+		beginShape();
+		vertex(-radius/4, radius, -radius/4); 	//1
+		vertex(radius/4, radius, -radius/4); 	//3
+		vertex(radius/4, radius, radius/4);		//5
+		vertex(-radius/4, radius, radius/4);	//7
+		endShape();
+		//bottom();
+		beginShape();
+		vertex(-radius/4, -radius, -radius/4); //2
+		vertex(radius/4,-radius, -radius/4); 	//4
+		vertex(radius/4, -radius, radius/4);	//6
+		vertex(-radius/4, -radius, radius/4);	//8
+		endShape();
+		//sphere(radius==0?5:radius); // draw node even if no incoming/outcoming edges
 		popMatrix();
-	
+
+		// animation of incoming/outgoing while spheres
 		int steps = 150;
 		float t = (frameCount % steps)/float(steps);
 		float dx = t*(inStartX-position.x);
@@ -51,8 +79,9 @@ class Node {
 		else {
 			translate(position.x+dx,position.y,0);
 		}
-		if(radius != 0)
+		if(radius != 0) {
 			sphere(radius);
+		}
 		popMatrix();
 	}
 

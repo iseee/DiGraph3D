@@ -60,6 +60,18 @@ class Node {
 		return (Float) assocArcPositions.get(index-1);
 	}
 
+	// when one of the associated arcs flows change, we
+	// need to update this nodes radius, and the positions
+	// of the arcs on the node
+	void updateArcPositions(int index, float newArcFlow) {
+		float prevFlow = (Float) assocArcPositions.get(index);
+		float delta = 2*newArcFlow - prevFlow;
+		increaseRadius(newArcFlow - (prevFlow/2));
+		for(int i = index; i < assocArcPositions.size(); i++) {
+			assocArcPositions.set(i, (Float) assocArcPositions.get(i)+delta);
+		}
+	}
+
 	int getRadius() {
 		return radius;
 	}

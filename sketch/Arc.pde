@@ -2,6 +2,7 @@ class Arc {
 
 	Node source;
 	Node dest;
+	float origFlow;
 	float flow;
 	float radius;
 	PVector ctrlPt1;
@@ -12,6 +13,7 @@ class Arc {
 	Arc(Node source, Node dest, float flow) {
 		this.source = source;
 		this.dest = dest;
+		origFlow = flow;
 		setFlow(flow);
 		sourceOffset = source.associateArc(radius);
 		destOffset = dest.associateArc(radius);
@@ -23,6 +25,12 @@ class Arc {
 	void setFlow(float flow) {
 		this.flow = flow;
 		radius = flow;
+	}
+
+	void updateFlow(float multiplier) {
+		setFlow(origFlow*multiplier);
+		source.updateArcPositions(sourceOffset, flow);
+		dest.updateArcPositions(destOffset, flow);
 	}
 
 	void draw() {

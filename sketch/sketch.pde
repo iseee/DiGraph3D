@@ -97,7 +97,12 @@ void mouseDragged() {
 	x_rotation += (lastMouseY-mouseY);
 }
 
-void updateRate(float rate) {
+void updateArcRate(int arcIndex, float rate) {
 	if(null != _graph)
-		_graph.updateRate(rate);
+		_graph.updateArcRate(arcIndex, rate);
+}
+
+void updateArcFlow(int arcIndex, float multiplier){
+	if(null != _graph)
+		_graph.updateArcFlow(arcIndex, multiplier);
 }

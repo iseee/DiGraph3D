@@ -92,12 +92,19 @@ class Graph {
 		return result;
 	}
 
-	void updateRate(float rate) {
-		Arc a;
-		Iterator it = arcs.iterator();
-		while(it.hasNext()) {
-			a = (Arc)it.next();
+	ArrayList<Arc> getArcs() {
+		return arcs;
+	}
+
+	void updateArcRate(int arcIndex, float rate) {
+		Arc a = arcs.get(arcIndex);
+		if(null != a)
 			a.updateRate(rate);
-		}
+	}
+
+	void updateArcFlow(int arcIndex, float multiplier) {
+		Arc a = arcs.get(arcIndex);
+		if(null != a)
+			a.updateFlow(multiplier);
 	}
 }

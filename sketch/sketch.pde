@@ -41,7 +41,7 @@ void setup() {
 
 void draw() {
 	lights();
-	background(50);
+	background(150);
 
 	float cameraY = HEIGHT/2.0;
 	float fov = PI/3.0;
@@ -95,4 +95,9 @@ void mouseDragged() {
 		setLastMouse();
 	y_rotation += (mouseX-lastMouseX);
 	x_rotation += (lastMouseY-mouseY);
+}
+
+void updateRate(float rate) {
+	if(null != _graph)
+		_graph.updateRate(rate);
 }

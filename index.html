@@ -56,15 +56,18 @@
       <h1>Interactive Sankey Diagram</h1>
       <p>Click and drag to rotate the scene. Hover over red nodes to see node ID and radius.<br>Refresh to generate a new graph.</p>
 	
-		<canvas data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
+		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 
-  		<input type="range" min="0" max="50" value="0" step="5" onchange="showValue(this.value)" />
-  		<span id="range">0</span>
+		<span class="label">Rate</span>
+  		<input type="range" min="0" max="100" value="50" step="1" onchange="showValue(this.value/100)" />
+  		<span id="range">0.5</span>
   		<script type="text/javascript">
 		function showValue(newValue)
 		{
 			document.getElementById("range").innerHTML=newValue;
+			rateSliderChanged(newValue);
 		}
+		
   		</script>
 
 
@@ -87,6 +90,7 @@
     <script src="assets/js/bootstrap-carousel.js"></script>
     <script src="assets/js/bootstrap-typeahead.js"></script>
 	 <script src="assets/js/processing-1.3.6.js"></script>
+	 <script src="assets/js/sketchScript.js"></script>
 
   </body>
 </html>

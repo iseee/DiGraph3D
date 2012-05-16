@@ -106,7 +106,7 @@ class Node {
 		float dx = t*(inStartX-position.x);
 		pushMatrix();
 		translate(inStartX,position.y,0);
-		fill(255);
+		fill(255, 100);
 		if(radius != 0) // processing.js renders a small sphere even if call sphere(0), so explicitly check
 			sphere(radius);
 		popMatrix();

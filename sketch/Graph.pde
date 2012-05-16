@@ -91,4 +91,13 @@ class Graph {
 		result.addAll(new ArrayList(sinks.values()));
 		return result;
 	}
+
+	void updateRate(float rate) {
+		Arc a;
+		Iterator it = arcs.iterator();
+		while(it.hasNext()) {
+			a = (Arc)it.next();
+			a.updateRate(rate);
+		}
+	}
 }

@@ -5,11 +5,14 @@ class Node {
 	int id;
 	float inStartX;
 	ArrayList assocArcPositions;
+	String name;
+	PFont font = createFont("Arial", 10);
 
-	Node(int id) {
+	Node(int id, String name) {
 		position = new PVector(0,0,0);
 		this.id = id;
 		assocArcPositions = new ArrayList();
+		this.name = name;
 	}
 
 	void setPosition(float x, float y) {
@@ -110,6 +113,14 @@ class Node {
 		vertex(-radius/4, -radius, radius/4);	//8
 		endShape();
 		//sphere(radius==0?5:radius); // draw node even if no incoming/outcoming edges
+		textSize(12);
+		fill(255);
+		float xpos;
+		if(position.x < 0)
+			xpos = -80;
+		else 
+			xpos = radius<10?10:radius;
+		text(name, xpos, 0);
 		popMatrix();
 /*
 		// animation of incoming/outgoing while spheres

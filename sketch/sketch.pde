@@ -14,29 +14,66 @@ void setup() {
 	size(WIDTH, HEIGHT, P3D);
 	font = createFont("Arial", 10);
 	sphereDetail(15);
-	_graph = new Graph();
-	
-	// generate some random graph
+	_graph = genCanadaSankeyGraph(); 
+}
+
+Graph genCanadaSankeyGraph() {
+	Graph g = new Graph();
+	String[] srcNames = {"Uranium", "Hydro", "Natural Gas", "Biomass", "Coal", "Petroleum"};
+	String[] dstNames = {"Residential", "Industrial", "Transportation", "Non-fuel", "Export"};
+	Node n;
+	for(int i=0; i < srcNames.length; i++) {
+		n = new Node(i+1, srcNames[i]);
+		g.addSource(n);
+	}
+	for(int i=0; i < dstNames.length; i++) {
+		n = new Node((i+1)*10, dstNames[i]);
+		g.addSink(n);
+	}
+	g.addArc(1,50,7.61);		
+	g.addArc(1,10,0.5);
+	g.addArc(1,20,0.5);
+	g.addArc(2,10,0.8);
+	g.addArc(2,20,0.3);
+	g.addArc(3,50,4.15);
+	g.addArc(3,10,1.25);
+	g.addArc(3,20,1.72);
+	g.addArc(3,30,0.01);
+	g.addArc(3,40,0.43);
+	g.addArc(4,10,0.2);
+	g.addArc(4,20,0.5);
+	g.addArc(5,10,1.5);
+	g.addArc(5,20,0.2);
+	g.addArc(5,50,0.74);
+	g.addArc(6,10,0.26);
+	g.addArc(6,20,0.88);
+	g.addArc(6,30,2.34);
+	g.addArc(6,40,0.47);
+	g.addArc(6,50,4.45);
+	return g;
+}
+
+Graph genRandomGraph() {
+	Graph graph = new Graph();
 	int numSource = int(random(1,5));
 	int numSink = int(random(1,5));
 	for(int i = 0; i < numSink; i++) {
-		Node dst = new Node((i+1)*10);
-		_graph.addSink(dst);
+		Node dst = new Node((i+1)*10, "fdsa");
+		graph.addSink(dst);
 	}
 	for(int j = 0; j < numSource; j++) {
-		Node src = new Node(j+1);
-		_graph.addSource(src);
+		Node src = new Node(j+1, "asdf");
+		graph.addSource(src);
 	}
 	for(int i = 0; i < numSource; i++) {
 		for(int j = 0; j < numSink; j++) {
 			// add some random edges
 			int rnd = int(random(0,1000));
 			if(rnd<500)
-				_graph.addArc(i+1,(j+1)*10,rnd%20+5);
+				graph.addArc(i+1,(j+1)*10,rnd%20+5);
 		}
 	}
-
-	
+	return graph;
 }
 
 void draw() {

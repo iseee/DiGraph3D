@@ -24,13 +24,13 @@ class Arc {
 
 	void setFlow(float flow) {
 		this.flow = flow;
-		radius = flow;
+		radius = flow*6;
 	}
 
 	void updateFlow(float multiplier) {
 		setFlow(origFlow*multiplier);
-		source.updateArcPositions(sourceOffset, flow);
-		dest.updateArcPositions(destOffset, flow);
+		source.updateArcPositions(sourceOffset, radius);
+		dest.updateArcPositions(destOffset, radius);
 	}
 
 	void draw() {
@@ -42,7 +42,7 @@ class Arc {
 		drawBand(topOfBandSrc, topOfBandDst);
 		//stroke(255);
 
-		fill( 0, map(flow,5,25,0,255), 255, 100);
+		fill( 0, map(radius,5,25,0,255), 255, 100);
 		float steps = 150/rate;
 		float t = (frameCount % steps)/steps;
 		float x = bezierPoint(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
@@ -56,7 +56,7 @@ class Arc {
 
 	void drawBand(float srcTop, float dstTop) {
 		//noFill();
-		fill( 0, map(flow,5,25,0,255), 255, 100);
+		fill( 0, map(radius,5,25,0,255), 255, 100);
 		beginShape(QUAD_STRIP);
 		int steps = 300;
 		float t;

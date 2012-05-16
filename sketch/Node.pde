@@ -111,14 +111,14 @@ class Node {
 		endShape();
 		//sphere(radius==0?5:radius); // draw node even if no incoming/outcoming edges
 		popMatrix();
-
+/*
 		// animation of incoming/outgoing while spheres
 		int steps = 150;
 		float t = (frameCount % steps)/float(steps);
 		float dx = t*(inStartX-position.x);
+		fill(255, 100);
 		pushMatrix();
 		translate(inStartX,position.y,0);
-		fill(255, 100);
 		if(radius != 0) // processing.js renders a small sphere even if call sphere(0), so explicitly check
 			sphere(radius);
 		popMatrix();
@@ -133,6 +133,7 @@ class Node {
 			sphere(radius);
 		}
 		popMatrix();
+*/
 	}
 
 	boolean selected() {

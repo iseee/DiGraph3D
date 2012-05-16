@@ -32,7 +32,7 @@ class Graph {
 
 	void updateSourcePositions() {
 		float dy = height/float(sources.size()+1);
-		float dx = width/5.0;
+		float dx = width/10.0;
 		Node n;
 		Iterator it = sources.values().iterator();
 		int i = 1;
@@ -45,7 +45,7 @@ class Graph {
 	
 	void updateSinkPositions() {
 		float dy = height/float(sinks.size()+1);
-		float dx = width/5.0;
+		float dx = width/10.0;
 		Node n;
 		Iterator it = sinks.values().iterator();
 		int i = 1;

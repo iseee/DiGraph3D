@@ -106,3 +106,13 @@ void updateArcFlow(int arcIndex, float multiplier){
 	if(null != _graph)
 		_graph.updateArcFlow(arcIndex, multiplier);
 }
+
+void keyPressed() {
+	if(key == 'r' || key == 'R')
+		resetRotation();
+}
+
+void resetRotation() {
+	x_rotation = 0;
+	y_rotation = 0;
+}

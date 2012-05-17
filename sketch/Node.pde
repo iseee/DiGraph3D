@@ -9,7 +9,7 @@ class Node {
 	PFont font = createFont("Arial", 10);
 	int level;
 
-
+	
 
 	Node(int id, String name, int level) {
 		position = new PVector(0,0,0);
@@ -85,7 +85,10 @@ class Node {
 
 	void draw() {
 		noStroke();
-		fill(255, 0, 0);
+		float alpha = 100;
+		if(selected())
+			alpha = 255;
+		fill(255, 0, 0, alpha);
 		pushMatrix();
 		translate(position.x, position.y, 0);
 		// draw a hexahedron to represent the node
@@ -116,7 +119,8 @@ class Node {
 		vertex(radius/4, -radius, radius/4);	//6
 		vertex(-radius/4, -radius, radius/4);	//8
 		endShape();
-		//sphere(radius==0?5:radius); // draw node even if no incoming/outcoming edges
+	
+		// label
 		textSize(12);
 		fill(255);
 		float xpos;
@@ -131,7 +135,7 @@ class Node {
 	boolean selected() {
 		float screen_x = screenX(position.x, position.y, position.z);
 		float screen_y = screenY(position.x, position.y, position.z);
-		return ( (mouseX > screen_x-radius && mouseX < screen_x+radius) && (mouseY < screen_y+radius && mouseY > screen_y-radius) );
+		return ( (mouseX > screen_x-radius/4 && mouseX < screen_x+radius/4) && (mouseY < screen_y+radius && mouseY > screen_y-radius) );
 	}
 }
 

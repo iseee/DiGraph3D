@@ -9,6 +9,8 @@ class Node {
 	PFont font = createFont("Arial", 10);
 	int level;
 
+
+
 	Node(int id, String name, int level) {
 		position = new PVector(0,0,0);
 		this.id = id;
@@ -55,14 +57,14 @@ class Node {
 	float getArcPosition(int index) {
 		// should give the value in index -1, or zero if first arc
 		if(index == 0) {
-			return 0;
+			return position.y-radius;
 		}
 
 		if(index < 0 || index > assocArcPositions.size()-1) {
 			return -1;
 		}
 
-		return (Float) assocArcPositions.get(index-1);
+		return position.y-radius+((Float) assocArcPositions.get(index-1));
 	}
 
 	// when one of the associated arcs flows change, we
@@ -124,29 +126,6 @@ class Node {
 			xpos = radius<10?10:radius;
 		text(name, xpos, 0);
 		popMatrix();
-/*
-		// animation of incoming/outgoing while spheres
-		int steps = 150;
-		float t = (frameCount % steps)/float(steps);
-		float dx = t*(inStartX-position.x);
-		fill(255, 100);
-		pushMatrix();
-		translate(inStartX,position.y,0);
-		if(radius != 0) // processing.js renders a small sphere even if call sphere(0), so explicitly check
-			sphere(radius);
-		popMatrix();
-		pushMatrix();
-		if(position.x < 0) {
-			translate(inStartX-dx,position.y,0);
-		}
-		else {
-			translate(position.x+dx,position.y,0);
-		}
-		if(radius != 0) {
-			sphere(radius);
-		}
-		popMatrix();
-*/
 	}
 
 	boolean selected() {

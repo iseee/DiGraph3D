@@ -35,9 +35,9 @@ class Arc {
 
 	void draw() {
 		// calculate the offsets of the arc, based on total arcs of the node, so that
-		// multiple arcs don't overlap at the beginnin/end
-		float topOfBandSrc = (source.getY()-source.getRadius())+source.getArcPosition(sourceOffset);	
-		float topOfBandDst = (dest.getY()-dest.getRadius())+dest.getArcPosition(destOffset);
+		// multiple arcs don't overlap at the beginning/end
+		float topOfBandSrc = source.getArcPosition(sourceOffset);	
+		float topOfBandDst = dest.getArcPosition(destOffset);
 
 		drawBand(topOfBandSrc, topOfBandDst);
 		//stroke(255);
@@ -56,7 +56,7 @@ class Arc {
 
 	void drawBand(float srcTop, float dstTop) {
 		//noFill();
-		fill( 0, map(radius,5,25,0,255), 255, 100);
+		fill(0, map(radius,5,25,0,255), 255, 100);
 		beginShape(QUAD_STRIP);
 		int steps = 300;
 		float t;

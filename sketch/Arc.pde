@@ -57,8 +57,9 @@ class Arc {
 	void drawBand(float srcTop, float dstTop) {
 		noStroke();
 		float alpha = 100;
-		if(source.selected() || dest.selected())
+		if(source.selected() || dest.selected()) {
 			alpha = 255;
+		}
 		fill(0, map(radius,5,25,0,255), 255, alpha);
 		beginShape(QUAD_STRIP);
 		int steps = 300;

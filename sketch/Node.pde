@@ -9,8 +9,6 @@ class Node {
 	PFont font = createFont("Arial", 10);
 	int level;
 
-	
-
 	Node(int id, String name, int level) {
 		position = new PVector(0,0,0);
 		this.id = id;
@@ -102,8 +100,8 @@ class Node {
 		vertex(radius/4, -radius, radius/4);	//6
 		vertex(-radius/4, radius, radius/4);	//7
 		vertex(-radius/4, -radius, radius/4);	//8
-		vertex(-radius/4, radius, -radius/4);	
-		vertex(-radius/4, -radius, -radius/4);
+		vertex(-radius/4, radius, -radius/4);	//1	
+		vertex(-radius/4, -radius, -radius/4);	//2
 		endShape();
 		//top
 		beginShape();

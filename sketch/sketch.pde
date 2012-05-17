@@ -100,7 +100,7 @@ void draw() {
 	textSize(15);
 	noStroke();
 	if(selectedNodeId != -1) {
-		text("Node: "+ selectedNodeId, -WIDTH/2+10,-HEIGHT/2+20);
+		text("Node: "+ _graph.getNode(selectedNodeId).name, -WIDTH/2+10,-HEIGHT/2+20);
 		text("Radius: "+ _graph.getNode(selectedNodeId).radius, -WIDTH/2+10, -HEIGHT/2+45); 
 	}
 

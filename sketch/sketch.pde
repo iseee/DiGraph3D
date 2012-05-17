@@ -23,13 +23,22 @@ Graph genCanadaSankeyGraph() {
 	String[] dstNames = {"Residential", "Industrial", "Transportation", "Non-fuel", "Export"};
 	Node n;
 	for(int i=0; i < srcNames.length; i++) {
-		n = new Node(i+1, srcNames[i]);
-		g.addSource(n);
+		n = new Node(i+1, srcNames[i],0);
+		g.addNode(n);
 	}
 	for(int i=0; i < dstNames.length; i++) {
-		n = new Node((i+1)*10, dstNames[i]);
-		g.addSink(n);
+		n = new Node((i+1)*10, dstNames[i],3);
+		g.addNode(n);
 	}
+
+	n = new Node(100, "Electric Power", 1);
+	g.addNode(n);
+	n = new Node(101, "Distributed Electricity", 2);
+	g.addNode(n);
+	
+	g.addArc(100,101,2.0);
+	g.addArc(5,100,1.16);
+
 	g.addArc(1,50,7.61);		
 	g.addArc(1,10,0.5);
 	g.addArc(1,20,0.5);
@@ -52,7 +61,7 @@ Graph genCanadaSankeyGraph() {
 	g.addArc(6,50,4.45);
 	return g;
 }
-
+/*
 Graph genRandomGraph() {
 	Graph graph = new Graph();
 	int numSource = int(random(1,5));
@@ -75,7 +84,7 @@ Graph genRandomGraph() {
 	}
 	return graph;
 }
-
+*/
 void draw() {
 	lights();
 	background(150);

@@ -7,12 +7,14 @@ class Node {
 	ArrayList assocArcPositions;
 	String name;
 	PFont font = createFont("Arial", 10);
+	int level;
 
-	Node(int id, String name) {
+	Node(int id, String name, int level) {
 		position = new PVector(0,0,0);
 		this.id = id;
 		assocArcPositions = new ArrayList();
 		this.name = name;
+		this.level = level;
 	}
 
 	void setPosition(float x, float y) {

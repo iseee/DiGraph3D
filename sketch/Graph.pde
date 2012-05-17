@@ -1,28 +1,20 @@
 class Graph {
 
-	HashMap sources;
-	HashMap sinks;
+	HashMap[] nodes  = {new HashMap(), new HashMap(), new HashMap(), new HashMap()};
 	ArrayList<Arc> arcs;
 
 	Graph() {
-		sources = new HashMap();
-		sinks = new HashMap();	
 		arcs = new ArrayList();
 	}
 
-	void addSource(Node node) {
-		sources.put(node.id, node);
-		updateSourcePositions();
-	}
-
-	void addSink(Node node) {
-		sinks.put(node.id, node);
-		updateSinkPositions();
+	void addNode(Node node) {
+		nodes[node.level].put(node.id, node);
+		updateNodePositions();
 	}
 
 	boolean addArc(int srcID, int dstID, float flow) {
-		Node src = (Node)sources.get(srcID);
-		Node dst = (Node)sinks.get(dstID);
+		Node src = getNode(srcID);
+		Node dst = getNode(dstID);
 		if(src==null || dst==null) 
 			return false;
 		
@@ -30,37 +22,32 @@ class Graph {
 		return true;
 	}
 
-	void updateSourcePositions() {
-		float dy = height/float(sources.size()+1);
-		float dx = width/10.0;
-		Node n;
-		Iterator it = sources.values().iterator();
-		int i = 1;
-		while(it.hasNext()){
-			n = (Node)it.next();
-			n.setPosition(-1*width/2+dx, -1*height/2+i*dy);
-			i++;
+	// update each level
+	void updateNodePositions() {
+		for(int j = 0; j<nodes.length; j++) {	
+			float dy = height/float(nodes[j].size()+1);
+			float dx = width/11.0;
+			Node n;
+			Iterator it = nodes[j].values().iterator();
+			int i = 1;
+			while(it.hasNext()){
+				n = (Node)it.next();
+				n.setPosition(-1*width/2+dx*(3*j+1), -1*height/2+i*dy);
+				i++;
+			}
 		}
 	}
 	
-	void updateSinkPositions() {
-		float dy = height/float(sinks.size()+1);
-		float dx = width/10.0;
-		Node n;
-		Iterator it = sinks.values().iterator();
-		int i = 1;
-		while(it.hasNext()){
-			n = (Node)it.next();
-			n.setPosition(width/2-dx, -1*height/2+i*dy);
-			i++;
-		}
-
-	}
-
 	Node getNode(int id) {
-		Node n = (Node)sources.get(id);
-		if(null == n)
-			n = (Node)sinks.get(id);
+		boolean found = false;
+		Node n = null;
+		for(int i = 0; i < nodes.length; i++) {
+			n = (Node)nodes[i].get(id);
+			if(null != n) {
+				found = true;
+				break;
+			}
+		}
 		return n;
 	}
 
@@ -73,22 +60,21 @@ class Graph {
 			a.draw();
 		}
 		Node n;
-		Iterator it = sources.values().iterator();
-		while(it.hasNext()) {
-			n = (Node)it.next();
-			n.draw();
-		}
-		it = sinks.values().iterator();
-		while(it.hasNext()) {
-			n = (Node)it.next(); 
-			n.draw();
+		for(int i = 0; i < nodes.length; i++) {
+			Iterator it = nodes[i].values().iterator();
+			while(it.hasNext()) {
+				n = (Node)it.next(); 
+				n.draw();
+			}
 		}
 		popMatrix();
 	}
 
 	ArrayList<Node> getNodes() {
-		ArrayList result = new ArrayList(sources.values());
-		result.addAll(new ArrayList(sinks.values()));
+		ArrayList result = new ArrayList(nodes[0].values());
+		result.addAll(nodes[1].values());
+		result.addAll(nodes[2].values());
+		result.addAll(nodes[3].values());
 		return result;
 	}
 

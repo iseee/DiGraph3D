@@ -36,29 +36,32 @@ Graph genCanadaSankeyGraph() {
 	n = new Node(101, "Distributed Electricity", 2);
 	g.addNode(n);
 	
-	g.addArc(100,101,2.0);
-	g.addArc(5,100,1.16);
+	g.addArc(100,101,2.0);	// elec to dist
+	g.addArc(101,10,1.02); 	// dist res
+	g.addArc(101,20,0.86);	// dist indus
 
-	g.addArc(1,50,7.61);		
-	g.addArc(1,10,0.5);
-	g.addArc(1,20,0.5);
-	g.addArc(2,10,0.8);
-	g.addArc(2,20,0.3);
-	g.addArc(3,50,4.15);
-	g.addArc(3,10,1.25);
-	g.addArc(3,20,1.72);
-	g.addArc(3,30,0.01);
-	g.addArc(3,40,0.43);
-	g.addArc(4,10,0.2);
-	g.addArc(4,20,0.5);
-	g.addArc(5,10,1.5);
-	g.addArc(5,20,0.2);
-	g.addArc(5,50,0.74);
-	g.addArc(6,10,0.26);
-	g.addArc(6,20,0.88);
-	g.addArc(6,30,2.34);
-	g.addArc(6,40,0.47);
-	g.addArc(6,50,4.45);
+
+	g.addArc(1,50,7.61);		// uranium to export
+	g.addArc(1,100,0.81);	// uranium to elec
+	g.addArc(2,100,1.2);		// hydro to elec
+	g.addArc(3,100,0.34);	// nat gas to elec
+	g.addArc(3,50,4.15);		// nat gas to export
+	g.addArc(3,10,1.25);		// ng res
+	g.addArc(3,20,1.72);		// ng indus
+	g.addArc(3,30,0.01);		// ng trans
+	g.addArc(3,40,0.43);		// ng nonfuel
+	g.addArc(4,10,0.11);		// bio res
+	g.addArc(4,20,0.5);		// bio indus
+	g.addArc(4,100,0.8);		// bio elec
+	g.addArc(5,100,1.16);	// coal elec
+	g.addArc(5,20,0.18);		// coal indus
+	g.addArc(5,50,0.74);		// coal export
+	g.addArc(6,100,0.14);	// petrol elec
+	g.addArc(6,10,0.26);		// petrol res	
+	g.addArc(6,20,0.88);		// petrol ind
+	g.addArc(6,30,2.34);		// petrol trans
+	g.addArc(6,40,0.47);		// petrol nonfuel
+	g.addArc(6,50,4.45);		// petrol export
 	return g;
 }
 /*

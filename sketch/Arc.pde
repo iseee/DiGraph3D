@@ -42,16 +42,18 @@ class Arc {
 		drawBand(topOfBandSrc, topOfBandDst);
 		//stroke(255);
 
-		fill( 0, map(radius,5,25,0,255), 255, 100);
-		float steps = 150/rate;
-		float t = (frameCount % steps)/steps;
-		float x = bezierPoint(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
-		float y = bezierPoint(topOfBandSrc+radius, ctrlPt1.y, ctrlPt2.y, topOfBandDst+radius, t);
-		float z = 0;
-		pushMatrix();
-		translate(x,y,z);
-		sphere(radius);
-		popMatrix();
+		if(source.selected() || dest.selected()) {
+			fill( 0, map(radius,5,25,0,255), 255, 100);
+			float steps = 150/rate;
+			float t = (frameCount % steps)/steps;
+			float x = bezierPoint(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
+			float y = bezierPoint(topOfBandSrc+radius, ctrlPt1.y, ctrlPt2.y, topOfBandDst+radius, t);
+			float z = 0;
+			pushMatrix();
+			translate(x,y,z);
+			sphere(radius);
+			popMatrix();
+		}
 	}
 
 	void drawBand(float srcTop, float dstTop) {

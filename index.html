@@ -59,19 +59,12 @@
 	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 
+		<span class="label">Selected Node</span><span id="selectedNode"></span><br>
 		<span class="label">Arc 0 Rate</span>
-  		<input type="range" min="0" max="100" value="50" step="1" onchange="showValue(this.value/100)" />
-  		<span id="range">0.5</span>
+  		<input type="range" min="0" max="100" value="50" step="1" onchange="rateSliderChanged(0,this.value/100)" />
 		<br>
 		<span class="label">Arc 0 Volume</span>
   		<input type="range" min="0" max="100" value="50" step="1" onchange="arcFlowSliderChanged(0,this.value/50)" />
-
-  		<script type="text/javascript">
-		function showValue(newValue)
-		{
-			document.getElementById("range").innerHTML=newValue;
-			rateSliderChanged(0,newValue);
-		}
 		
   		</script>
 

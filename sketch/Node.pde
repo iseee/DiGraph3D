@@ -84,8 +84,12 @@ class Node {
 	void draw() {
 		noStroke();
 		float alpha = 100;
-		if(selected())
+		if(selected()){
 			alpha = 255;
+			if(null != js) {
+				js.displaySelectedNodeInfo(name, radius);
+			}
+		}
 		fill(255, 0, 0, alpha);
 		pushMatrix();
 		translate(position.x, position.y, 0);

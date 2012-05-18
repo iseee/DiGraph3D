@@ -8,7 +8,17 @@ int y_rotation = 0;
 
 PFont font;
 Graph _graph;
-int selectedNodeId = -1;
+
+JavaScript js;
+
+interface JavaScript {
+	void displaySelectedNodeInfo(String name, float flow);	
+}
+
+void bindJavascript(JavaScript jscript) {
+	js = jscript;
+}
+
 
 void setup() {
 	size(WIDTH, HEIGHT, P3D);
@@ -99,31 +109,10 @@ void draw() {
 	perspective(fov, aspect, cameraZ/10.0, cameraZ*10.0);
 	translate(WIDTH/2, HEIGHT/2, 0);
 
-	fill(255);
-	textSize(15);
-	noStroke();
-	if(selectedNodeId != -1) {
-		text("Node: "+ _graph.getNode(selectedNodeId).name, -WIDTH/2+10,-HEIGHT/2+20);
-		text("Radius: "+ _graph.getNode(selectedNodeId).radius, -WIDTH/2+10, -HEIGHT/2+45); 
-	}
-
 	rotateX(x_rotation * PI/500);
 	rotateY(y_rotation * PI/500);
-	ArrayList<Node> nodes = _graph.getNodes();
-	Node n;
-	// find selected node after rotation, but write text before
-	boolean found = false;
-	for(int i=0; i<nodes.size(); i++) {
-		n = nodes.get(i);
-		if(n.selected()) {
-			selectedNodeId = n.id;
-			found = true;
-		}
-	}
-	if(!found)
-		selectedNodeId = -1;
-
-_graph.draw(WIDTH, HEIGHT);
+	
+	_graph.draw(WIDTH, HEIGHT);
 }
 
 void mousePressed() {

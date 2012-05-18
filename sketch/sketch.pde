@@ -176,3 +176,7 @@ void resetRotation() {
 	x_rotation = 0;
 	y_rotation = 0;
 }
+
+Graph getGraph() {
+	return _graph;
+}

@@ -84,6 +84,10 @@ class Graph {
 		return arcs;
 	}
 
+	Arc[] getArcsArray() {
+		return arcs.toArray();
+	}
+
 	void updateArcRate(int arcIndex, float rate) {
 		Arc a = arcs.get(arcIndex);
 		if(null != a)

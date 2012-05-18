@@ -6,7 +6,6 @@ class Node {
 	float inStartX;
 	ArrayList assocArcPositions;
 	String name;
-	PFont font = createFont("Arial", 10);
 	int level;
 
 	Node(int id, String name, int level) {
@@ -91,6 +90,7 @@ class Node {
 			}
 		}
 		fill(255, 0, 0, alpha);
+		stroke(100);
 		pushMatrix();
 		translate(position.x, position.y, 0);
 		// draw a hexahedron to represent the node
@@ -126,11 +126,15 @@ class Node {
 		textSize(12);
 		fill(255);
 		float xpos;
-		if(position.x < 0)
-			xpos = -80;
-		else 
+		if(position.x < 0){
+			textAlign(RIGHT);
+			xpos = 0;
+		}
+		else {
+			textAlign(LEFT);
 			xpos = radius<10?10:radius;
-		text(name, xpos, 0);
+		}
+		text(name, 0, 0, 50);
 		popMatrix();
 	}
 

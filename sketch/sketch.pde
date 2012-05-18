@@ -30,7 +30,7 @@ void setup() {
 Graph genCanadaSankeyGraph() {
 	Graph g = new Graph();
 	String[] srcNames = {"Uranium", "Hydro", "Natural Gas", "Biomass", "Coal", "Petroleum"};
-	String[] dstNames = {"Residential", "Industrial", "Transportation", "Non-fuel", "Export"};
+	String[] dstNames = {"Residential", "Industrial", "Transportation", "Non-fuel"};
 	Node n;
 	for(int i=0; i < srcNames.length; i++) {
 		n = new Node(i+1, srcNames[i],0);
@@ -41,6 +41,8 @@ Graph genCanadaSankeyGraph() {
 		g.addNode(n);
 	}
 
+	n = new Node(50, "Export", 4);
+	g.addNode(n);
 	n = new Node(100, "Electric Power", 1);
 	g.addNode(n);
 	n = new Node(101, "Distributed Electricity", 2);

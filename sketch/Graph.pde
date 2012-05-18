@@ -1,6 +1,6 @@
 class Graph {
 
-	HashMap[] nodes  = {new HashMap(), new HashMap(), new HashMap(), new HashMap()};
+	HashMap[] nodes  = {new HashMap(), new HashMap(), new HashMap(), new HashMap(), new HashMap()};
 	ArrayList<Arc> arcs;
 
 	Graph() {
@@ -24,15 +24,17 @@ class Graph {
 
 	// update each level
 	void updateNodePositions() {
+		// iterate over levels
 		for(int j = 0; j<nodes.length; j++) {	
 			float dy = height/float(nodes[j].size()+1);
-			float dx = width/11.0;
+			float dx = width/10.0;
 			Node n;
 			Iterator it = nodes[j].values().iterator();
 			int i = 1;
+			// iterate over nodes in this level
 			while(it.hasNext()){
 				n = (Node)it.next();
-				n.setPosition(-1*width/2+dx*(3*j+1), -1*height/2+i*dy);
+				n.setPosition(-1*width/2+dx*(2*j+1), -1*height/2+i*dy);
 				i++;
 			}
 		}

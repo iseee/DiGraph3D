@@ -45,11 +45,24 @@ Graph genCanadaSankeyGraph() {
 	g.addNode(n);
 	n = new Node(101, "Distributed Electricity", 2);
 	g.addNode(n);
+	n = new Node(200, "Electrical System Losses", 4);
+	g.addNode(n);
+	n = new Node(201, "Lost Energy", 4);
+	g.addNode(n);
+	n = new Node(202, "Useful Energy", 4);
+	g.addNode(n);
 	
 	g.addArc(100,101,2.0);	// elec to dist
 	g.addArc(101,10,1.02); 	// dist res
 	g.addArc(101,20,0.86);	// dist indus
 
+	g.addArc(100,200,1.82); // elec to elec loss
+	g.addArc(10, 201,0.77); // res to lost
+	g.addArc(20, 201,1.62); // ind to lost
+	g.addArc(30, 201,1.89); // trans to lost
+	g.addArc(10,202,1.87);	// res to useful
+	g.addArc(20,202,2.52);	// ind to useful
+	g.addArc(30,202,0.47);	// trans to useful
 
 	g.addArc(1,50,7.61);		// uranium to export
 	g.addArc(1,100,0.81);	// uranium to elec

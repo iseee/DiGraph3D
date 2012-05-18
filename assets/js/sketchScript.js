@@ -24,4 +24,7 @@ function displaySelectedNodeInfo(name, flow) {
 	document.getElementById("selectedNode").innerHTML=name+": "+flow.toFixed(2);
 }
 
-
+function timeSliderChanged(val) {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.updateArcLerps(val);
+}

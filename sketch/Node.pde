@@ -1,12 +1,12 @@
 class Node {
 
-	int radius = 0;
 	PVector position;
 	int id;
 	float inStartX;
 	ArrayList assocArcPositions;
 	String name;
 	int level;
+	float totalFlow = 0;
 
 	Node(int id, String name, int level) {
 		position = new PVector(0,0,0);
@@ -29,22 +29,23 @@ class Node {
 		return position.y;
 	}
 
-	void increaseRadius(float delta) {
-		radius += delta;	
+	void increaseFlow(float delta) {
+		totalFlow += delta;
 	}
+
 
 	// when associating new arc, add the width of that arc
 	// to the positions list. This will tell the subsequent
 	// arc it's y coordinate later on. 
 	// Tell the arc its position in the list
 	int associateArc(float flowIncrease) {
-		increaseRadius(flowIncrease);
+		increaseFlow(flowIncrease);
 		if(assocArcPositions.size() > 0) {
 			float prevElem = (Float) assocArcPositions.get(assocArcPositions.size()-1);
-			assocArcPositions.add(prevElem+flowIncrease*2);
+			assocArcPositions.add(prevElem+flowIncrease*SCALE);
 		}
 		else {
-			assocArcPositions.add(flowIncrease*2);	
+			assocArcPositions.add(flowIncrease*SCALE);	
 		}
 		
 		return assocArcPositions.size() - 1;
@@ -54,31 +55,27 @@ class Node {
 	float getArcPosition(int index) {
 		// should give the value in index -1, or zero if first arc
 		if(index == 0) {
-			return position.y-radius;
+			return position.y-(totalFlow*SCALE/2);
 		}
 
 		if(index < 0 || index > assocArcPositions.size()-1) {
 			return -1;
 		}
 
-		return position.y-radius+((Float) assocArcPositions.get(index-1));
+		return position.y-(totalFlow*SCALE/2)+((Float) assocArcPositions.get(index-1));
 	}
 
 	// when one of the associated arcs flows change, we
-	// need to update this nodes radius, and the positions
+	// need to update this nodes flow, and the positions
 	// of the arcs on the node
-	void updateArcPositions(int index, float newArcFlow) {
-		float prevFlow = (Float) assocArcPositions.get(index);
-		float delta = 2*newArcFlow - prevFlow;
-		increaseRadius(newArcFlow - (prevFlow/2));
+	void updateArcPositions(int index, float flowDelta) {
+		increaseFlow(flowDelta);
+		float delta = SCALE*flowDelta;
 		for(int i = index; i < assocArcPositions.size(); i++) {
 			assocArcPositions.set(i, (Float) assocArcPositions.get(i)+delta);
 		}
 	}
 
-	int getRadius() {
-		return radius;
-	}
 
 	void draw() {
 		noStroke();
@@ -86,9 +83,13 @@ class Node {
 		if(selected()){
 			alpha = 255;
 			if(null != js) {
-				js.displaySelectedNodeInfo(name, radius);
+				js.displaySelectedNodeInfo(name, totalFlow);
 			}
 		}
+
+		float half_width = totalFlow*SCALE/8;
+		float half_height = totalFlow*SCALE/2;
+
 		fill(255, 0, 0, alpha);
 		stroke(100);
 		pushMatrix();
@@ -96,52 +97,50 @@ class Node {
 		// draw a hexahedron to represent the node
 		//sides
 		beginShape(QUAD_STRIP);
-		vertex(-radius/4, radius, -radius/4); 	//1
-		vertex(-radius/4, -radius, -radius/4); //2
-		vertex(radius/4, radius, -radius/4); 	//3
-		vertex(radius/4,-radius, -radius/4); 	//4
-		vertex(radius/4, radius, radius/4);		//5
-		vertex(radius/4, -radius, radius/4);	//6
-		vertex(-radius/4, radius, radius/4);	//7
-		vertex(-radius/4, -radius, radius/4);	//8
-		vertex(-radius/4, radius, -radius/4);	//1	
-		vertex(-radius/4, -radius, -radius/4);	//2
+		vertex(-half_width, half_height, -half_width); 	//1
+		vertex(-half_width, -half_height, -half_width); //2
+		vertex(half_width, half_height, -half_width); 	//3
+		vertex(half_width,-half_height, -half_width); 	//4
+		vertex(half_width, half_height, half_width);		//5
+		vertex(half_width, -half_height, half_width);	//6
+		vertex(-half_width, half_height, half_width);	//7
+		vertex(-half_width, -half_height, half_width);	//8
+		vertex(-half_width, half_height, -half_width);	//1	
+		vertex(-half_width, -half_height, -half_width);	//2
 		endShape();
 		//top
 		beginShape();
-		vertex(-radius/4, radius, -radius/4); 	//1
-		vertex(radius/4, radius, -radius/4); 	//3
-		vertex(radius/4, radius, radius/4);		//5
-		vertex(-radius/4, radius, radius/4);	//7
+		vertex(-half_width, half_height, -half_width); 	//1
+		vertex(half_width, half_height, -half_width); 	//3
+		vertex(half_width, half_height, half_width);		//5
+		vertex(-half_width, half_height, half_width);	//7
 		endShape();
 		//bottom();
 		beginShape();
-		vertex(-radius/4, -radius, -radius/4); //2
-		vertex(radius/4,-radius, -radius/4); 	//4
-		vertex(radius/4, -radius, radius/4);	//6
-		vertex(-radius/4, -radius, radius/4);	//8
+		vertex(-half_width, -half_height, -half_width); //2
+		vertex(half_width,-half_height, -half_width); 	//4
+		vertex(half_width, -half_height, half_width);	//6
+		vertex(-half_width, -half_height, half_width);	//8
 		endShape();
 	
 		// label
 		textSize(12);
 		fill(255);
-		float xpos;
 		if(position.x < 0){
 			textAlign(RIGHT);
-			xpos = 0;
 		}
 		else {
 			textAlign(LEFT);
-			xpos = radius<10?10:radius;
 		}
 		text(name, 0, 0, 50);
 		popMatrix();
 	}
 
 	boolean selected() {
+		float _width = totalFlow*SCALE/2;
 		float screen_x = screenX(position.x, position.y, position.z);
 		float screen_y = screenY(position.x, position.y, position.z);
-		return ( (mouseX > screen_x-radius/4 && mouseX < screen_x+radius/4) && (mouseY < screen_y+radius && mouseY > screen_y-radius) );
+		return ( (mouseX > screen_x-_width && mouseX < screen_x+_width) && (mouseY < screen_y+_width && mouseY > screen_y-_width) );
 	}
 }
 

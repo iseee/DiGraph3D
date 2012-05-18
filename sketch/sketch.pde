@@ -1,5 +1,6 @@
 int WIDTH = 1200;
 int HEIGHT = 800;
+int SCALE = 6;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -54,39 +55,39 @@ Graph genCanadaSankeyGraph() {
 	n = new Node(202, "Useful Energy", 4);
 	g.addNode(n);
 	
-	g.addArc(100,101,2.0);	// elec to dist
-	g.addArc(101,10,1.02); 	// dist res
-	g.addArc(101,20,0.86);	// dist indus
+	g.addArc(100,101,2.0, 0.5);	// elec to dist
+	g.addArc(101,10,1.02, 0.5); 	// dist res
+	g.addArc(101,20,0.86, 0.5);	// dist indus
 
-	g.addArc(100,200,1.82); // elec to elec loss
-	g.addArc(10, 201,0.77); // res to lost
-	g.addArc(20, 201,1.62); // ind to lost
-	g.addArc(30, 201,1.89); // trans to lost
-	g.addArc(10,202,1.87);	// res to useful
-	g.addArc(20,202,2.52);	// ind to useful
-	g.addArc(30,202,0.47);	// trans to useful
+	g.addArc(100,200,1.82, 0.5); // elec to elec loss
+	g.addArc(10, 201,0.77, 0.5); // res to lost
+	g.addArc(20, 201,1.62, 0.5); // ind to lost
+	g.addArc(30, 201,1.89, 0.5); // trans to lost
+	g.addArc(10,202,1.87, 0.5);	// res to useful
+	g.addArc(20,202,2.52, 0.5);	// ind to useful
+	g.addArc(30,202,0.47, 0.5);	// trans to useful
 
-	g.addArc(1,50,7.61);		// uranium to export
-	g.addArc(1,100,0.81);	// uranium to elec
-	g.addArc(2,100,1.2);		// hydro to elec
-	g.addArc(3,100,0.34);	// nat gas to elec
-	g.addArc(3,50,4.15);		// nat gas to export
-	g.addArc(3,10,1.25);		// ng res
-	g.addArc(3,20,1.72);		// ng indus
-	g.addArc(3,30,0.01);		// ng trans
-	g.addArc(3,40,0.43);		// ng nonfuel
-	g.addArc(4,10,0.11);		// bio res
-	g.addArc(4,20,0.5);		// bio indus
-	g.addArc(4,100,0.8);		// bio elec
-	g.addArc(5,100,1.16);	// coal elec
-	g.addArc(5,20,0.18);		// coal indus
-	g.addArc(5,50,0.74);		// coal export
-	g.addArc(6,100,0.14);	// petrol elec
-	g.addArc(6,10,0.26);		// petrol res	
-	g.addArc(6,20,0.88);		// petrol ind
-	g.addArc(6,30,2.34);		// petrol trans
-	g.addArc(6,40,0.47);		// petrol nonfuel
-	g.addArc(6,50,4.45);		// petrol export
+	g.addArc(1,50,7.61, 0.5);		// uranium to export
+	g.addArc(1,100,0.81, 0.5);	// uranium to elec
+	g.addArc(2,100,1.2, 0.5);		// hydro to elec
+	g.addArc(3,100,0.34, 0.5);	// nat gas to elec
+	g.addArc(3,50,4.15, 0.5);		// nat gas to export
+	g.addArc(3,10,1.25, 0.5);		// ng res
+	g.addArc(3,20,1.72, 0.5);		// ng indus
+	g.addArc(3,30,0.01, 0.5);		// ng trans
+	g.addArc(3,40,0.43, 0.5);		// ng nonfuel
+	g.addArc(4,10,0.11, 0.5);		// bio res
+	g.addArc(4,20,0.5, 0.5);		// bio indus
+	g.addArc(4,100,0.8, 0.5);		// bio elec
+	g.addArc(5,100,1.16, 0.5);	// coal elec
+	g.addArc(5,20,0.18, 0.5);		// coal indus
+	g.addArc(5,50,0.74, 0.5);		// coal export
+	g.addArc(6,100,0.14, 0.5);	// petrol elec
+	g.addArc(6,10,0.26, 0.5);		// petrol res	
+	g.addArc(6,20,0.88, 0.5);		// petrol ind
+	g.addArc(6,30,2.34, 0.5);		// petrol trans
+	g.addArc(6,40,0.47, 0.5);		// petrol nonfuel
+	g.addArc(6,50,4.45, 0.5);		// petrol export
 	return g;
 }
 /*
@@ -158,6 +159,11 @@ void updateArcRate(int arcIndex, float rate) {
 void updateArcFlow(int arcIndex, float multiplier){
 	if(null != _graph)
 		_graph.updateArcFlow(arcIndex, multiplier);
+}
+
+void updateArcLerps(float val) {
+	if(null != _graph)
+		_graph.updateArcLerps(val);
 }
 
 void keyPressed() {

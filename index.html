@@ -59,11 +59,15 @@
 	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 
+		<span class="label">Selected Node</span>
+		<span id="selectedNode"></span>
+		<br>
+		<span class="label">See the future...</span>
+		Present Day
+		<input type="range" min="0" max="100" value="0" step="1" onchange="timeSliderChanged(this.value/100)" />
+		2050
+		
 		<table>
-		<tr>
-			<td><span class="label">Selected Node</span></td>
-			<td><span id="selectedNode"></span></td>
-		</tr>
 		<tr>
 			<td><span class="label">Arc 0 Rate</span></td>
   			<td><input type="range" min="0" max="100" value="50" step="1" onchange="rateSliderChanged(0,this.value/100)" /></td>

@@ -117,7 +117,7 @@ Graph genRandomGraph() {
 */
 void draw() {
 	lights();
-	background(150);
+	background(0);
 
 	float cameraY = HEIGHT/2.0;
 	float fov = PI/3.0;

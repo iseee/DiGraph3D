@@ -173,8 +173,11 @@ class Node {
 
 	void drawCarbonDioxBubbles() {
 		float radius = carbonEmission*totalFlow*SCALE;
+		float dy = position.y-(totalFlow*SCALE/2)-(radius/4)*(frameCount%radius);
+		if(dy<-height/2+radius)
+			dy = -height/2+radius;
 		pushMatrix();
-		translate(position.x, position.y-(totalFlow*SCALE/2)-(radius/4)*(frameCount%radius));
+		translate(position.x, dy);
 		noStroke();
 		fill(100);
 		sphere(frameCount%radius);
@@ -183,8 +186,11 @@ class Node {
 
 	void drawWaterBubbles() {
 		float radius = waterEmission*totalFlow*SCALE;
+		float dy = position.y+(totalFlow*SCALE/2)+(radius/4)*(frameCount%radius);
+		if(dy>height/2-radius)
+			dy = height/2-radius;
 		pushMatrix();
-		translate(position.x, position.y+(totalFlow*SCALE/2)+(radius/4)*(frameCount%radius));
+		translate(position.x, dy);
 		noStroke();
 		fill(0,0, 255);
 		sphere(frameCount%radius);

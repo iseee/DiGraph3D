@@ -7,7 +7,7 @@ class Arc {
 	PVector ctrlPt1;
 	PVector ctrlPt2;
 	int sourceOffset, destOffset;
-	float rate = 0.5;
+	float rate = 5;
 
 	// param for hack to show transistion between two 'states'
 	float futureFlow;

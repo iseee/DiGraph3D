@@ -19,8 +19,9 @@ function bindJavascript() {
 		setTimeout(bindJavascript, 250);
 }
 
-function displaySelectedNodeInfo(name, flow) {
-	document.getElementById("selectedNode").innerHTML=name+": "+flow.toFixed(2);
+function displaySelectedNodeInfo(name, flow, carbonFactor, waterFactor) {
+	html = "<b>"+name + "</b>: <i>TotalFlow</i>="+flow.toFixed(2)+" <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
+	document.getElementById("selectedNode").innerHTML=html;
 }
 
 function timeSliderChanged(val) {

@@ -7,8 +7,30 @@ class Node {
 	String name;
 	int level;
 	float totalFlow = 0;
+	// a fraction of the total flow can be shown as emmisions
+	float carbonEmission = 0;
+	float waterEmission = 0;
 
 	Node(int id, String name, int level) {
+		initialize(id, name, level);	
+	}
+
+	Node(int id, String name, int level, float carbonEmission, float waterEmission) {
+		initialize(id, name, level);
+		if(carbonEmission < 0)
+			carbonEmission = 0;
+		if(carbonEmission > 1)
+			carbonEmission = 1;
+		if(waterEmission < 0)
+			waterEmission = 0;
+		if(waterEmission > 1)
+			waterEmission = 1;
+		this.carbonEmission = carbonEmission;
+		this.waterEmission = waterEmission;
+		
+	}
+
+	void initialize(int id, String name, int level) {
 		position = new PVector(0,0,0);
 		this.id = id;
 		assocArcPositions = new ArrayList();
@@ -83,8 +105,9 @@ class Node {
 		if(selected()){
 			alpha = 255;
 			if(null != js) {
-				js.displaySelectedNodeInfo(name, totalFlow);
+				js.displaySelectedNodeInfo(name, totalFlow, carbonEmission, waterEmission);
 			}
+			drawEmissions();
 		}
 
 		float half_width = totalFlow*SCALE/8;
@@ -142,5 +165,31 @@ class Node {
 		float screen_y = screenY(position.x, position.y, position.z);
 		return ( (mouseX > screen_x-_width && mouseX < screen_x+_width) && (mouseY < screen_y+_width && mouseY > screen_y-_width) );
 	}
+
+	void drawEmissions() {
+		drawCarbonDioxBubbles();
+		drawWaterBubbles();
+	}
+
+	void drawCarbonDioxBubbles() {
+		float radius = carbonEmission*totalFlow*SCALE;
+		pushMatrix();
+		translate(position.x, position.y-(totalFlow*SCALE/2)-(radius/4)*(frameCount%radius));
+		noStroke();
+		fill(100);
+		sphere(frameCount%radius);
+		popMatrix();
+	}
+
+	void drawWaterBubbles() {
+		float radius = waterEmission*totalFlow*SCALE;
+		pushMatrix();
+		translate(position.x, position.y+(totalFlow*SCALE/2)+(radius/4)*(frameCount%radius));
+		noStroke();
+		fill(0,0, 255);
+		sphere(frameCount%radius);
+		popMatrix();
+	}
+
 }
 

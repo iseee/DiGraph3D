@@ -13,7 +13,7 @@ Graph _graph;
 JavaScript js;
 
 interface JavaScript {
-	void displaySelectedNodeInfo(String name, float flow);	
+	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, waterEmission);	
 }
 
 void bindJavascript(JavaScript jscript) {
@@ -34,7 +34,7 @@ Graph genCanadaSankeyGraph() {
 	String[] dstNames = {"Residential", "Industrial", "Transportation", "Non-fuel"};
 	Node n;
 	for(int i=0; i < srcNames.length; i++) {
-		n = new Node(i+1, srcNames[i],0);
+		n = new Node(i+1, srcNames[i],0,random(100)/100,random(100/100));
 		g.addNode(n);
 	}
 	for(int i=0; i < dstNames.length; i++) {
@@ -44,7 +44,7 @@ Graph genCanadaSankeyGraph() {
 
 	n = new Node(50, "Export", 4);
 	g.addNode(n);
-	n = new Node(100, "Electric Power", 1);
+	n = new Node(100, "Electric Power", 1, 0.07,0.2);		// with emmisions
 	g.addNode(n);
 	n = new Node(101, "Distributed Electricity", 2);
 	g.addNode(n);

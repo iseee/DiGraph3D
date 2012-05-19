@@ -28,6 +28,7 @@ void setup() {
 	_graph = genCanadaSankeyGraph(); 
 }
 
+// hard code this for now, add data src query later
 Graph genCanadaSankeyGraph() {
 	Graph g = new Graph();
 	String[] srcNames = {"Uranium", "Hydro", "Natural Gas", "Biomass", "Coal", "Petroleum"};

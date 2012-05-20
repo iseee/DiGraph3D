@@ -13,7 +13,7 @@ Graph _graph;
 JavaScript js;
 
 interface JavaScript {
-	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, waterEmission);	
+	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
 }
 
 void bindJavascript(JavaScript jscript) {

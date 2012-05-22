@@ -81,6 +81,10 @@ class Arc {
 			textAlign(RIGHT);
 			text(nf(flow,1,2), dest.getX()-10, topDst, TEXT_Z); 
 		}
+		if(dest.selected()) {
+			textAlign(LEFT);
+			text(nf(flow,1,2), source.getX()+10, topSrc, TEXT_Z);
+		}
 	}
 	/*
 	 * Draw the arc, as a band from source to destination. The width of the band is

@@ -2,6 +2,8 @@ int WIDTH = 1200;
 int HEIGHT = 800;
 int SCALE = 8;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
 int TEXT_Z = 50; 
+int BG_COLOR = 0;
+int TEXT_COLOR = 255;
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -118,7 +120,7 @@ Graph genRandomGraph() {
 */
 void draw() {
 	lights();
-	background(0);
+	background(BG_COLOR);
 
 	float cameraY = HEIGHT/2.0;
 	float fov = PI/3.0;

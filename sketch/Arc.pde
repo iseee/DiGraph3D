@@ -75,7 +75,7 @@ class Arc {
 	}
 
 	void showArcInfo(float topSrc, float topDst) {
-		fill(255);
+		fill(TEXT_COLOR);
 		textSize(15);
 		if(source.selected()) {
 			textAlign(RIGHT);

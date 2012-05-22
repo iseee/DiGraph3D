@@ -169,7 +169,7 @@ class Node {
 	
 		// label
 		textSize(12);
-		fill(255);
+		fill(TEXT_COLOR);
 		if(position.x < 0){
 			textAlign(RIGHT);
 		}

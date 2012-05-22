@@ -7,7 +7,7 @@ class Node {
 	String name;
 	int level;
 	float totalFlow = 0;
-	// a fraction of the total flow can be shown as emmisions
+	// a fraction of the total flow can be shown as emissions
 	float carbonEmission = 0;
 	float waterEmission = 0;
 
@@ -159,6 +159,12 @@ class Node {
 		popMatrix();
 	}
 
+	/*
+	 * Determine if this node is selected.
+	 * Selected means that the mouse is hovering over the node.
+	 * This will work even when the scene is rotated, using the screenX/Y functions.
+	 * returns	true if mouse over node, false otherwise
+	 */
 	boolean selected() {
 		float _width = totalFlow*SCALE/2;
 		float screen_x = screenX(position.x, position.y, position.z);
@@ -171,6 +177,11 @@ class Node {
 		drawWaterBubbles();
 	}
 
+	/*
+	 * Draw spheres rising from a node, to represent carbon emissions.
+	 * The sphere rises only to the top of the screen, it grows in radius as
+	 * it rises
+	 */
 	void drawCarbonDioxBubbles() {
 		float radius = carbonEmission*totalFlow*SCALE;
 		float dy = position.y-(totalFlow*SCALE/2)-(radius/4)*(frameCount%radius);
@@ -184,6 +195,11 @@ class Node {
 		popMatrix();
 	}
 
+	/*
+	 * Draw a sphere falling downwards from the node, to represent water emissions.
+	 * Sphere increases in radius as it falls, only falls to bottom of screen, where
+	 * it stops.
+	 */
 	void drawWaterBubbles() {
 		float radius = waterEmission*totalFlow*SCALE;
 		float dy = position.y+(totalFlow*SCALE/2)+(radius/4)*(frameCount%radius);

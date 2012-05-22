@@ -3,7 +3,6 @@ class Node {
 	PVector position;
 	int id;
 	float inStartX;
-	ArrayList assocArcPositions;
 	ArrayList assocInArcPositions;
 	ArrayList assocOutArcPositions;
 	String name;
@@ -26,7 +25,6 @@ class Node {
 
 	void initialize(int id, String name, int level) {
 		position = new PVector(0,0,0);
-		assocArcPositions = new ArrayList();
 		assocInArcPositions = new ArrayList();
 		assocOutArcPositions = new ArrayList();
 		this.id = id;

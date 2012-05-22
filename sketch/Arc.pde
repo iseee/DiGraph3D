@@ -43,7 +43,7 @@ class Arc {
 	/*
 	 * The arc can be between two different states, the original flow (origFlow) and
 	 * some future flow (futureFlow). We linearly interpolate between the two states
-	 * @param val: linear interpolation parameter, 0<=val<=1
+	 * @param val: linear interpolation parameter, 0<=val<=1 (enforced by boundParam)
 	 */
 	void updateLerp(float val) {
 		setFlow(lerp(origFlow, futureFlow, boundParam(val)));
@@ -70,9 +70,18 @@ class Arc {
 			translate(x,y,z);
 			sphere(_width/2);
 			popMatrix();
+			showArcInfo(topOfBandSrc, topOfBandDst);
 		}
 	}
 
+	void showArcInfo(float topSrc, float topDst) {
+		fill(255);
+		textSize(18);
+		if(source.selected()) {
+			textAlign(RIGHT);
+			text(nf(flow,1,2), dest.getX()-10, topDst, TEXT_Z); 
+		}
+	}
 	/*
 	 * Draw the arc, as a band from source to destination. The width of the band is
 	 * proportional to the flow of the arc. Arc will be drawn less opaque if neither associated node is selected. 

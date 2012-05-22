@@ -1,5 +1,16 @@
+/*
+ * Represents a directed graph, consisting of nodes and arcs.
+ */
+
 class Graph {
 
+	// nodes are arranged in 'levels'. A level is a section of the canvas. The canvas is split into five
+	// sections, which we refer to as levels. A level consists of some nodes, which will be drawn stacked
+	// vertically. This is kind of a hack. Rather than automatically determining the horizontal spacing
+	// between nodes based on connectivity, we manually enter which level they should be in. So nodes that
+	// are only sources, will be in level 1 (left most section of canvas), and nodes which are only destinations
+	// are usually in level 5 (rightmost). The intermediate nodes which have both incoming and outgoing arcs, fill
+	// the other intermediate levels
 	HashMap[] nodes  = {new HashMap(), new HashMap(), new HashMap(), new HashMap(), new HashMap()};
 	ArrayList<Arc> arcs;
 

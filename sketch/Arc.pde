@@ -48,6 +48,7 @@ class Arc {
 
 		drawBand(_width, topOfBandSrc, topOfBandDst);
 
+		// if the source or destination or the arc is selected, draw a sphere 'flowing' along the arc
 		if(source.selected() || dest.selected()) {
 			fill( 0, map(_width,5,25,0,255), 255, 100);
 			float steps = 150/rate;
@@ -68,7 +69,8 @@ class Arc {
 		int steps = 300;
 		float t;
 		float x, y, z;
-
+		
+		// solid color if source/dest selected, more transparant otherwise
 		if(source.selected() || dest.selected()) {
 			alpha = 255;
 		}

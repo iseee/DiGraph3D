@@ -17,23 +17,25 @@ class Node {
 
 	Node(int id, String name, int level, float carbonEmission, float waterEmission) {
 		initialize(id, name, level);
-		if(carbonEmission < 0)
-			carbonEmission = 0;
-		if(carbonEmission > 1)
-			carbonEmission = 1;
-		if(waterEmission < 0)
-			waterEmission = 0;
-		if(waterEmission > 1)
-			waterEmission = 1;
-		this.carbonEmission = carbonEmission;
-		this.waterEmission = waterEmission;
-		
+		this.carbonEmission = boundParam(carbonEmission);
+		this.waterEmission = boundParam(waterEmission);
+	}
+
+	/*
+	 * Bound param between 0 and 1
+	 */
+	float boundParam(float param) {
+		if(param < 0)
+			return 0;
+		if(param > 1)
+			return 1;
+		return param;
 	}
 
 	void initialize(int id, String name, int level) {
 		position = new PVector(0,0,0);
-		this.id = id;
 		assocArcPositions = new ArrayList();
+		this.id = id;
 		this.name = name;
 		this.level = level;
 	}
@@ -155,7 +157,7 @@ class Node {
 		else {
 			textAlign(LEFT);
 		}
-		text(name, 0, 0, 50);
+		text(name, 0, 0, TEXT_Z);
 		popMatrix();
 	}
 

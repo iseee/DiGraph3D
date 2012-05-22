@@ -1,6 +1,7 @@
 int WIDTH = 1200;
 int HEIGHT = 800;
 int SCALE = 8;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
+int TEXT_Z = 50; 
 
 int lastMouseX = 0;
 int lastMouseY = 0;

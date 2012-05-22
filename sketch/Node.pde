@@ -21,17 +21,6 @@ class Node {
 		this.waterEmission = boundParam(waterEmission);
 	}
 
-	/*
-	 * Bound param between 0 and 1
-	 */
-	float boundParam(float param) {
-		if(param < 0)
-			return 0;
-		if(param > 1)
-			return 1;
-		return param;
-	}
-
 	void initialize(int id, String name, int level) {
 		position = new PVector(0,0,0);
 		assocArcPositions = new ArrayList();

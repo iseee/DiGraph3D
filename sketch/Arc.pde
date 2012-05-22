@@ -46,7 +46,7 @@ class Arc {
 	 * @param val: linear interpolation parameter, 0<=val<=1
 	 */
 	void updateLerp(float val) {
-		setFlow(lerp(origFlow, futureFlow, val));
+		setFlow(lerp(origFlow, futureFlow, boundParam(val)));
 	}
 
 	void draw() {

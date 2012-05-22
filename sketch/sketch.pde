@@ -182,3 +182,17 @@ void resetRotation() {
 Graph getGraph() {
 	return _graph;
 }
+
+
+/*
+ * Bound param between 0 and 1
+ */
+float boundParam(float param) {
+	if(param < 0)
+		return 0;
+	if(param > 1)
+		return 1;
+	return param;
+}
+
+

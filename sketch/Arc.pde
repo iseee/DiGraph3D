@@ -25,6 +25,11 @@ class Arc {
 		ctrlPt2 = new PVector(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
 	}
 
+	/*
+	 * When the flow of the arc is changed, the source and destination nodes of the
+	 * arc must be notified, so they can update the stacking positions of the various
+	 * arcs associated with the node.
+	 */
 	void setFlow(float newFlow) {
 		source.updateArcPositions(sourceOffset, newFlow-flow);
 		dest.updateArcPositions(destOffset, newFlow-flow);
@@ -35,6 +40,11 @@ class Arc {
 		setFlow(origFlow*multiplier);
 	}
 
+	/*
+	 * The arc can be between two different states, the original flow (origFlow) and
+	 * some future flow (futureFlow). We linearly interpolate between the two states
+	 * @param val: linear interpolation parameter, 0<=val<=1
+	 */
 	void updateLerp(float val) {
 		setFlow(lerp(origFlow, futureFlow, val));
 	}
@@ -63,6 +73,14 @@ class Arc {
 		}
 	}
 
+	/*
+	 * Draw the arc, as a band from source to destination. The width of the band is
+	 * proportional to the flow of the arc. Arc will be drawn less opaque if neither associated node is selected. 
+	 * @param _width: the width of the arc, proportional to flow
+	 * @param srcTop: y coord of the top of the band at the source. This depends on the source, and how many
+	 * other arcs are associated with it, and their size. The source must be queried for this
+	 * @param dstTop: similar to srcTop, but the y coord at the destination, rather than source
+	 */
 	void drawBand(float _width, float srcTop, float dstTop) {
 		noStroke();
 		float alpha = 100;

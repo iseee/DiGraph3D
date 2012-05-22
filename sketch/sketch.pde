@@ -84,7 +84,6 @@ Graph genCanadaSankeyGraph() {
 	g.addArc(5,100,1.16, 0.5);	// coal elec
 	g.addArc(5,20,0.18, 0.0);		// coal indus
 	g.addArc(5,50,0.74, 0.5);		// coal export
-	g.addArc(5,100,1.16,0.5);	// coal to elec
 	g.addArc(6,100,0.14, 0.0);	// petrol elec
 	g.addArc(6,10,0.26, 0.2);		// petrol res	
 	g.addArc(6,20,0.88, 0.2);		// petrol ind

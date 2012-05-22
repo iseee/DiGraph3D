@@ -17,8 +17,8 @@ class Arc {
 		this.dest = dest;
 		this.flow = flow;
 		origFlow = flow;
-		sourceOffset = source.associateArc(flow);
-		destOffset = dest.associateArc(flow);
+		sourceOffset = source.associateOutArc(flow);
+		destOffset = dest.associateInArc(flow);
 		this.futureFlow = futureFlow;
 
 		ctrlPt1 = new PVector(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
@@ -31,8 +31,8 @@ class Arc {
 	 * arcs associated with the node.
 	 */
 	void setFlow(float newFlow) {
-		source.updateArcPositions(sourceOffset, newFlow-flow);
-		dest.updateArcPositions(destOffset, newFlow-flow);
+		source.updateOutArcPositions(sourceOffset, newFlow-flow);
+		dest.updateInArcPositions(destOffset, newFlow-flow);
 		flow = newFlow;
 	}
 
@@ -53,8 +53,8 @@ class Arc {
 		float _width = SCALE * flow;
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end
-		float topOfBandSrc = source.getArcPosition(sourceOffset);	
-		float topOfBandDst = dest.getArcPosition(destOffset);
+		float topOfBandSrc = source.getOutArcPosition(sourceOffset);	
+		float topOfBandDst = dest.getInArcPosition(destOffset);
 
 		drawBand(_width, topOfBandSrc, topOfBandDst);
 

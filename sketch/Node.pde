@@ -4,9 +4,12 @@ class Node {
 	int id;
 	float inStartX;
 	ArrayList assocArcPositions;
+	ArrayList assocInArcPositions;
+	ArrayList assocOutArcPositions;
 	String name;
 	int level;
-	float totalFlow = 0;
+	float inFlow = 0;
+	float outFlow = 0;
 	// a fraction of the total flow can be shown as emissions
 	float carbonEmission = 0;
 	float waterEmission = 0;
@@ -24,9 +27,15 @@ class Node {
 	void initialize(int id, String name, int level) {
 		position = new PVector(0,0,0);
 		assocArcPositions = new ArrayList();
+		assocInArcPositions = new ArrayList();
+		assocOutArcPositions = new ArrayList();
 		this.id = id;
 		this.name = name;
 		this.level = level;
+	}
+
+	float getFlow() {
+		return max(inFlow,outFlow);
 	}
 
 	void setPosition(float x, float y) {
@@ -42,50 +51,73 @@ class Node {
 		return position.y;
 	}
 
-	void increaseFlow(float delta) {
-		totalFlow += delta;
-	}
-
-
-	// when associating new arc, add the width of that arc
-	// to the positions list. This will tell the subsequent
-	// arc it's y coordinate later on. 
-	// Tell the arc its position in the list
-	int associateArc(float flowIncrease) {
-		increaseFlow(flowIncrease);
-		if(assocArcPositions.size() > 0) {
-			float prevElem = (Float) assocArcPositions.get(assocArcPositions.size()-1);
-			assocArcPositions.add(prevElem+flowIncrease*SCALE);
+	int associateInArc(float flowIncrease) {
+		inFlow+=flowIncrease;	
+		if(assocInArcPositions.size() > 0) {
+			float prevElem = (Float) assocInArcPositions.get(assocInArcPositions.size()-1);
+			assocInArcPositions.add(prevElem+flowIncrease*SCALE);
 		}
 		else {
-			assocArcPositions.add(flowIncrease*SCALE);	
+			assocInArcPositions.add(flowIncrease*SCALE);	
 		}
 		
-		return assocArcPositions.size() - 1;
+		return assocInArcPositions.size() - 1;
 
 	}
 
-	float getArcPosition(int index) {
+	int associateOutArc(float flowIncrease) {
+		outFlow+=flowIncrease;
+		if(assocOutArcPositions.size() > 0) {
+			float prevElem = (Float) assocOutArcPositions.get(assocOutArcPositions.size()-1);
+			assocOutArcPositions.add(prevElem+flowIncrease*SCALE);
+		}
+		else {
+			assocOutArcPositions.add(flowIncrease*SCALE);	
+		}
+		
+		return assocOutArcPositions.size() - 1;
+
+	}
+
+	float getInArcPosition(int index) {
 		// should give the value in index -1, or zero if first arc
 		if(index == 0) {
-			return position.y-(totalFlow*SCALE/2);
+			return position.y-(getFlow()*SCALE/2);
 		}
 
-		if(index < 0 || index > assocArcPositions.size()-1) {
+		if(index < 0 || index > assocInArcPositions.size()-1) {
 			return -1;
 		}
 
-		return position.y-(totalFlow*SCALE/2)+((Float) assocArcPositions.get(index-1));
+		return position.y-(getFlow()*SCALE/2)+((Float) assocInArcPositions.get(index-1));
 	}
 
-	// when one of the associated arcs flows change, we
-	// need to update this nodes flow, and the positions
-	// of the arcs on the node
-	void updateArcPositions(int index, float flowDelta) {
-		increaseFlow(flowDelta);
+	float getOutArcPosition(int index) {
+		// should give the value in index -1, or zero if first arc
+		if(index == 0) {
+			return position.y-(getFlow()*SCALE/2);
+		}
+
+		if(index < 0 || index > assocOutArcPositions.size()-1) {
+			return -1;
+		}
+
+		return position.y-(getFlow()*SCALE/2)+((Float) assocOutArcPositions.get(index-1));
+	}
+
+	void updateInArcPositions(int index, float flowDelta) {
+		inFlow+=flowDelta;
 		float delta = SCALE*flowDelta;
-		for(int i = index; i < assocArcPositions.size(); i++) {
-			assocArcPositions.set(i, (Float) assocArcPositions.get(i)+delta);
+		for(int i = index; i < assocInArcPositions.size(); i++) {
+			assocInArcPositions.set(i, (Float) assocInArcPositions.get(i)+delta);
+		}
+	}
+
+	void updateOutArcPositions(int index, float flowDelta) {
+		outFlow+=flowDelta;
+		float delta = SCALE*flowDelta;
+		for(int i = index; i < assocOutArcPositions.size(); i++) {
+			assocOutArcPositions.set(i, (Float) assocOutArcPositions.get(i)+delta);
 		}
 	}
 
@@ -96,13 +128,13 @@ class Node {
 		if(selected()){
 			alpha = 255;
 			if(null != js) {
-				js.displaySelectedNodeInfo(name, totalFlow, carbonEmission, waterEmission);
+				js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
 			}
 			drawEmissions();
 		}
 
-		float half_width = totalFlow*SCALE/8;
-		float half_height = totalFlow*SCALE/2;
+		float half_width = getFlow()*SCALE/8;
+		float half_height = getFlow()*SCALE/2;
 
 		fill(255, 0, 0, alpha);
 		stroke(100);
@@ -157,7 +189,7 @@ class Node {
 	 * returns	true if mouse over node, false otherwise
 	 */
 	boolean selected() {
-		float _width = totalFlow*SCALE/2;
+		float _width = getFlow()*SCALE/2;
 		float screen_x = screenX(position.x, position.y, position.z);
 		float screen_y = screenY(position.x, position.y, position.z);
 		return ( (mouseX > screen_x-_width && mouseX < screen_x+_width) && (mouseY < screen_y+_width && mouseY > screen_y-_width) );
@@ -174,8 +206,8 @@ class Node {
 	 * it rises
 	 */
 	void drawCarbonDioxBubbles() {
-		float radius = carbonEmission*totalFlow*SCALE;
-		float dy = position.y-(totalFlow*SCALE/2)-(radius/4)*(frameCount%radius);
+		float radius = carbonEmission*getFlow()*SCALE;
+		float dy = position.y-(getFlow()*SCALE/2)-(radius/4)*(frameCount%radius);
 		if(dy<-height/2+radius)
 			dy = -height/2+radius;
 		pushMatrix();
@@ -192,8 +224,8 @@ class Node {
 	 * it stops.
 	 */
 	void drawWaterBubbles() {
-		float radius = waterEmission*totalFlow*SCALE;
-		float dy = position.y+(totalFlow*SCALE/2)+(radius/4)*(frameCount%radius);
+		float radius = waterEmission*getFlow()*SCALE;
+		float dy = position.y+(getFlow()*SCALE/2)+(radius/4)*(frameCount%radius);
 		if(dy>height/2-radius)
 			dy = height/2-radius;
 		pushMatrix();

@@ -2,8 +2,8 @@ int WIDTH = 1200;
 int HEIGHT = 800;
 int SCALE = 8;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
 int TEXT_Z = 50; 
-int BG_COLOR = 0;
-int TEXT_COLOR = 255;
+color BG_COLOR = #000000;
+color TEXT_COLOR = #FFFFFF;
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -15,10 +15,19 @@ Graph _graph;
 
 JavaScript js;
 
+/*
+ * This allows the sketch to call external javascript functions, so it can interact with the page.
+ * You just prototype the function here in the interface. Then as long as this function is defined 
+ * somewhere in your js, you can call it straight from processing code.
+ */
 interface JavaScript {
 	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
 }
 
+/*
+ * This is called from javascript on pageload. The js passes a reference to itself to the processing
+ * code using this function, allowing use of the interface above.
+ */
 void bindJavascript(JavaScript jscript) {
 	js = jscript;
 }

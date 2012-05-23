@@ -231,9 +231,13 @@ class Node {
 		sphere(frameCount%radius);
 		popMatrix();
 	}
-
 }
-
+i
+/*
+ * Animated bubbles rising from the node when selected. Rate they rise
+ * is proportional to the amount of emissions. The spheres slowly increase
+ * in radius as they rise. 
+ */
 class CarbonBubbleAnimation {
 	
 	ArrayList<CarbonBubble> bubbles;
@@ -260,7 +264,6 @@ class CarbonBubbleAnimation {
 			b.draw(start,i++);
 		}
 	}
-
 }
 
 class CarbonBubble {

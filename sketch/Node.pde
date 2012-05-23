@@ -137,7 +137,7 @@ class Node {
 				start.sub(0, getFlow()*SCALE/2, 0);
 				carbonBubbleAnim.initiate(start, carbonEmission*getFlow());
 				start.set(position);
-				start.add(0, getFlow()*SCALE/2, 0);
+				start.add(0, getFlow()*SCALE/2+5, 0);
 				waterDropletAnim.initiate(start, waterEmission*getFlow());
 			}
 			alpha = 255;
@@ -327,6 +327,7 @@ class WaterDroplet {
 	PVector start;
 	float startRadius = 1;
 	float maxRadius = 10;
+	float curRadius = startRadius;
 	float emission;
 	float yMax = 300;
 
@@ -340,21 +341,21 @@ class WaterDroplet {
 	}
 	
 	void draw(int animStart, int i) {
-		if( (frameCount - animStart) > (i*40) ) {
+		if( (frameCount - animStart) > (i*emission) ) {
 			noStroke();
 			fill(0,0, 255,100);
 			pushMatrix();
 			translate(dropPos.x, dropPos.y);
-			float curRad = map( (frameCount-animStart), i*20, (i+1)*20, startRadius, maxRadius);
-			curRad = curRad>maxRadius?maxRadius:curRad;
-			sphere(curRad);
+			sphere(curRadius++);
+			curRadius = curRadius>maxRadius?maxRadius:curRadius;
 			popMatrix();
-			if(curRad >= maxRadius) {
+			if(curRadius >= maxRadius) {
 				dropPos.add(velocity);
 				velocity.add(gravity);
 				if(dropPos.y > height/2-startRadius || dropPos.y-start.y > yMax){
 					dropPos.set(start);
 					velocity.set(0,emission,0);
+					curRadius = startRadius;
 				}
 			}
 		}

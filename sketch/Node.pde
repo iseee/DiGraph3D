@@ -14,6 +14,7 @@ class Node {
 	float waterEmission = 0;
 	boolean isSelected = false;
 	CarbonBubbleAnimation carbonBubbleAnim;
+	WaterDropletAnimation waterDropletAnim;
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -33,6 +34,7 @@ class Node {
 		this.name = name;
 		this.level = level;
 		carbonBubbleAnim = new CarbonBubbleAnimation();
+		waterDropletAnim = new WaterDropletAnimation();
 	}
 
 	float getFlow() {
@@ -134,6 +136,9 @@ class Node {
 				start.set(position);
 				start.sub(0, getFlow()*SCALE/2, 0);
 				carbonBubbleAnim.initiate(start, carbonEmission*getFlow());
+				start.set(position);
+				start.add(0, getFlow()*SCALE/2, 0);
+				waterDropletAnim.initiate(start, waterEmission*getFlow());
 			}
 			alpha = 255;
 			if(null != js) {
@@ -211,28 +216,10 @@ class Node {
 
 	void drawEmissions() {
 		carbonBubbleAnim.draw();
-		drawWaterDroplets();
-	}
-
-	/*
-	 * Draw a sphere falling downwards from the node, to represent water emissions.
-	 * Sphere increases in radius as it falls, only falls to bottom of screen, where
-	 * it stops.
-	 */
-	void drawWaterDroplets() {
-		float radius = waterEmission*getFlow()*SCALE;
-		float dy = position.y+(getFlow()*SCALE/2)+(radius/4)*(frameCount%radius);
-		if(dy>height/2-radius)
-			dy = height/2-radius;
-		pushMatrix();
-		translate(position.x, dy);
-		noStroke();
-		fill(0,0, 255);
-		sphere(frameCount%radius);
-		popMatrix();
+		waterDropletAnim.draw();
 	}
 }
-i
+
 /*
  * Animated bubbles rising from the node when selected. Rate they rise
  * is proportional to the amount of emissions. The spheres slowly increase
@@ -299,7 +286,79 @@ class CarbonBubble {
 				bubPos.set(start);
 		}
 	}
+}
 
+/*
+ * Animated droplets falling from node to represent water emissions.
+ * This may need to be modified to signify water usage instead.
+ */
+class WaterDropletAnimation {
+	ArrayList<WaterDroplet> droplets;
+	int start;
+
+	WaterDropletAnimation() {
+		droplets = new ArrayList<WaterDroplet>();
+	}
+
+	void initiate(PVector pos, float emission) {
+		droplets.clear();
+		for(int i = 0; i < 5; i++) {
+			droplets.add(new WaterDroplet(pos, emission));
+		}
+		start = frameCount;
+	}
+
+	void draw() {
+		WaterDroplet w;
+		Iterator<WaterDroplet> it = droplets.iterator();
+		int i = 0;
+		while(it.hasNext()) {
+			w = it.next();
+			w.draw(start,i++);
+		}
+	}
+}
+
+class WaterDroplet {
+
+	PVector velocity;
+	PVector gravity = new PVector(0,0.5,0);
+	PVector dropPos;
+	PVector start;
+	float startRadius = 1;
+	float maxRadius = 10;
+	float emission;
+	float yMax = 300;
+
+	WaterDroplet(PVector position, float emission)  {
+		dropPos = new PVector();
+		dropPos.set(position);
+		start = new PVector();
+		start.set(dropPos);
+		velocity = new PVector(0.0, emission, 0.0);
+		this.emission = emission;
+	}
+	
+	void draw(int animStart, int i) {
+		if( (frameCount - animStart) > (i*40) ) {
+			noStroke();
+			fill(0,0, 255,100);
+			pushMatrix();
+			translate(dropPos.x, dropPos.y);
+			float curRad = map( (frameCount-animStart), i*20, (i+1)*20, startRadius, maxRadius);
+			curRad = curRad>maxRadius?maxRadius:curRad;
+			sphere(curRad);
+			popMatrix();
+			if(curRad >= maxRadius) {
+				dropPos.add(velocity);
+				velocity.add(gravity);
+				if(dropPos.y > height/2-startRadius || dropPos.y-start.y > yMax){
+					dropPos.set(start);
+					velocity.set(0,emission,0);
+				}
+			}
+		}
+	}
 }
 
 

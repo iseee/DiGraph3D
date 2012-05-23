@@ -12,6 +12,8 @@ class Node {
 	// a fraction of the total flow can be shown as emissions
 	float carbonEmission = 0;
 	float waterEmission = 0;
+	boolean isSelected = false;
+	CarbonBubbleAnimation carbonBubbleAnim;
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -30,6 +32,7 @@ class Node {
 		this.id = id;
 		this.name = name;
 		this.level = level;
+		carbonBubbleAnim = new CarbonBubbleAnimation();
 	}
 
 	float getFlow() {
@@ -124,11 +127,24 @@ class Node {
 		noStroke();
 		float alpha = 100;
 		if(selected()){
+			if(!isSelected) { // means node just became selected
+				isSelected = true;
+				// start animations
+				PVector start = new PVector();
+				start.set(position);
+				start.sub(0, getFlow()*SCALE/2, 0);
+				carbonBubbleAnim.initiate(start, carbonEmission*getFlow());
+			}
 			alpha = 255;
 			if(null != js) {
 				js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
 			}
 			drawEmissions();
+		}
+		else {
+			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected
+				isSelected = false;
+			}
 		}
 
 		float half_width = getFlow()*SCALE/8;
@@ -194,26 +210,8 @@ class Node {
 	}
 
 	void drawEmissions() {
-		drawCarbonDioxBubbles();
-		drawWaterBubbles();
-	}
-
-	/*
-	 * Draw spheres rising from a node, to represent carbon emissions.
-	 * The sphere rises only to the top of the screen, it grows in radius as
-	 * it rises
-	 */
-	void drawCarbonDioxBubbles() {
-		float radius = carbonEmission*getFlow()*SCALE;
-		float dy = position.y-(getFlow()*SCALE/2)-(radius/4)*(frameCount%radius);
-		if(dy<-height/2+radius)
-			dy = -height/2+radius;
-		pushMatrix();
-		translate(position.x, dy);
-		noStroke();
-		fill(100);
-		sphere(frameCount%radius);
-		popMatrix();
+		carbonBubbleAnim.draw();
+		drawWaterDroplets();
 	}
 
 	/*
@@ -221,7 +219,7 @@ class Node {
 	 * Sphere increases in radius as it falls, only falls to bottom of screen, where
 	 * it stops.
 	 */
-	void drawWaterBubbles() {
+	void drawWaterDroplets() {
 		float radius = waterEmission*getFlow()*SCALE;
 		float dy = position.y+(getFlow()*SCALE/2)+(radius/4)*(frameCount%radius);
 		if(dy>height/2-radius)
@@ -235,4 +233,70 @@ class Node {
 	}
 
 }
+
+class CarbonBubbleAnimation {
+	
+	ArrayList<CarbonBubble> bubbles;
+	int start;
+
+	CarbonBubbleAnimation() {
+		bubbles = new ArrayList<CarbonBubble>();
+	}
+
+	void initiate(PVector pos, float emission) {
+		bubbles.clear();
+		for(int i = 0; i < 5; i++) {
+			bubbles.add(new CarbonBubble(pos, emission));
+		}
+		start = frameCount;
+	}
+
+	void draw() {
+		CarbonBubble b;
+		Iterator<CarbonBubble> it = bubbles.iterator();
+		int i = 0;
+		while(it.hasNext()) {
+			b = it.next();
+			b.draw(start,i++);
+		}
+	}
+
+}
+
+class CarbonBubble {
+
+	PVector velocity;
+	PVector bubPos;
+	PVector start;
+	float startRadius = 5;
+	float maxRadius = 20;
+	float emission;
+	float yMax = 200;
+
+	CarbonBubble(PVector position, float emission)  {
+		bubPos = new PVector();
+		bubPos.set(position);
+		start = new PVector();
+		start.set(bubPos);
+		velocity = new PVector(0.0, -emission, 0.0);
+		this.emission = emission;
+	}
+	
+	void draw(int animStart, int i) {
+		if( (frameCount - animStart) > (i*20) ) {
+			noStroke();
+			fill(230,50);
+			pushMatrix();
+			translate(bubPos.x, bubPos.y);
+			float t = abs( (start.y-bubPos.y)/yMax);
+			sphere(lerp(startRadius, maxRadius, t));
+			popMatrix();
+			bubPos.add(velocity);
+			if(bubPos.y < -height/2+startRadius || start.y-bubPos.y > yMax)
+				bubPos.set(start);
+		}
+	}
+
+}
+
 

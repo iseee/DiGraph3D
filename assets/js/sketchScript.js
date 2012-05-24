@@ -1,3 +1,7 @@
+/*
+ * Functions that interact with processing.js sketch
+ */
+
 function rateSliderChanged(index, newValue) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.updateArcRate(index, newValue);

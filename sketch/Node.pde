@@ -216,8 +216,10 @@ class Node {
 	}
 
 	void drawEmissions() {
-		carbonBubbleAnim.draw();
-		waterDropletAnim.draw();
+		if(carbonEmission > 0)
+			carbonBubbleAnim.draw();
+		if(waterEmission > 0)
+			waterDropletAnim.draw();
 	}
 }
 

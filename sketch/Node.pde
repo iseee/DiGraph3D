@@ -149,6 +149,7 @@ class Node {
 		else {
 			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected
 				isSelected = false;
+				js.clearNodeInfo();
 			}
 		}
 

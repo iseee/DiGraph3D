@@ -22,6 +22,7 @@ JavaScript js;
  */
 interface JavaScript {
 	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
+	void clearNodeInfo();
 }
 
 /*

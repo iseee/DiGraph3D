@@ -24,6 +24,10 @@ function displaySelectedNodeInfo(name, flow, carbonFactor, waterFactor) {
 	document.getElementById("selectedNode").innerHTML=html;
 }
 
+function clearNodeInfo() {
+	document.getElementById("selectedNode").innerHTML="";
+}
+
 function timeSliderChanged(val) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.updateArcLerps(val);

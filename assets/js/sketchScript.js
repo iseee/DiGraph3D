@@ -2,10 +2,17 @@
  * Functions that interact with processing.js sketch
  */
 
+/*
+ * Generates the graph based on JSON data retrieved from remote server
+ * Must use a callback, standard for JSONP, because we are accessing a
+ * resource outside the current domain. Without JSONP, we will get 
+ * Access-origin-policy errors when attempting to retrieve the data.
+ */
 function loadGraphFromRemote() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {
 		var url = "http://localhost:2999/canadaenergy?callback=?";
+		// ajax call to getJSON, function is the callback on success
 		$.getJSON(url, function (data) {  
 			console.log(data);
 			var graphObj = pjs.getGraph();	

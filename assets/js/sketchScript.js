@@ -2,6 +2,29 @@
  * Functions that interact with processing.js sketch
  */
 
+function loadGraphFromRemote() {
+	var pjs = Processing.getInstanceById('sketch');
+	if(pjs != null) {
+		var url = "http://localhost:2999/canadaenergy?callback=?";
+		$.getJSON(url, function (data) {  
+			console.log(data);
+			var graphObj = pjs.getGraph();	
+			var nodes = data.graph.nodes;
+			for(i = 0; i < nodes.length; i++) {
+				var node = nodes[i];
+				graphObj.addNode(new pjs.Node(node.id, node.name, node.level));	
+			}
+			var arcs = data.graph.arcs;
+			for(i = 0; i < arcs.length; i++) {
+				var arc = arcs[i];
+				graphObj.addArc(arc.srcid, arc.dstid, arc.flow, arc.futureflow);
+			}
+		});  
+	}
+	else
+		setTimeout(loadGraphFromRemote, 255);
+}
+
 function rateSliderChanged(index, newValue) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.updateArcRate(index, newValue);
@@ -58,5 +81,6 @@ function renderIndividualControls() {
 
 window.onload = function loadScript() {
 	bindJavascript();
+	loadGraphFromRemote();
 //	renderIndividualControls();
 }

@@ -38,8 +38,9 @@ void setup() {
 	size(WIDTH, HEIGHT, P3D);
 	font = createFont("Arial", 10);
 	sphereDetail(15);
-	_graph = genCanadaSankeyGraph(); 
+	_graph = new Graph(); 
 }
+
 
 // hard code this for now, add data src query later
 Graph genCanadaSankeyGraph() {
@@ -128,6 +129,7 @@ Graph genRandomGraph() {
 	return graph;
 }
 */
+
 void draw() {
 	lights();
 	background(BG_COLOR);
@@ -141,8 +143,13 @@ void draw() {
 
 	rotateX(x_rotation * PI/500);
 	rotateY(y_rotation * PI/500);
-	
-	_graph.draw(WIDTH, HEIGHT);
+
+	if(null != _graph)
+		_graph.draw(WIDTH, HEIGHT);
+	else {
+		text("No data yet!", 0, 0);
+	}
+
 }
 
 void mousePressed() {

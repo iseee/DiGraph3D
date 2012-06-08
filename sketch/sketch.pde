@@ -214,7 +214,8 @@ static class ColorScheme {
 	final static color TEXT_COLOR_DARK = #FFFFFF;
 	final static color TEXT_COLOR_LIGHT = #000000;
 
-	final static color CARBON_BUBBLE_COLOR = color(230,50);
+	final static color CARBON_BUBBLE_COLOR_DARK = color(230,50);
+	final static color CARBON_BUBBLE_COLOR_LIGHT = color(50,100);
 	final static color WATER_DROPLET_COLOR = color(0,0,255,100);
 
 
@@ -258,7 +259,7 @@ static class ColorScheme {
 	}
 
 	static color getCarbonBubbleColor() {
-		return CARBON_BUBBLE_COLOR;
+		return getColorBasedOnScheme(CARBON_BUBBLE_COLOR_DARK, CARBON_BUBBLE_COLOR_LIGHT);
 	}
 
 	static color getWaterDropletColor() {

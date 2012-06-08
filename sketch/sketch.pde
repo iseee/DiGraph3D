@@ -231,20 +231,20 @@ static class ColorScheme {
 			currentScheme = 0;
 	}
 
-	static color getBgColor() {
-		if(currentScheme == 0)
-			return BG_COLOR_DARK;
+	static color getColorBasedOnScheme(color darkSchemeColor, color lightSchemeColor) {
+	if(currentScheme == 0)
+			return darkSchemeColor;
 		if(currentScheme == 1)
-			return BG_COLOR_LIGHT;
-		return BG_COLOR_DARK; //default
+			return lightSchemeColor;
+		return darkSchemeColor; //default
+	}
+
+	static color getBgColor() {
+		return getColorBasedOnScheme(BG_COLOR_DARK, BG_COLOR_LIGHT); 
 	}
 
 	static color getTextColor() {
-		if(currentScheme == 0)
-			return TEXT_COLOR_DARK;
-		if(currentScheme == 1)
-			return TEXT_COLOR_LIGHT;
-		return TEXT_COLOR_DARK; //default
+		return getColorBasedOnScheme(TEXT_COLOR_DARK, TEXT_COLOR_LIGHT);
 	}
 
 	static color getArcColor(float width, float min, float max, boolean selected) {

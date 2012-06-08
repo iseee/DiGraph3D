@@ -156,7 +156,7 @@ class Node {
 		float half_width = getFlow()*SCALE/8;
 		float half_height = getFlow()*SCALE/2;
 
-		fill(255, 0, 0, alpha);
+		fill(ColorScheme.getNodeColor(isSelected));
 		stroke(100);
 		pushMatrix();
 		translate(position.x, position.y, 0);
@@ -191,7 +191,7 @@ class Node {
 	
 		// label
 		textSize(12);
-		fill(TEXT_COLOR);
+		fill(ColorScheme.getTextColor());
 		if(position.x < 0){
 			textAlign(RIGHT);
 		}
@@ -278,7 +278,7 @@ class CarbonBubble {
 	void draw(int animStart, int i) {
 		if( (frameCount - animStart) > (i*20) ) {
 			noStroke();
-			fill(230,50);
+			fill(ColorScheme.getCarbonBubbleColor());
 			pushMatrix();
 			translate(bubPos.x, bubPos.y);
 			float t = abs( (start.y-bubPos.y)/yMax);
@@ -346,7 +346,7 @@ class WaterDroplet {
 	void draw(int animStart, int i) {
 		if( (frameCount - animStart) > (i*emission) ) {
 			noStroke();
-			fill(0,0, 255,100);
+			fill(ColorScheme.getWaterDropletColor());
 			pushMatrix();
 			translate(dropPos.x, dropPos.y);
 			sphere(curRadius++);

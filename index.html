@@ -56,6 +56,8 @@
       <h1>Interactive Sankey Diagram</h1>
       <p>Click and drag to rotate the scene. Hover over red nodes to see node ID and radius.<br>Refresh to generate a new graph.
 		<br>Press 'r' to reset rotation</p>
+		<br>
+		<button class="btn" type="button" onclick="changeColorScheme()">Change color scheme</button>
 	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 		

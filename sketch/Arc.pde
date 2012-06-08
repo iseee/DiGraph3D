@@ -60,7 +60,7 @@ class Arc {
 
 		// if the source or destination or the arc is selected, draw a sphere 'flowing' along the arc
 		if(source.isSelected || dest.isSelected) {
-			fill( 0, map(_width,5,25,0,255), 255, 100);
+			fill(ColorScheme.getArcColor(_width,5,25,false));
 			float steps = 150/rate;
 			float t = (frameCount % steps)/steps;
 			float x = bezierPoint(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
@@ -75,7 +75,7 @@ class Arc {
 	}
 
 	void showArcInfo(float topSrc, float topDst) {
-		fill(TEXT_COLOR);
+		fill(ColorScheme.getTextColor());
 		textSize(15);
 		if(source.isSelected) {
 			textAlign(RIGHT);
@@ -96,16 +96,11 @@ class Arc {
 	 */
 	void drawBand(float _width, float srcTop, float dstTop) {
 		noStroke();
-		float alpha = 100;
 		int steps = 300;
 		float t;
 		float x, y, z;
 		
-		// solid color if source/dest selected, more transparant otherwise
-		if(source.isSelected || dest.isSelected) {
-			alpha = 255;
-		}
-		fill(0, map(_width,5,25,0,255), 255, alpha);
+		fill(ColorScheme.getArcColor(_width,5,25, source.isSelected || dest.isSelected));
 		beginShape(QUAD_STRIP);
 		for(int i = 0; i < steps; i++) {
 			t = i/float(steps);	

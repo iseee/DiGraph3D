@@ -43,7 +43,7 @@ void setup() {
 
 void draw() {
 	lights();
-	background(BG_COLOR);
+	background(ColorScheme.getBgColor());
 
 	float cameraY = HEIGHT/2.0;
 	float fov = PI/3.0;
@@ -123,5 +123,78 @@ float boundParam(float param) {
 		return 1;
 	return param;
 }
+
+static class ColorScheme {
+
+	final static color BG_COLOR_DARK = #000000; 	// black
+	final static color BG_COLOR_LIGHT = 245; 		// off white
+
+	final static color TEXT_COLOR_DARK = #FFFFFF;
+	final static color TEXT_COLOR_LIGHT = #000000;
+
+	final static color CARBON_BUBBLE_COLOR = color(230,50);
+	final static color WATER_DROPLET_COLOR = color(0,0,255,100);
+
+
+	/*
+	 * Processing doesn't seem to currently support enums, so for the dark/light scheme we just
+	 * hack using ints for now, 0=dark, 1=light
+	 */
+	static int currentScheme = 0;
+
+	static void changeColorScheme() {
+		if(currentScheme == 0)
+			currentScheme = 1;
+		else
+			currentScheme = 0;
+	}
+
+	static color getBgColor() {
+		if(currentScheme == 0)
+			return BG_COLOR_DARK;
+		if(currentScheme == 1)
+			return BG_COLOR_LIGHT;
+		return BG_COLOR_DARK; //default
+	}
+
+	static color getTextColor() {
+		if(currentScheme == 0)
+			return TEXT_COLOR_DARK;
+		if(currentScheme == 1)
+			return TEXT_COLOR_LIGHT;
+		return TEXT_COLOR_DARK; //default
+	}
+
+	static color getArcColor(float width, float min, float max, boolean selected) {
+		int alpha = selected?255:100;
+		return color(0, map(width, min, max, 0, 255), 255, alpha);
+	}
+
+	static color getNodeColor(boolean selected) {
+		int alpha=selected?255:100;	
+		return color(255, 0, 0, alpha);
+	}
+
+	static color getCarbonBubbleColor() {
+		return CARBON_BUBBLE_COLOR;
+	}
+
+	static color getWaterDropletColor() {
+		return WATER_DROPLET_COLOR;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

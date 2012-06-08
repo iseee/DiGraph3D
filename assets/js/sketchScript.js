@@ -67,6 +67,11 @@ function timeSliderChanged(val) {
 	pjs.updateArcLerps(val);
 }
 
+function changeColorScheme() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.ColorScheme.changeColorScheme();
+}
+
 function renderIndividualControls() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {

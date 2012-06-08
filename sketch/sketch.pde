@@ -232,6 +232,11 @@ static class ColorScheme {
 			currentScheme = 0;
 	}
 
+	/*
+	 * Common if statement when querying for scheme dependant color.
+	 * @params darkSchemeColor: color to be returned if currently using dark scheme
+	 *	        lightSchemeColor: color to be returned if currently using light scheme
+	 */
 	static color getColorBasedOnScheme(color darkSchemeColor, color lightSchemeColor) {
 	if(currentScheme == 0)
 			return darkSchemeColor;

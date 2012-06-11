@@ -238,7 +238,7 @@ static class ColorScheme {
 	 *	        lightSchemeColor: color to be returned if currently using light scheme
 	 */
 	static color getColorBasedOnScheme(color darkSchemeColor, color lightSchemeColor) {
-	if(currentScheme == 0)
+		if(currentScheme == 0)
 			return darkSchemeColor;
 		if(currentScheme == 1)
 			return lightSchemeColor;

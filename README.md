@@ -15,10 +15,10 @@ and vice versa. Due to this, sketch/sketch.pde will most likely not compile and 
 The easiest way to work on the code is to run in locally in a browser, preferably Chrome.  
 To do this you need to run some kind of http server locally, or Chrome will not load the page. The easiest option to just use
 pythons SimpleHTTPServer.  
-In MacOSX, this can be done as follows, the process will be similar in other environments:
-- Clone the repository
+In MacOSX, this can be done as follows, the process will be similar in other environments, just commands may differ:
+- Clone the repository: git clone git://github.com/thejnich/DiGraph3D.git
 - In the terminal navigate to the top level project directory (where index.html lives)
-- python -m SimpleHTTPServer
+- start the web server: python -m SimpleHTTPServer
 - navigate to localhost:8000 (or whatever port your python module tells you) in Chrome
 - Modify code as you like, refresh the page to see changes
 - Debug using Chrome developer tools

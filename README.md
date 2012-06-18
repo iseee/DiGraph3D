@@ -13,7 +13,7 @@ Local Development
 Processing.js is slightly different than standard Processing, in that you can call javascript functions from processing code
 and vice versa. Due to this, sketch/sketch.pde will most likely not compile and run in the Processing IDE.  
 The easiest way to work on the code is to run in locally in a browser, preferably Chrome.  
-To do this you need to run some kind of http server locally, or Chrome will not load the page. The easiest option to just use
+To do this you need to run some kind of http server locally, or Chrome will not load the page. I prefer
 pythons SimpleHTTPServer.  
 In MacOSX, this can be done as follows, the process will be similar in other environments, just commands may differ:
 - Clone the repository: git clone git://github.com/thejnich/DiGraph3D.git

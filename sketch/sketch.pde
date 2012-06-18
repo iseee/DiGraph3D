@@ -159,10 +159,25 @@ float dragLength() {
 }
 
 void mouseDragged() {
-	if(dragLength() > 10)
-		setLastMouse();
-	y_rotation += (mouseX-lastMouseX);
-	x_rotation += (lastMouseY-mouseY);
+	bool movingNode = false;
+	Iterator it = _graph.getNodes().iterator();
+	Node n;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		if(n.isSelected) {
+			movingNode = true;
+			break;
+		}
+	}
+	if(movingNode) {
+		println("fuck");
+	}
+	else {
+		if(dragLength() > 10)
+			setLastMouse();
+		y_rotation += (mouseX-lastMouseX);
+		x_rotation += (lastMouseY-mouseY);
+	}
 }
 
 void updateArcRate(int arcIndex, float rate) {

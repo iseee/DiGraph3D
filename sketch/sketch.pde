@@ -4,6 +4,7 @@ int SCALE = 8;		// used throughout to scale the visualization, ie the flow may b
 int TEXT_Z = 50; 
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
+boolean EDITING = false;
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -159,18 +160,20 @@ float dragLength() {
 }
 
 void mouseDragged() {
-	boolean movingNode = false;
-	Iterator it = _graph.getNodes().iterator();
-	Node n = null;
-	while(it.hasNext()) {
-		n = (Node) it.next();
-		if(n.isSelected) {
-			movingNode = true;
-			break;
+	if(EDITING) {
+		boolean movingNode = false;
+		Iterator it = _graph.getNodes().iterator();
+		Node n = null;
+		while(it.hasNext()) {
+			n = (Node) it.next();
+			if(n.isSelected) {
+				movingNode = true;
+				break;
+			}
 		}
-	}
-	if(movingNode && null != n) {
-		n.moveByDelta(mouseX-pmouseX, mouseY-pmouseY);
+		if(movingNode && null != n) {
+			n.moveByDelta(mouseX-pmouseX, mouseY-pmouseY);
+		}
 	}
 	else {
 		if(dragLength() > 10)
@@ -226,6 +229,10 @@ float boundParam(float param) {
  */
 void resetNodePositions() {
 	_graph.updateNodePositions();
+}
+
+void setEditing(boolean state) {
+	EDITING = state;
 }
 
 static class ColorScheme {

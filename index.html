@@ -55,10 +55,11 @@
 
       <h1>Interactive Sankey Diagram</h1>
       <p>Click and drag to rotate the scene. Hover over red nodes to see node ID and radius.
-		<br>Click and drag a node to move it.
+		<br>Click and drag a node to move it while in edit mode.
 		<br>Press 'r' to reset rotation</p>
 		<br>
 		<button class="btn" type="button" onclick="changeColorScheme()">Change color scheme</button>
+		<input class="checkbox" type="checkbox" onchange="editCheckboxChange(this)"><span class="label">Edit mode</span>
 		<button class="btn" type="button" onclick="resetNodePositions()">Reset node positions</button>
 	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>

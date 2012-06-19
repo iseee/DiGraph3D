@@ -47,6 +47,11 @@ function resetNodePositions() {
 	pjs.resetNodePositions();
 }
 
+function editCheckboxChange(checkbox) {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.setEditing(checkbox.checked);
+}
+
 function renderIndividualControls() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {

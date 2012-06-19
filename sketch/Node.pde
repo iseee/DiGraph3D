@@ -44,6 +44,13 @@ class Node {
 	void setPosition(float x, float y) {
 		position.set(x,y,0);
 		inStartX = position.x+(position.x/2);
+		PVector start = new PVector();
+		start.set(position);
+		start.sub(0, getFlow()*SCALE/2, 0);
+		carbonBubbleAnim.setStartPosition(start);
+		start.set(position);
+		start.add(0, getFlow()*SCALE/2+5, 0);
+		waterDropletAnim.setStartPosition(start);
 	}
 
 	void moveByDelta(float deltaX, float deltaY) {
@@ -155,7 +162,8 @@ class Node {
 		else {
 			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected
 				isSelected = false;
-				js.clearNodeInfo();
+				if(js != null)
+					js.clearNodeInfo();
 			}
 		}
 
@@ -251,6 +259,15 @@ class CarbonBubbleAnimation {
 		start = frameCount;
 	}
 
+	void setStartPosition(PVector pos) {
+		Iterator it = bubbles.iterator();
+		CarbonBubble b;
+		while(it.hasNext()) {
+			b = (CarbonBubble)it.next();
+			b.start = pos;
+		}
+	}
+
 	void draw() {
 		CarbonBubble b;
 		Iterator<CarbonBubble> it = bubbles.iterator();
@@ -285,11 +302,20 @@ class CarbonBubble {
 		if( (frameCount - animStart) > (i*20) ) {
 			noStroke();
 			fill(ColorScheme.getCarbonBubbleColor());
+			//===================================================
+			/*
+			 * for some reason this code generates a WebGl INVALID_OPERATION warning
+			 * each time it is called. So far I have not been able to figure out why.
+			 * It seem so to behave as expected and work correctly.
+			 * If the sphere is not drawn, the error stops. May be a bug in processing.js
+			 * and how it compiles to webGl code
+			 */ 
 			pushMatrix();
 			translate(bubPos.x, bubPos.y);
 			float t = abs( (start.y-bubPos.y)/yMax);
 			sphere(lerp(startRadius, maxRadius, t));
 			popMatrix();
+			//===================================================
 			bubPos.add(velocity);
 			if(bubPos.y < -height/2+startRadius || start.y-bubPos.y > yMax)
 				bubPos.set(start);
@@ -315,6 +341,15 @@ class WaterDropletAnimation {
 			droplets.add(new WaterDroplet(pos, emission));
 		}
 		start = frameCount;
+	}
+
+	void setStartPosition(PVector pos) {
+		Iterator it = droplets.iterator();
+		WaterDroplet d;
+		while(it.hasNext()) {
+			d = (WaterDroplet)it.next();
+			d.start = pos;
+		}
 	}
 
 	void draw() {
@@ -353,11 +388,20 @@ class WaterDroplet {
 		if( (frameCount - animStart) > (i*emission) ) {
 			noStroke();
 			fill(ColorScheme.getWaterDropletColor());
+			//===================================================
+			/*
+			 * for some reason this code generates a WebGl INVALID_OPERATION warning
+			 * each time it is called. So far I have not been able to figure out why.
+			 * It seem so to behave as expected and work correctly.
+			 * If the sphere is not drawn, the error stops. May be a bug in processing.js
+			 * and how it compiles to webGl code
+			 */ 
 			pushMatrix();
 			translate(dropPos.x, dropPos.y);
 			sphere(curRadius++);
 			curRadius = curRadius>maxRadius?maxRadius:curRadius;
 			popMatrix();
+			//===================================================
 			if(curRadius >= maxRadius) {
 				dropPos.add(velocity);
 				velocity.add(gravity);

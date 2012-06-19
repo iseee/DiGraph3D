@@ -159,9 +159,9 @@ float dragLength() {
 }
 
 void mouseDragged() {
-	bool movingNode = false;
+	boolean movingNode = false;
 	Iterator it = _graph.getNodes().iterator();
-	Node n;
+	Node n = null;
 	while(it.hasNext()) {
 		n = (Node) it.next();
 		if(n.isSelected) {
@@ -169,7 +169,7 @@ void mouseDragged() {
 			break;
 		}
 	}
-	if(movingNode) {
+	if(movingNode && null != n) {
 		n.moveByDelta(mouseX-pmouseX, mouseY-pmouseY);
 	}
 	else {
@@ -236,9 +236,10 @@ static class ColorScheme {
 	final static color TEXT_COLOR_DARK = #FFFFFF;
 	final static color TEXT_COLOR_LIGHT = #000000;
 
-	final static color CARBON_BUBBLE_COLOR_DARK = color(230,50);
-	final static color CARBON_BUBBLE_COLOR_LIGHT = color(50,100);
-	final static color WATER_DROPLET_COLOR = color(0,0,255,100);
+	// color(gray, alpha) cannot be used in static context, so use hex notation 0xARGB
+	final static color CARBON_BUBBLE_COLOR_DARK = 0x32e6e6e6; // equiv to color(230,50);
+	final static color CARBON_BUBBLE_COLOR_LIGHT = 0x64323232; // equiv to color(50,100);
+	final static color WATER_DROPLET_COLOR = 0x640000ff; // equiv to color(0,0,255,100);
 
 
 	/*
@@ -274,6 +275,12 @@ static class ColorScheme {
 	static color getTextColor() {
 		return getColorBasedOnScheme(TEXT_COLOR_DARK, TEXT_COLOR_LIGHT);
 	}
+
+	/*
+	 * The following methods use static references to the color() method, which is not static.
+	 * The processing IDE will complain about this and not compile/run. This does however work
+	 * fine when compiled to javascript.
+	 */
 
 	static color getArcColor(float width, float min, float max, boolean selected) {
 		int alpha = selected?255:100;

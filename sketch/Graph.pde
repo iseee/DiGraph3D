@@ -90,7 +90,7 @@ class Graph {
 
 	ArrayList<Node> getNodes() {
 		ArrayList result = new ArrayList();
-		for(int i = 0; i < nodes.length(); ++i) {
+		for(int i = 0; i < nodes.length; ++i) {
 			result.addAll(nodes[i].values());
 		}
 		return result;

@@ -42,6 +42,11 @@ function changeColorScheme() {
 	pjs.ColorScheme.changeColorScheme();
 }
 
+function resetNodePositions() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetNodePositions();
+}
+
 function renderIndividualControls() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {

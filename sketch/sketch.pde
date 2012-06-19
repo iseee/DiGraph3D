@@ -221,6 +221,13 @@ float boundParam(float param) {
 	return param;
 }
 
+/*
+ * Allows user to reset node positions to original
+ */
+void resetNodePositions() {
+	_graph.updateNodePositions();
+}
+
 static class ColorScheme {
 
 	final static color BG_COLOR_DARK = #000000; 	// black

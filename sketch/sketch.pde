@@ -170,7 +170,7 @@ void mouseDragged() {
 		}
 	}
 	if(movingNode) {
-		println("fuck");
+		n.moveByDelta(mouseX-pmouseX, mouseY-pmouseY);
 	}
 	else {
 		if(dragLength() > 10)

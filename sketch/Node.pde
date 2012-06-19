@@ -46,6 +46,12 @@ class Node {
 		inStartX = position.x+(position.x/2);
 	}
 
+	void moveByDelta(float deltaX, float deltaY) {
+		float newX = position.x + deltaX;
+		float newY = position.y + deltaY;
+		setPosition(newX, newY);
+	}
+
 	float getX() {
 		return position.x;
 	}

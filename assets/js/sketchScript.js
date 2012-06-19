@@ -50,6 +50,7 @@ function resetNodePositions() {
 function editCheckboxChange(checkbox) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.setEditing(checkbox.checked);
+	$('#editing-div').toggle();
 }
 
 function renderIndividualControls() {

@@ -2,7 +2,8 @@
 =====================
 
 Visualize energy flows as interactive Sankey diagrams.  
-Uses [processing.js](http://processingjs.org/), [bootstrap from Twitter](http://twitter.github.com/bootstrap/).
+Uses [processing.js](http://processingjs.org/), [bootstrap from Twitter](http://twitter.github.com/bootstrap/),
+and [RightJS](http://rightjs.org/), specifically their [Colorpicker](http://rightjs.org/ui/colorpicker#api) plugin.
 
 See the [demo](http://thejnich.github.com/DiGraph3D/).
 

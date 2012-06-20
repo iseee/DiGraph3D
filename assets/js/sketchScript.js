@@ -2,6 +2,8 @@
  * Functions that interact with processing.js sketch
  */
 
+var colorPicker = new Colorpicker();
+
 function rateSliderChanged(index, newValue) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.updateArcRate(index, newValue);
@@ -50,6 +52,8 @@ function resetNodePositions() {
 function editCheckboxChange(checkbox) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.setEditing(checkbox.checked);
+	// call jQuery explicity, rather than usual $ syntax, due to suspected namespace collision with rightjs
+	jQuery('#editing-div').toggle();
 }
 
 function renderIndividualControls() {
@@ -71,7 +75,26 @@ function renderIndividualControls() {
 		setTimeout(renderIndividualControls, 255);
 }
 
+function getColorPickerValue() {
+	return colorPicker.toHex();	
+}
+
+function setColorPickerValue(val) {
+	colorPicker.setValue(val);
+}
+
+function resetAllNodeColors() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetAllNodeColors();
+}
+
+function resetSelectedNodeColor() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetSelectedNodeColor();
+}
+
 window.onload = function loadScript() {
 	bindJavascript();
+	colorPicker.insertTo('color-picker');
 //	renderIndividualControls();
 }

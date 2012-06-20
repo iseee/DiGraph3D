@@ -15,6 +15,8 @@ class Node {
 	boolean isSelected = false;
 	CarbonBubbleAnimation carbonBubbleAnim;
 	WaterDropletAnimation waterDropletAnim;
+	boolean selectedForEditing = false;
+	color nodeBaseColor = ColorScheme.getNodeBaseColor();
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -139,8 +141,7 @@ class Node {
 
 
 	void draw() {
-		noStroke();
-		float alpha = 100;
+				float alpha = 100;
 		if(selected()){
 			if(!isSelected) { // means node just became selected
 				isSelected = true;
@@ -170,8 +171,25 @@ class Node {
 		float half_width = getFlow()*SCALE/8;
 		float half_height = getFlow()*SCALE/2;
 
-		fill(ColorScheme.getNodeColor(isSelected));
-		stroke(100);
+		noStroke();
+		if(selectedForEditing && EDITING) {
+			stroke(ColorScheme.getEditingColor());
+			strokeWeight(2);
+			
+			/*
+			 * colorpicker returns string of hex representation, prefixed with #
+			 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
+			 * then, processing can only create colors from integer values, so using the colorToBe int as 
+			 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
+			 */
+			String[] split = splitTokens(js.getColorPickerValue(), "#");
+			int colorToBe = unhex(split[0]);
+			int r = colorToBe  >> 16 & 0xFF;
+			int g = colorToBe >> 8 & 0xFF;
+			int b = colorToBe & 0xFF;
+			nodeBaseColor = color(r,g,b,255);
+		}
+		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
 		translate(position.x, position.y, 0);
 		// draw a hexahedron to represent the node
@@ -214,6 +232,8 @@ class Node {
 		}
 		text(name, 0, 0, TEXT_Z);
 		popMatrix();
+		stroke(100); // there is a bug in processing, this fixes it
+		noStroke();
 	}
 
 	/*
@@ -234,6 +254,10 @@ class Node {
 			carbonBubbleAnim.draw();
 		if(waterEmission > 0)
 			waterDropletAnim.draw();
+	}
+	
+	void toggleEditing() {
+		selectedForEditing = !selectedForEditing;	
 	}
 }
 
@@ -277,6 +301,7 @@ class CarbonBubbleAnimation {
 			b.draw(start,i++);
 		}
 	}
+
 }
 
 class CarbonBubble {

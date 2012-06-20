@@ -24,6 +24,8 @@ JavaScript js;
 interface JavaScript {
 	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
 	void clearNodeInfo();
+	String getColorPickerValue();
+	void setColorPickerValue(String val);
 }
 
 /*
@@ -148,6 +150,23 @@ void draw() {
 
 void mousePressed() {
 	setLastMouse();
+	if(EDITING) {
+		Iterator it = _graph.getNodes().iterator();
+		Node n = null;
+		while(it.hasNext()) {
+			n = (Node) it.next();
+			if(n.isSelected) {
+				// colorpicker needs the # to preface the hex string
+				js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+				n.toggleEditing();	
+			}
+			else {
+				// ensure only one node selected at one time
+				if(n.selectedForEditing)
+					n.toggleEditing();
+			}
+		}
+	}
 }
 
 void setLastMouse() {
@@ -235,6 +254,29 @@ void setEditing(boolean state) {
 	EDITING = state;
 }
 
+void resetAllNodeColors() {
+	Iterator it = _graph.getNodes().iterator();
+	Node n = null;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+	}
+	js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+}
+
+void resetSelectedNodeColor() {
+	Iterator it = _graph.getNodes().iterator();
+	Node n = null;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		if(n.selectedForEditing) {
+			n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+			js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+			break;
+		}
+	}
+}
+
 static class ColorScheme {
 
 	final static color BG_COLOR_DARK = #000000; 	// black
@@ -247,6 +289,11 @@ static class ColorScheme {
 	final static color CARBON_BUBBLE_COLOR_DARK = 0x32e6e6e6; // equiv to color(230,50);
 	final static color CARBON_BUBBLE_COLOR_LIGHT = 0x64323232; // equiv to color(50,100);
 	final static color WATER_DROPLET_COLOR = 0x640000ff; // equiv to color(0,0,255,100);
+
+	final static color EDITING_COLOR_DARK = #f8f800;
+	final static color EDITING_COLOR_LIGHT = #f8f800;
+
+	final static color NODE_BASE_COLOR = 0xffff0000;
 
 
 	/*
@@ -294,9 +341,13 @@ static class ColorScheme {
 		return color(0, map(width, min, max, 0, 255), 255, alpha);
 	}
 
-	static color getNodeColor(boolean selected) {
+	static int getNodeAlpha(boolean selected) {
 		int alpha=selected?255:100;	
-		return color(255, 0, 0, alpha);
+		return alpha;
+	}
+
+	static color getNodeBaseColor() {
+		return NODE_BASE_COLOR;
 	}
 
 	static color getCarbonBubbleColor() {
@@ -305,6 +356,10 @@ static class ColorScheme {
 
 	static color getWaterDropletColor() {
 		return WATER_DROPLET_COLOR;
+	}
+
+	static color getEditingColor() {
+		return getColorBasedOnScheme(EDITING_COLOR_DARK, EDITING_COLOR_LIGHT);
 	}
 }
 

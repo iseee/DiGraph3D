@@ -24,6 +24,8 @@ JavaScript js;
 interface JavaScript {
 	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
 	void clearNodeInfo();
+	String getColorPickerValue();
+	void setColorPickerValue(String val);
 }
 
 /*
@@ -154,6 +156,8 @@ void mousePressed() {
 		while(it.hasNext()) {
 			n = (Node) it.next();
 			if(n.isSelected) {
+				// colorpicker needs the # to preface the hex string
+				js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
 				n.toggleEditing();	
 			}
 			else {
@@ -266,6 +270,8 @@ static class ColorScheme {
 	final static color EDITING_COLOR_DARK = #f8f800;
 	final static color EDITING_COLOR_LIGHT = #f8f800;
 
+	final static color NODE_BASE_COLOR = 0xffff0000;
+
 
 	/*
 	 * Processing doesn't seem to currently support enums, so for the dark/light scheme we just
@@ -312,9 +318,13 @@ static class ColorScheme {
 		return color(0, map(width, min, max, 0, 255), 255, alpha);
 	}
 
-	static color getNodeColor(boolean selected) {
+	static int getNodeAlpha(boolean selected) {
 		int alpha=selected?255:100;	
-		return color(255, 0, 0, alpha);
+		return alpha;
+	}
+
+	static color getNodeBaseColor() {
+		return NODE_BASE_COLOR;
 	}
 
 	static color getCarbonBubbleColor() {

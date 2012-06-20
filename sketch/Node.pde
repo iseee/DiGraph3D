@@ -16,6 +16,7 @@ class Node {
 	CarbonBubbleAnimation carbonBubbleAnim;
 	WaterDropletAnimation waterDropletAnim;
 	boolean selectedForEditing = false;
+	color nodeBaseColor = ColorScheme.getNodeBaseColor();
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -174,8 +175,21 @@ class Node {
 		if(selectedForEditing && EDITING) {
 			stroke(ColorScheme.getEditingColor());
 			strokeWeight(2);
+			
+			/*
+			 * colorpicker returns string of hex representation, prefixed with #
+			 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
+			 * then, processing can only create colors from integer values, so using the colorToBe int as 
+			 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
+			 */
+			String[] split = splitTokens(js.getColorPickerValue(), "#");
+			int colorToBe = unhex(split[0]);
+			int r = colorToBe  >> 16 & 0xFF;
+			int g = colorToBe >> 8 & 0xFF;
+			int b = colorToBe & 0xFF;
+			nodeBaseColor = color(r,g,b,255);
 		}
-		fill(ColorScheme.getNodeColor(isSelected));
+		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
 		translate(position.x, position.y, 0);
 		// draw a hexahedron to represent the node

@@ -2,6 +2,8 @@
  * Functions that interact with processing.js sketch
  */
 
+var colorPicker = new Colorpicker();
+
 function rateSliderChanged(index, newValue) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.updateArcRate(index, newValue);
@@ -73,8 +75,16 @@ function renderIndividualControls() {
 		setTimeout(renderIndividualControls, 255);
 }
 
+function getColorPickerValue() {
+	return colorPicker.toHex();	
+}
+
+function setColorPickerValue(val) {
+	colorPicker.setValue(val);
+}
+
 window.onload = function loadScript() {
 	bindJavascript();
-	new Colorpicker().insertTo('color-picker');
+	colorPicker.insertTo('color-picker');
 //	renderIndividualControls();
 }

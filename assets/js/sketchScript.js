@@ -50,7 +50,8 @@ function resetNodePositions() {
 function editCheckboxChange(checkbox) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.setEditing(checkbox.checked);
-	$('#editing-div').toggle();
+	// call jQuery explicity, rather than usual $ syntax, due to suspected namespace collision with rightjs
+	jQuery('#editing-div').toggle();
 }
 
 function renderIndividualControls() {
@@ -74,5 +75,6 @@ function renderIndividualControls() {
 
 window.onload = function loadScript() {
 	bindJavascript();
+	new Colorpicker().insertTo('color-picker');
 //	renderIndividualControls();
 }

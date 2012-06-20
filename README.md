@@ -8,6 +8,11 @@ See the [demo](http://thejnich.github.com/DiGraph3D/).
 
 Currently only [Google Chrome](http://www.google.com/chrome) fully supports all features.
 
+The Code
+--------
+The main functionality is implemented in the *.pde files within the sketch folder. This is the processing code,
+and contains the meat of the application. All javascript that interfaces with the sketch is in assets/js/sketchScript.js.
+
 Local Development
 -----------------
 Processing.js is slightly different than standard Processing, in that you can call javascript functions from processing code

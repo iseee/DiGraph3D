@@ -148,6 +148,21 @@ void draw() {
 
 void mousePressed() {
 	setLastMouse();
+	if(EDITING) {
+		Iterator it = _graph.getNodes().iterator();
+		Node n = null;
+		while(it.hasNext()) {
+			n = (Node) it.next();
+			if(n.isSelected) {
+				n.toggleEditing();	
+			}
+			else {
+				// ensure only one node selected at one time
+				if(n.selectedForEditing)
+					n.toggleEditing();
+			}
+		}
+	}
 }
 
 void setLastMouse() {
@@ -248,6 +263,9 @@ static class ColorScheme {
 	final static color CARBON_BUBBLE_COLOR_LIGHT = 0x64323232; // equiv to color(50,100);
 	final static color WATER_DROPLET_COLOR = 0x640000ff; // equiv to color(0,0,255,100);
 
+	final static color EDITING_COLOR_DARK = #f8f800;
+	final static color EDITING_COLOR_LIGHT = #f8f800;
+
 
 	/*
 	 * Processing doesn't seem to currently support enums, so for the dark/light scheme we just
@@ -305,6 +323,10 @@ static class ColorScheme {
 
 	static color getWaterDropletColor() {
 		return WATER_DROPLET_COLOR;
+	}
+
+	static color getEditingColor() {
+		return getColorBasedOnScheme(EDITING_COLOR_DARK, EDITING_COLOR_LIGHT);
 	}
 }
 

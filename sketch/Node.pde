@@ -15,6 +15,7 @@ class Node {
 	boolean isSelected = false;
 	CarbonBubbleAnimation carbonBubbleAnim;
 	WaterDropletAnimation waterDropletAnim;
+	boolean selectedForEditing = false;
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -139,8 +140,7 @@ class Node {
 
 
 	void draw() {
-		noStroke();
-		float alpha = 100;
+				float alpha = 100;
 		if(selected()){
 			if(!isSelected) { // means node just became selected
 				isSelected = true;
@@ -170,8 +170,12 @@ class Node {
 		float half_width = getFlow()*SCALE/8;
 		float half_height = getFlow()*SCALE/2;
 
+		noStroke();
+		if(selectedForEditing && EDITING) {
+			stroke(ColorScheme.getEditingColor());
+			strokeWeight(2);
+		}
 		fill(ColorScheme.getNodeColor(isSelected));
-		stroke(100);
 		pushMatrix();
 		translate(position.x, position.y, 0);
 		// draw a hexahedron to represent the node
@@ -214,6 +218,8 @@ class Node {
 		}
 		text(name, 0, 0, TEXT_Z);
 		popMatrix();
+		stroke(100); // there is a bug in processing, this fixes it
+		noStroke();
 	}
 
 	/*
@@ -234,6 +240,10 @@ class Node {
 			carbonBubbleAnim.draw();
 		if(waterEmission > 0)
 			waterDropletAnim.draw();
+	}
+	
+	void toggleEditing() {
+		selectedForEditing = !selectedForEditing;	
 	}
 }
 
@@ -277,6 +287,7 @@ class CarbonBubbleAnimation {
 			b.draw(start,i++);
 		}
 	}
+
 }
 
 class CarbonBubble {

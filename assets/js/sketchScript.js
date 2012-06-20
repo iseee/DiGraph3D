@@ -83,6 +83,16 @@ function setColorPickerValue(val) {
 	colorPicker.setValue(val);
 }
 
+function resetAllNodeColors() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetAllNodeColors();
+}
+
+function resetSelectedNodeColor() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetSelectedNodeColor();
+}
+
 window.onload = function loadScript() {
 	bindJavascript();
 	colorPicker.insertTo('color-picker');

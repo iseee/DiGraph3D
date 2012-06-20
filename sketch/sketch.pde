@@ -254,6 +254,14 @@ void setEditing(boolean state) {
 	EDITING = state;
 }
 
+void resetAllNodeColors() {
+	println("not implemented");
+}
+
+void resetSelectedNodeColor() {
+	println("not implemented");
+}
+
 static class ColorScheme {
 
 	final static color BG_COLOR_DARK = #000000; 	// black

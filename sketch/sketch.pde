@@ -265,7 +265,16 @@ void resetAllNodeColors() {
 }
 
 void resetSelectedNodeColor() {
-	println("not implemented");
+	Iterator it = _graph.getNodes().iterator();
+	Node n = null;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		if(n.selectedForEditing) {
+			n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+			js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+			break;
+		}
+	}
 }
 
 static class ColorScheme {

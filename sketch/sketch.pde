@@ -255,7 +255,13 @@ void setEditing(boolean state) {
 }
 
 void resetAllNodeColors() {
-	println("not implemented");
+	Iterator it = _graph.getNodes().iterator();
+	Node n = null;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+	}
+	js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
 }
 
 void resetSelectedNodeColor() {

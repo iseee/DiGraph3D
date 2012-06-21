@@ -100,7 +100,5 @@ window.onload = function loadScript() {
 	jQuery('#editCheckBox').click(function(){
 		editCheckboxChange(!$(this).hasClass('active')); 
 	});
-	//jQuery('#editCheckBox').attr('checked', false); // ensure unchecked on page load, for case when leave then revisit page
-	//jQuery('.nav-tabs').button();
 //	renderIndividualControls();
 }

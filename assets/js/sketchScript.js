@@ -100,5 +100,6 @@ window.onload = function loadScript() {
 	jQuery('#editCheckBox').click(function(){
 		editCheckboxChange(!$(this).hasClass('active')); 
 	});
+	jQuery("button[rel=tooltip]").tooltip();
 //	renderIndividualControls();
 }

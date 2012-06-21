@@ -60,10 +60,20 @@
 		<br>
 		<button class="btn btn-primary btn-mini" id="editCheckBox" data-toggle="button">Edit</button>
 		<div id="editing-div" style="display:none">
-			<button class="btn btn-inverse btn-mini" type="button" onclick="changeColorScheme()">Change color scheme</button>
-			<button class="btn btn-primary" type="button" onclick="resetNodePositions()">Reset node positions</button>
-			<button class="btn btn-primary" type="button" onclick="resetAllNodeColors()">Reset all node colors</button>
-			<button class="btn btn-mini" type="button" onclick="resetSelectedNodeColor()">Reset selected node color</button>
+			<div class="btn-toolbar">
+				<div class="btn-group">
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Reset <span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<!-- dropdown menu links -->
+						<li><a href="#" onclick="resetNodePositions()">All node positions</a></li>
+						<li><a href="#" onclick="resetAllNodeColors()">All node colors</a></li>
+						<li><a href="#" onclick="resetSelectedNodeColor()">Selected node color</a></li>
+					</ul>
+				</div>
+				<div class="btn-group">
+					<button class="btn btn-inverse btn-mini" type="button" onclick="changeColorScheme()">Change color scheme</button>
+				</div>
+			</div>
 			<div id="color-picker"></div>
 		</div>
 	

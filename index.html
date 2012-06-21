@@ -74,8 +74,32 @@
 				<div class="btn-group">
 					<button class="btn btn-inverse btn-mini" type="button" onclick="changeColorScheme()" rel="tooltip" title="Switch between dark and light themes">Change color theme</button>
 				</div>
+				<div class="btn-group">
+					<button class="btn btn-inverse btn-mini" type="button" href="#editHelp" data-toggle="modal">Help</button>
+				</div>
 			</div>
 			<div id="color-picker"></div>
+			<div class="modal hide fade" id="editHelp" style="display: none;">
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button">×</button>
+					<h3>Editing Help</h3>
+				</div>
+				<div class="modal-body">
+					<h4>Changing color theme</h4>
+					<p>By clicking the 'Change color theme' button, you can switch between the dark and light themes.</p>
+					<h4>Editing node colors</h4>
+					<p>Select a node by clicking it. When selected, a node will have a yellow border. Then use the color
+					picker to modify the nodes color.</p>
+					<p>You can reset all the nodes back to their default color, or reset only the currently selected node
+					by selecting the appropriate option from the 'Reset' dropdown</p>
+					<h4>Moving nodes</h4>
+					<p>Click and drag any node to adjust its position.</p>
+					<p>To reset the positions, from the 'Reset' dropdown, select 'All node postions'.</p>
+				</div>
+				<div class="modal-footer">
+					<a data-dismiss="modal" class="btn" href="#">Close</a>
+				</div>
+			</div>
 		</div>
 	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>

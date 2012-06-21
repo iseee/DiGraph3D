@@ -96,5 +96,6 @@ function resetSelectedNodeColor() {
 window.onload = function loadScript() {
 	bindJavascript();
 	colorPicker.insertTo('color-picker');
+	jQuery('#editCheckBox').attr('checked', false); // ensure unchecked on page load, for case when leave then revisit page
 //	renderIndividualControls();
 }

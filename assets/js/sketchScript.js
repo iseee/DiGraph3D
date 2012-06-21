@@ -49,9 +49,9 @@ function resetNodePositions() {
 	pjs.resetNodePositions();
 }
 
-function editCheckboxChange(checkbox) {
+function editCheckboxChange(checked) {
 	var pjs = Processing.getInstanceById('sketch');
-	pjs.setEditing(checkbox.checked);
+	pjs.setEditing(checked);
 	// call jQuery explicity, rather than usual $ syntax, due to suspected namespace collision with rightjs
 	jQuery('#editing-div').toggle();
 }
@@ -93,9 +93,14 @@ function resetSelectedNodeColor() {
 	pjs.resetSelectedNodeColor();
 }
 
+
 window.onload = function loadScript() {
 	bindJavascript();
 	colorPicker.insertTo('color-picker');
-	jQuery('#editCheckBox').attr('checked', false); // ensure unchecked on page load, for case when leave then revisit page
+	jQuery('#editCheckBox').click(function(){
+		editCheckboxChange(!$(this).hasClass('active')); 
+	});
+	//jQuery('#editCheckBox').attr('checked', false); // ensure unchecked on page load, for case when leave then revisit page
+	//jQuery('.nav-tabs').button();
 //	renderIndividualControls();
 }

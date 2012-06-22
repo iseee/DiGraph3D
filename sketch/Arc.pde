@@ -8,6 +8,7 @@ class Arc {
 	PVector ctrlPt2;
 	int sourceOffset, destOffset;
 	float rate = 5;
+	boolean selectedForEditing = false;
 
 	// param for hack to show transistion between two 'states'
 	float futureFlow;
@@ -96,7 +97,7 @@ class Arc {
 	 */
 	void drawBand(float _width, float srcTop, float dstTop) {
 		noStroke();
-		int steps = 300;
+		int steps = BAND_STEPS;
 		float t;
 		float x, y, z;
 		
@@ -112,10 +113,61 @@ class Arc {
 			vertex(x,y,z);
 		}
 		endShape();
+		
+		if(selectedForEditing) {
+			noFill();
+			stroke(ColorScheme.getEditingColor());
+			strokeWeight(2);
+			// top line
+			beginShape();
+			vertex(source.getX(),srcTop,0); // start
+			bezierVertex(ctrlPt1.x,ctrlPt1.y-_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y-_width/2,ctrlPt2.z, dest.getX(),dstTop,0); // cp1,cp2,end
+			endShape();
+			// bottom line
+			beginShape();
+			vertex(source.getX(),srcTop+_width,0); // start
+			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width/2,ctrlPt2.z, dest.getX(),dstTop+_width,0); // cp1,cp2,end
+			endShape();
+			stroke(100);
+			noStroke();
+		}
 	}
 
 	void updateRate(float newRate) {
 		rate = newRate;
+	}
+
+	boolean selected() {
+		float src_screen_x = screenX(source.getX(), source.getY(), source.getZ());	
+		float dst_screen_x = screenX(dest.getX(), dest.getY(), dest.getZ());	
+
+		if(mouseX < dst_screen_x && mouseX > src_screen_x) {
+			float _width = SCALE * flow;
+			float srcTop = source.getOutArcPosition(sourceOffset);	
+			float dstTop = dest.getInArcPosition(destOffset);
+			float t = (mouseX - src_screen_x) / (dst_screen_x - src_screen_x);
+			int topY = bezierPoint(srcTop, ctrlPt1.y-_width/2, ctrlPt2.y-_width/2, dstTop, t);
+			int botY = bezierPoint(srcTop+_width, ctrlPt1.y+_width/2, ctrlPt2.y+_width/2, dstTop+_width, t);
+			float top_screen_y = screenY(0, topY, 0);
+			float bot_screen_y = screenY(0, botY, 0);
+			/* debug println's
+			println("between "+source.name+" and "+dest.name);
+			println(t);
+			println("topY: "+topY);
+			println("botY: "+botY);
+			println("top_screen_y: "+top_screen_y);
+			println("bot_screen_y: "+bot_screen_y);
+			println("mouseY: "+mouseY);
+			*/
+			if(mouseY > top_screen_y && mouseY < bot_screen_y)
+				return true;
+		}
+
+		return false;
+	}
+
+	void toggleEditing() {
+		selectedForEditing = !selectedForEditing;
 	}
 
 }

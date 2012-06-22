@@ -5,6 +5,7 @@ int TEXT_Z = 50;
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
 boolean EDITING = false;
+int BAND_STEPS = 300;
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -151,14 +152,17 @@ void draw() {
 void mousePressed() {
 	setLastMouse();
 	if(EDITING) {
+
 		Iterator it = _graph.getNodes().iterator();
 		Node n = null;
+		boolean nodeSelected = false;
 		while(it.hasNext()) {
 			n = (Node) it.next();
 			if(n.isSelected) {
 				// colorpicker needs the # to preface the hex string
 				js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
 				n.toggleEditing();	
+				nodeSelected = true;
 			}
 			else {
 				// ensure only one node selected at one time
@@ -166,7 +170,23 @@ void mousePressed() {
 					n.toggleEditing();
 			}
 		}
-	}
+			it = _graph.getArcs().iterator();
+			Arc a = null;
+			boolean arcSelected = false; // avoid overlapping arcs being simultaneously selected
+			while(it.hasNext()) {
+				a = (Arc) it.next();
+				//println("checking between "+a.source.name+" and "+a.dest.name); 
+				if(a.selected() && !nodeSelected && !arcSelected) {
+					a.toggleEditing();
+					arcSelected = true;
+				}
+				else {
+					if(a.selectedForEditing)
+						a.toggleEditing();
+				}
+			}
+
+	} // editing
 }
 
 void setLastMouse() {

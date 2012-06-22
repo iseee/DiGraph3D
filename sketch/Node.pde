@@ -69,6 +69,10 @@ class Node {
 		return position.y;
 	}
 
+	float getZ() {
+		return position.z;
+	}
+
 	int associateInArc(float flowIncrease) {
 		inFlow+=flowIncrease;	
 		if(assocInArcPositions.size() > 0) {

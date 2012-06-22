@@ -141,7 +141,7 @@ class Node {
 
 
 	void draw() {
-				float alpha = 100;
+		float alpha = 100;
 		if(selected()){
 			if(!isSelected) { // means node just became selected
 				isSelected = true;
@@ -158,7 +158,8 @@ class Node {
 			if(null != js) {
 				js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
 			}
-			drawEmissions();
+			if(!EDITING)
+				drawEmissions();
 		}
 		else {
 			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected

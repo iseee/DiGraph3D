@@ -59,7 +59,7 @@ class Arc {
 		drawBand(_width, topOfBandSrc, topOfBandDst);
 
 		// if the source or destination or the arc is selected, draw a sphere 'flowing' along the arc
-		if(source.isSelected || dest.isSelected) {
+		if( (source.isSelected || dest.isSelected) && !EDITING) {
 			fill(ColorScheme.getArcColor(_width,5,25,false));
 			float steps = 150/rate;
 			float t = (frameCount % steps)/steps;

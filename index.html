@@ -80,11 +80,11 @@
 					<div class="btn-group">
 						<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Reset <span class="caret"></span></button>
 						<ul class="dropdown-menu">
-							<!-- dropdown menu links -->
-							<li><a href="#" onclick="resetNodePositions()">All node positions</a></li>
+							<!-- dropdown menu links, return false so browser does not navigate to top of page (#) on click -->
+							<li><a href="#" onclick="resetNodePositions();return false;">All node positions</a></li>
 							<li class="divider"></li>
-							<li><a href="#" onclick="resetAllNodeColors()">All node colors</a></li>
-							<li><a href="#" onclick="resetSelectedNodeColor()">Selected node color</a></li>
+							<li><a href="#" onclick="resetAllNodeColors();return false;">All node colors</a></li>
+							<li><a href="#" onclick="resetSelectedNodeColor();return false;">Selected node color</a></li>
 						</ul>
 					</div><!--/btn-group-->
 					<!--color picker for nodes-->

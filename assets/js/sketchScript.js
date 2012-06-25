@@ -53,6 +53,9 @@ function editCheckboxChange(checked) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.setEditing(checked);
 	// call jQuery explicity, rather than usual $ syntax, due to suspected namespace collision with rightjs
+	jQuery('html, body').animate({
+		scrollTop: jQuery("#editCheckBox").offset().top-50
+	},5);
 	jQuery('#editing-div').toggle();
 }
 

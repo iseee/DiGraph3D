@@ -1,0 +1,101 @@
+{
+   "graph": {
+      "nodes": [
+         {
+            "level": 4, 
+            "name": "electricity", 
+            "id": 1
+         }, 
+         {
+            "level": 0, 
+            "name": "urainium", 
+            "id": 2
+         }, 
+         {
+            "level": 0, 
+            "name": "waterFall", 
+            "id": 3
+         }, 
+         {
+            "level": 0, 
+            "name": "wind", 
+            "id": 4
+         }, 
+         {
+            "level": 0, 
+            "name": "geoSteam", 
+            "id": 5
+         }, 
+         {
+            "level": 0, 
+            "name": "waterTide", 
+            "id": 6
+         }, 
+         {
+            "level": 0, 
+            "name": "waterWave", 
+            "id": 7
+         }, 
+         {
+            "level": 0, 
+            "name": "inRiverFlow", 
+            "id": 8
+         }, 
+         {
+            "level": 0, 
+            "name": "solar", 
+            "id": 9
+         }
+      ], 
+      "arcs": [
+         {
+            "flow": 83.62294, 
+            "futureflow": 343.1357, 
+            "srcid": 2, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 842.7829, 
+            "futureflow": 1168.099, 
+            "srcid": 3, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 13.49799, 
+            "srcid": 4, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 0.0, 
+            "srcid": 5, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 0.0, 
+            "srcid": 6, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 0.0, 
+            "srcid": 7, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 0.0, 
+            "srcid": 8, 
+            "dstid": 1
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 0.4298269, 
+            "srcid": 9, 
+            "dstid": 1
+         }
+      ]
+   }
+}

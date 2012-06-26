@@ -66,11 +66,7 @@ class Graph {
 		return n;
 	}
 
-	/*
-	 * @params width of canvas
-	 *         height of canvas
-	 */
-	void draw(int width, int height) {
+	void draw() {
 		pushMatrix();
 		Arc a;
 		for(int i = 0; i < arcs.size(); i++) {

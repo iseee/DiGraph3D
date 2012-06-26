@@ -1,6 +1,6 @@
 int WIDTH = 1200;
 int HEIGHT = 800;
-int SCALE = 8;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
+int SCALE = 0.1;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
 int TEXT_Z = 50; 
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
@@ -60,7 +60,7 @@ void draw() {
 	rotateY(y_rotation * PI/500);
 
 	if(null != _graph)
-		_graph.draw(WIDTH, HEIGHT);
+		_graph.draw();
 	else {
 		text("No data yet!", 0, 0);
 	}

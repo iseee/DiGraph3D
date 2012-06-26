@@ -13,7 +13,7 @@ var colorPicker = new Colorpicker();
 function loadGraphFromStaticJson() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {
-		var url = "assets/json/canadaEnergy.json";
+		var url = "assets/json/historicalData.json";
 		// jquery ajax call to getJSON, function is the callback on success
 		jQuery.getJSON(url, function (data) {  
 			console.log(data);

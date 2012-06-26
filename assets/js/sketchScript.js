@@ -14,8 +14,9 @@ function loadGraphFromStaticJson() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {
 		var url = "assets/json/historicalData.json";
-		// jquery ajax call to getJSON, function is the callback on success
-		jQuery.getJSON(url, function (data) {  
+		// jquery ajax call to getJSON, function is the callback on success, eliminate caching
+		var noCache = new Date().getTime();
+		jQuery.getJSON(url, {"noCache":noCache}, function (data) {  
 			console.log(data);
 			var graphObj = pjs.getGraph();	
 			var nodes = data.graph.nodes;
@@ -59,7 +60,7 @@ function bindJavascript() {
 }
 
 function displaySelectedNodeInfo(name, flow, carbonFactor, waterFactor) {
-	html = "<b>"+name + "</b>: <i>TotalFlow</i>="+flow.toFixed(2)+" <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
+	html = "<b>"+name + "</b>: <i>TotalFlow</i>=<b>"+flow.toFixed(2)+" </b> Exajoules <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
 	document.getElementById("selectedNode").innerHTML=html;
 }
 

@@ -5,15 +5,15 @@
 var colorPicker = new Colorpicker();
 
 /*
- * Generates the graph based on JSON data retrieved from remote server
+ * Generates the graph based on JSON data retrieved from static file 
  * Must use a callback, standard for JSONP, because we are accessing a
  * resource outside the current domain. Without JSONP, we will get 
  * Access-origin-policy errors when attempting to retrieve the data.
  */
-function loadGraphFromRemote() {
+function loadGraphFromStaticJson() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {
-		var url = "http://localhost:2999/canadaenergy?callback=?";
+		var url = "assets/json/canadaEnergy.json";
 		// jquery ajax call to getJSON, function is the callback on success
 		jQuery.getJSON(url, function (data) {  
 			console.log(data);
@@ -28,10 +28,13 @@ function loadGraphFromRemote() {
 				var arc = arcs[i];
 				graphObj.addArc(arc.srcid, arc.dstid, arc.flow, arc.futureflow);
 			}
-		});  
+		})  
+		.error(function(jqXHR, textStatus, errorThrown) {
+			console.log("error " + textStatus);
+			console.log("incoming Text " + jqXHR.responseText); });
 	}
 	else
-		setTimeout(loadGraphFromRemote, 255);
+		setTimeout(loadGraphFromStaticJson, 255);
 }
 
 function rateSliderChanged(index, newValue) {
@@ -128,7 +131,7 @@ function resetSelectedNodeColor() {
 
 window.onload = function loadScript() {
 	bindJavascript();
-	loadGraphFromRemote();
+	loadGraphFromStaticJson();
 	colorPicker.insertTo('color-picker');
 	jQuery('#editCheckBox').click(function(){
 		editCheckboxChange(!$(this).hasClass('active')); 

@@ -2,6 +2,8 @@
  * Functions that interact with processing.js sketch
  */
 
+var colorPicker = new Colorpicker();
+
 /*
  * Generates the graph based on JSON data retrieved from remote server
  * Must use a callback, standard for JSONP, because we are accessing a
@@ -12,8 +14,8 @@ function loadGraphFromRemote() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {
 		var url = "http://localhost:2999/canadaenergy?callback=?";
-		// ajax call to getJSON, function is the callback on success
-		$.getJSON(url, function (data) {  
+		// jquery ajax call to getJSON, function is the callback on success
+		jQuery.getJSON(url, function (data) {  
 			console.log(data);
 			var graphObj = pjs.getGraph();	
 			var nodes = data.graph.nodes;
@@ -72,6 +74,21 @@ function changeColorScheme() {
 	pjs.ColorScheme.changeColorScheme();
 }
 
+function resetNodePositions() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetNodePositions();
+}
+
+function editCheckboxChange(checked) {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.setEditing(checked);
+	// call jQuery explicity, rather than usual $ syntax, due to suspected namespace collision with rightjs
+	jQuery('html, body').animate({
+		scrollTop: jQuery("#editCheckBox").offset().top-50
+	},5);
+	jQuery('#editing-div').toggle();
+}
+
 function renderIndividualControls() {
 	var pjs = Processing.getInstanceById('sketch');
 	if(pjs != null) {
@@ -85,14 +102,37 @@ function renderIndividualControls() {
 			html+="</tr>";
 		}
 		html += "</table>";
-		document.getElementById("individualControls").innerHTML=html;
 	}
 	else
 		setTimeout(renderIndividualControls, 255);
 }
 
+function getColorPickerValue() {
+	return colorPicker.toHex();	
+}
+
+function setColorPickerValue(val) {
+	colorPicker.setValue(val);
+}
+
+function resetAllNodeColors() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetAllNodeColors();
+}
+
+function resetSelectedNodeColor() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.resetSelectedNodeColor();
+}
+
+
 window.onload = function loadScript() {
 	bindJavascript();
 	loadGraphFromRemote();
+	colorPicker.insertTo('color-picker');
+	jQuery('#editCheckBox').click(function(){
+		editCheckboxChange(!$(this).hasClass('active')); 
+	});
+	jQuery("button[rel=tooltip]").tooltip();
 //	renderIndividualControls();
 }

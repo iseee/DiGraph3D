@@ -4,6 +4,8 @@ int SCALE = 8;		// used throughout to scale the visualization, ie the flow may b
 int TEXT_Z = 50; 
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
+boolean EDITING = false;
+int BAND_STEPS = 300;
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -23,6 +25,8 @@ JavaScript js;
 interface JavaScript {
 	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
 	void clearNodeInfo();
+	String getColorPickerValue();
+	void setColorPickerValue(String val);
 }
 
 /*
@@ -65,6 +69,42 @@ void draw() {
 
 void mousePressed() {
 	setLastMouse();
+	if(EDITING) {
+
+		Iterator it = _graph.getNodes().iterator();
+		Node n = null;
+		boolean nodeSelected = false;
+		while(it.hasNext()) {
+			n = (Node) it.next();
+			if(n.isSelected) {
+				// colorpicker needs the # to preface the hex string
+				js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+				n.toggleEditing();	
+				nodeSelected = true;
+			}
+			else {
+				// ensure only one node selected at one time
+				if(n.selectedForEditing)
+					n.toggleEditing();
+			}
+		}
+			it = _graph.getArcs().iterator();
+			Arc a = null;
+			boolean arcSelected = false; // avoid overlapping arcs being simultaneously selected
+			while(it.hasNext()) {
+				a = (Arc) it.next();
+				//println("checking between "+a.source.name+" and "+a.dest.name); 
+				if(a.selected() && !nodeSelected && !arcSelected) {
+					a.toggleEditing();
+					arcSelected = true;
+				}
+				else {
+					if(a.selectedForEditing)
+						a.toggleEditing();
+				}
+			}
+
+	} // editing
 }
 
 void setLastMouse() {
@@ -77,10 +117,27 @@ float dragLength() {
 }
 
 void mouseDragged() {
-	if(dragLength() > 10)
-		setLastMouse();
-	y_rotation += (mouseX-lastMouseX);
-	x_rotation += (lastMouseY-mouseY);
+	if(EDITING) {
+		boolean movingNode = false;
+		Iterator it = _graph.getNodes().iterator();
+		Node n = null;
+		while(it.hasNext()) {
+			n = (Node) it.next();
+			if(n.isSelected) {
+				movingNode = true;
+				break;
+			}
+		}
+		if(movingNode && null != n) {
+			n.moveByDelta(mouseX-pmouseX, mouseY-pmouseY);
+		}
+	}
+	else {
+		if(dragLength() > 10)
+			setLastMouse();
+		y_rotation += (mouseX-lastMouseX);
+		x_rotation += (lastMouseY-mouseY);
+	}
 }
 
 void updateArcRate(int arcIndex, float rate) {
@@ -124,6 +181,40 @@ float boundParam(float param) {
 	return param;
 }
 
+/*
+ * Allows user to reset node positions to original
+ */
+void resetNodePositions() {
+	_graph.updateNodePositions();
+}
+
+void setEditing(boolean state) {
+	EDITING = state;
+}
+
+void resetAllNodeColors() {
+	Iterator it = _graph.getNodes().iterator();
+	Node n = null;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+	}
+	js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+}
+
+void resetSelectedNodeColor() {
+	Iterator it = _graph.getNodes().iterator();
+	Node n = null;
+	while(it.hasNext()) {
+		n = (Node) it.next();
+		if(n.selectedForEditing) {
+			n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+			js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+			break;
+		}
+	}
+}
+
 static class ColorScheme {
 
 	final static color BG_COLOR_DARK = #000000; 	// black
@@ -132,8 +223,15 @@ static class ColorScheme {
 	final static color TEXT_COLOR_DARK = #FFFFFF;
 	final static color TEXT_COLOR_LIGHT = #000000;
 
-	final static color CARBON_BUBBLE_COLOR = color(230,50);
-	final static color WATER_DROPLET_COLOR = color(0,0,255,100);
+	// color(gray, alpha) cannot be used in static context, so use hex notation 0xARGB
+	final static color CARBON_BUBBLE_COLOR_DARK = 0x32e6e6e6; // equiv to color(230,50);
+	final static color CARBON_BUBBLE_COLOR_LIGHT = 0x64323232; // equiv to color(50,100);
+	final static color WATER_DROPLET_COLOR = 0x640000ff; // equiv to color(0,0,255,100);
+
+	final static color EDITING_COLOR_DARK = #f8f800;
+	final static color EDITING_COLOR_LIGHT = #f8f800;
+
+	final static color NODE_BASE_COLOR = 0xffff0000;
 
 
 	/*
@@ -149,38 +247,57 @@ static class ColorScheme {
 			currentScheme = 0;
 	}
 
-	static color getBgColor() {
+	/*
+	 * Common if statement when querying for scheme dependant color.
+	 * @params darkSchemeColor: color to be returned if currently using dark scheme
+	 *	        lightSchemeColor: color to be returned if currently using light scheme
+	 */
+	static color getColorBasedOnScheme(color darkSchemeColor, color lightSchemeColor) {
 		if(currentScheme == 0)
-			return BG_COLOR_DARK;
+			return darkSchemeColor;
 		if(currentScheme == 1)
-			return BG_COLOR_LIGHT;
-		return BG_COLOR_DARK; //default
+			return lightSchemeColor;
+		return darkSchemeColor; //default
+	}
+
+	static color getBgColor() {
+		return getColorBasedOnScheme(BG_COLOR_DARK, BG_COLOR_LIGHT); 
 	}
 
 	static color getTextColor() {
-		if(currentScheme == 0)
-			return TEXT_COLOR_DARK;
-		if(currentScheme == 1)
-			return TEXT_COLOR_LIGHT;
-		return TEXT_COLOR_DARK; //default
+		return getColorBasedOnScheme(TEXT_COLOR_DARK, TEXT_COLOR_LIGHT);
 	}
+
+	/*
+	 * The following methods use static references to the color() method, which is not static.
+	 * The processing IDE will complain about this and not compile/run. This does however work
+	 * fine when compiled to javascript.
+	 */
 
 	static color getArcColor(float width, float min, float max, boolean selected) {
 		int alpha = selected?255:100;
 		return color(0, map(width, min, max, 0, 255), 255, alpha);
 	}
 
-	static color getNodeColor(boolean selected) {
+	static int getNodeAlpha(boolean selected) {
 		int alpha=selected?255:100;	
-		return color(255, 0, 0, alpha);
+		return alpha;
+	}
+
+	static color getNodeBaseColor() {
+		return NODE_BASE_COLOR;
 	}
 
 	static color getCarbonBubbleColor() {
-		return CARBON_BUBBLE_COLOR;
+		return getColorBasedOnScheme(CARBON_BUBBLE_COLOR_DARK, CARBON_BUBBLE_COLOR_LIGHT);
 	}
 
 	static color getWaterDropletColor() {
 		return WATER_DROPLET_COLOR;
+	}
+
+	static color getEditingColor() {
+		return getColorBasedOnScheme(EDITING_COLOR_DARK, EDITING_COLOR_LIGHT);
 	}
 }
 

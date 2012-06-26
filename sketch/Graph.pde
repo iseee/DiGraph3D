@@ -66,7 +66,10 @@ class Graph {
 		return n;
 	}
 
-	// height and width of canvas
+	/*
+	 * @params width of canvas
+	 *         height of canvas
+	 */
 	void draw(int width, int height) {
 		pushMatrix();
 		Arc a;
@@ -86,10 +89,10 @@ class Graph {
 	}
 
 	ArrayList<Node> getNodes() {
-		ArrayList result = new ArrayList(nodes[0].values());
-		result.addAll(nodes[1].values());
-		result.addAll(nodes[2].values());
-		result.addAll(nodes[3].values());
+		ArrayList result = new ArrayList();
+		for(int i = 0; i < nodes.length; ++i) {
+			result.addAll(nodes[i].values());
+		}
 		return result;
 	}
 

@@ -15,6 +15,8 @@ class Node {
 	boolean isSelected = false;
 	CarbonBubbleAnimation carbonBubbleAnim;
 	WaterDropletAnimation waterDropletAnim;
+	boolean selectedForEditing = false;
+	color nodeBaseColor = ColorScheme.getNodeBaseColor();
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -44,6 +46,19 @@ class Node {
 	void setPosition(float x, float y) {
 		position.set(x,y,0);
 		inStartX = position.x+(position.x/2);
+		PVector start = new PVector();
+		start.set(position);
+		start.sub(0, getFlow()*SCALE/2, 0);
+		carbonBubbleAnim.setStartPosition(start);
+		start.set(position);
+		start.add(0, getFlow()*SCALE/2+5, 0);
+		waterDropletAnim.setStartPosition(start);
+	}
+
+	void moveByDelta(float deltaX, float deltaY) {
+		float newX = position.x + deltaX;
+		float newY = position.y + deltaY;
+		setPosition(newX, newY);
 	}
 
 	float getX() {
@@ -52,6 +67,10 @@ class Node {
 
 	float getY() {
 		return position.y;
+	}
+
+	float getZ() {
+		return position.z;
 	}
 
 	int associateInArc(float flowIncrease) {
@@ -126,7 +145,6 @@ class Node {
 
 
 	void draw() {
-		noStroke();
 		float alpha = 100;
 		if(selected()){
 			if(!isSelected) { // means node just became selected
@@ -144,20 +162,39 @@ class Node {
 			if(null != js) {
 				js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
 			}
-			drawEmissions();
+			if(!EDITING)
+				drawEmissions();
 		}
 		else {
 			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected
 				isSelected = false;
-				js.clearNodeInfo();
+				if(js != null)
+					js.clearNodeInfo();
 			}
 		}
 
 		float half_width = getFlow()*SCALE/8;
 		float half_height = getFlow()*SCALE/2;
 
-		fill(ColorScheme.getNodeColor(isSelected));
-		stroke(100);
+		noStroke();
+		if(selectedForEditing && EDITING) {
+			stroke(ColorScheme.getEditingColor());
+			strokeWeight(2);
+			
+			/*
+			 * colorpicker returns string of hex representation, prefixed with #
+			 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
+			 * then, processing can only create colors from integer values, so using the colorToBe int as 
+			 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
+			 */
+			String[] split = splitTokens(js.getColorPickerValue(), "#");
+			int colorToBe = unhex(split[0]);
+			int r = colorToBe  >> 16 & 0xFF;
+			int g = colorToBe >> 8 & 0xFF;
+			int b = colorToBe & 0xFF;
+			nodeBaseColor = color(r,g,b,255);
+		}
+		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
 		translate(position.x, position.y, 0);
 		// draw a hexahedron to represent the node
@@ -200,6 +237,8 @@ class Node {
 		}
 		text(name, 0, 0, TEXT_Z);
 		popMatrix();
+		stroke(100); // there is a bug in processing, this fixes it
+		noStroke();
 	}
 
 	/*
@@ -220,6 +259,10 @@ class Node {
 			carbonBubbleAnim.draw();
 		if(waterEmission > 0)
 			waterDropletAnim.draw();
+	}
+	
+	void toggleEditing() {
+		selectedForEditing = !selectedForEditing;	
 	}
 }
 
@@ -245,6 +288,15 @@ class CarbonBubbleAnimation {
 		start = frameCount;
 	}
 
+	void setStartPosition(PVector pos) {
+		Iterator it = bubbles.iterator();
+		CarbonBubble b;
+		while(it.hasNext()) {
+			b = (CarbonBubble)it.next();
+			b.start = pos;
+		}
+	}
+
 	void draw() {
 		CarbonBubble b;
 		Iterator<CarbonBubble> it = bubbles.iterator();
@@ -254,6 +306,7 @@ class CarbonBubbleAnimation {
 			b.draw(start,i++);
 		}
 	}
+
 }
 
 class CarbonBubble {
@@ -279,11 +332,20 @@ class CarbonBubble {
 		if( (frameCount - animStart) > (i*20) ) {
 			noStroke();
 			fill(ColorScheme.getCarbonBubbleColor());
+			//===================================================
+			/*
+			 * for some reason this code generates a WebGl INVALID_OPERATION warning
+			 * each time it is called. So far I have not been able to figure out why.
+			 * It seem so to behave as expected and work correctly.
+			 * If the sphere is not drawn, the error stops. May be a bug in processing.js
+			 * and how it compiles to webGl code
+			 */ 
 			pushMatrix();
 			translate(bubPos.x, bubPos.y);
 			float t = abs( (start.y-bubPos.y)/yMax);
 			sphere(lerp(startRadius, maxRadius, t));
 			popMatrix();
+			//===================================================
 			bubPos.add(velocity);
 			if(bubPos.y < -height/2+startRadius || start.y-bubPos.y > yMax)
 				bubPos.set(start);
@@ -309,6 +371,15 @@ class WaterDropletAnimation {
 			droplets.add(new WaterDroplet(pos, emission));
 		}
 		start = frameCount;
+	}
+
+	void setStartPosition(PVector pos) {
+		Iterator it = droplets.iterator();
+		WaterDroplet d;
+		while(it.hasNext()) {
+			d = (WaterDroplet)it.next();
+			d.start = pos;
+		}
 	}
 
 	void draw() {
@@ -347,11 +418,20 @@ class WaterDroplet {
 		if( (frameCount - animStart) > (i*emission) ) {
 			noStroke();
 			fill(ColorScheme.getWaterDropletColor());
+			//===================================================
+			/*
+			 * for some reason this code generates a WebGl INVALID_OPERATION warning
+			 * each time it is called. So far I have not been able to figure out why.
+			 * It seem so to behave as expected and work correctly.
+			 * If the sphere is not drawn, the error stops. May be a bug in processing.js
+			 * and how it compiles to webGl code
+			 */ 
 			pushMatrix();
 			translate(dropPos.x, dropPos.y);
 			sphere(curRadius++);
 			curRadius = curRadius>maxRadius?maxRadius:curRadius;
 			popMatrix();
+			//===================================================
 			if(curRadius >= maxRadius) {
 				dropPos.add(velocity);
 				velocity.add(gravity);

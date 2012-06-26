@@ -54,10 +54,84 @@
     <div class="container">
 
       <h1>Interactive Sankey Diagram</h1>
-      <p>Click and drag to rotate the scene. Hover over red nodes to see node ID and radius.<br>Refresh to generate a new graph.
+      <p>Click and drag to rotate the scene. Hover over red nodes to see node ID and radius.
+		<br>Click and drag a node to move it while in edit mode.
 		<br>Press 'r' to reset rotation</p>
 		<br>
-		<button class="btn" type="button" onclick="changeColorScheme()">Change color scheme</button>
+
+		<button class="btn btn-primary btn-mini" id="editCheckBox" data-toggle="button" rel="tooltip" title="Click to show/hide the editing pane"><i class="icon-pencil icon-white"></i> Edit</button>
+		
+		<div id="editing-div" style="display:none">
+			<div class="btn-toolbar">
+				<div class="btn-group">
+					<button class="btn btn-inverse btn-mini" type="button" onclick="changeColorScheme()" rel="tooltip" title="Switch between dark and light themes">Change color theme</button>
+				</div>
+				<div class="btn-group">
+					<button class="btn btn-inverse btn-mini" type="button" href="#editHelp" data-toggle="modal"><i class="icon-question-sign icon-white"></i> Help</button>
+				</div>
+			</div><!--/btn-toolbar-->
+
+			<ul class="nav nav-tabs" id="editingTabs">
+				<li class="active"><a data-toggle="tab" href="#nodeEditing">Nodes</a></li>
+				<li><a data-toggle="tab" href="#arcEditing">Arcs</a></li>
+			</ul>
+			<div id="editingTabContent" class="tab-content">
+				<div id="nodeEditing" class="tab-pane fade in active">
+					<div class="btn-group">
+						<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Reset <span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<!-- dropdown menu links, return false so browser does not navigate to top of page (#) on click -->
+							<li><a href="#" onclick="resetNodePositions();return false;">All node positions</a></li>
+							<li class="divider"></li>
+							<li><a href="#" onclick="resetAllNodeColors();return false;">All node colors</a></li>
+							<li><a href="#" onclick="resetSelectedNodeColor();return false;">Selected node color</a></li>
+						</ul>
+					</div><!--/btn-group-->
+					<!--color picker for nodes-->
+					<div id="color-picker"></div>
+				</div><!--/nodeEditing-->
+
+				<div id="arcEditing" class="tab-pane fade">
+					<p>Coming soon!</p>
+				</div>
+			</div><!--/editingTabContent-->
+	
+			<!--Hidden div for help madal-->
+			<div class="modal hide fade" id="editHelp" style="display: none;">
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button">×</button>
+					<h2>Editing Help</h2>
+				</div>
+				<div class="modal-body">
+					<h3>General</h3>
+					<p>Edit mode allows you to move nodes and modify the colors of the Sankey diagram. When in edit mode
+					<strong>animations are deactivated</strong> (bubbles, flow spheres, etc).</p>
+					<hr>
+					<h3>Changing color theme</h3>
+					<p>By clicking the <em>Change color theme</em> button, you can switch between the dark and light themes.</p>
+					<hr>
+					<h3>Nodes</h3>
+					<h4>Editing node colors</h4>
+					<p>Select a node by clicking it. When selected, a node will have a yellow border. Then use the color
+					picker to modify the nodes color.</p>
+					<p>You can reset all the nodes back to their default color, or reset only the currently selected node
+					by selecting the appropriate option from the <em>Reset</em> dropdown</p>
+					<h4>Moving nodes</h4>
+					<p>Click and drag any node to adjust its position.</p>
+					<p>To reset the positions, from the <em>Reset</em> dropdown, select <em>All node postions</em>.</p>
+					<hr>
+					<h3>Arcs</h3>
+					<h4>Editing arc colors</h4>
+					<p>Coming soon!</p>
+					<h4>Moving arcs</h4>
+					<p>Coming soon!</p>
+				</div>
+				<div class="modal-footer">
+					<a data-dismiss="modal" class="btn" href="#">Close</a>
+				</div>
+			</div><!--/modal-->
+
+		</div><!--/editing-div-->
 	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 		
@@ -89,21 +163,22 @@
 		<!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/bootstrap-transition.js"></script>
-    <script src="assets/js/bootstrap-alert.js"></script>
-    <script src="assets/js/bootstrap-modal.js"></script>
-    <script src="assets/js/bootstrap-dropdown.js"></script>
-    <script src="assets/js/bootstrap-scrollspy.js"></script>
-    <script src="assets/js/bootstrap-tab.js"></script>
-    <script src="assets/js/bootstrap-tooltip.js"></script>
-    <script src="assets/js/bootstrap-popover.js"></script>
-    <script src="assets/js/bootstrap-button.js"></script>
-    <script src="assets/js/bootstrap-collapse.js"></script>
-    <script src="assets/js/bootstrap-carousel.js"></script>
-    <script src="assets/js/bootstrap-typeahead.js"></script>
-	 <script src="assets/js/processing-1.3.6.js"></script>
-	 <script src="assets/js/sketchScript.js"></script>
-
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-transition.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-alert.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-scrollspy.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-popover.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-button.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-collapse.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-carousel.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-typeahead.js"></script>
+    <script type="text/javascript" src="assets/js/processing-1.3.6.js"></script>
+ 	 <script type="text/javascript" src="http://cdn.rightjs.org/right.js"></script>
+    <script type="text/javascript" src="assets/js/right-colorpicker.js"></script>
+    <script type="text/javascript" src="assets/js/sketchScript.js"></script>
   </body>
 </html>

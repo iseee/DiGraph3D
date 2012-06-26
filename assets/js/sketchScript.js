@@ -82,6 +82,16 @@ function resetNodePositions() {
 	pjs.resetNodePositions();
 }
 
+function zoomIn() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.zoomIn();
+}
+
+function zoomOut() {
+	var pjs = Processing.getInstanceById('sketch');
+	pjs.zoomOut();
+}
+
 function editCheckboxChange(checked) {
 	var pjs = Processing.getInstanceById('sketch');
 	pjs.setEditing(checked);

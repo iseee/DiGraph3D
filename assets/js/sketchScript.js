@@ -68,9 +68,10 @@ function clearNodeInfo() {
 	document.getElementById("selectedNode").innerHTML="";
 }
 
-function timeSliderChanged(val) {
+function yearSliderChanged(val) {
 	var pjs = Processing.getInstanceById('sketch');
-	pjs.updateArcLerps(val);
+	var _graph = pjs.getGraph();
+	_graph.updateArcLerps(val);
 }
 
 function changeColorScheme() {

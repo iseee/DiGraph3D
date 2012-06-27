@@ -56,7 +56,7 @@ for line in renewableElecCsv:
 	# find correct node to assign data to
 	node = findMappedNode(csvName)
 	if node: 
-		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":(float(split[1])/1000), "futureflow":(float(split[len(split)-1])/1000)})
+		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":[float(val)/1000 for val in split[1:]]})
 
 renewableElecCsv.close()
 print "done"
@@ -77,7 +77,7 @@ for line in fuelUsedElecGenCsv:
 	# find correct node to assign data to
 	node = findMappedNode(csvName)
 	if node: 
-		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":(float(split[1])/1000), "futureflow":(float(split[len(split)-1])/1000)})
+		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":[float(val)/1000 for val in split[1:]]})
 
 fuelUsedElecGenCsv.close()
 print "done"
@@ -100,7 +100,7 @@ for line in finalDemandCsv:
 		nodes[useName] = {'id':len(nodes)+1, 'level':4}
 	srcNode = findMappedNode(fuelName)
 	if srcNode:
-		arcs.append({ 'srcid':nodes[srcNode]['id'], 'dstid':nodes[useName]['id'], 'flow':(float(split[2])/1000), 'futureflow':(float(split[len(split)-1])/1000)})
+		arcs.append({ 'srcid':nodes[srcNode]['id'], 'dstid':nodes[useName]['id'], 'flow':[float(val)/1000 for val in split[2:]]})
 
 finalDemandCsv.close()
 print "done"

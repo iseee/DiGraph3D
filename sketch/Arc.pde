@@ -2,7 +2,7 @@ class Arc {
 
 	Node source;
 	Node dest;
-	float origFlow;
+//	float origFlow;
 	float flow;
 	PVector ctrlPt1;
 	PVector ctrlPt2;
@@ -11,16 +11,18 @@ class Arc {
 	boolean selectedForEditing = false;
 
 	// param for hack to show transistion between two 'states'
-	float futureFlow;
+//	float futureFlow;
 	
-	Arc(Node source, Node dest, float flow, float futureFlow) {
+	float[] flowByYears;
+
+	// Assume flowData has at least two entries
+	Arc(Node source, Node dest, float[] flowData) {
 		this.source = source;
 		this.dest = dest;
-		this.flow = flow;
-		origFlow = flow;
+		flowByYears = flowData;
+		this.flow = flowByYears[0];
 		sourceOffset = source.associateOutArc(flow);
 		destOffset = dest.associateInArc(flow);
-		this.futureFlow = futureFlow;
 
 		ctrlPt1 = new PVector(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
 		ctrlPt2 = new PVector(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
@@ -38,7 +40,7 @@ class Arc {
 	}
 
 	void updateFlow(float multiplier) {
-		setFlow(origFlow*multiplier);
+		setFlow(flowByYears[0]*multiplier);
 	}
 
 	/*
@@ -46,8 +48,8 @@ class Arc {
 	 * some future flow (futureFlow). We linearly interpolate between the two states
 	 * @param val: linear interpolation parameter, 0<=val<=1 (enforced by boundParam)
 	 */
-	void updateLerp(float val) {
-		setFlow(lerp(origFlow, futureFlow, boundParam(val)));
+	void updateYear(int year) {
+		setFlow(flowByYears[year-1978]);
 	}
 
 	void draw() {

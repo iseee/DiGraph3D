@@ -25,13 +25,13 @@ class Graph {
 		updateNodePositions();
 	}
 
-	boolean addArc(int srcID, int dstID, float flow, float futureFlow) {
+	boolean addArc(int srcID, int dstID, float[] flowData) {
 		Node src = getNode(srcID);
 		Node dst = getNode(dstID);
 		if(src==null || dst==null) 
 			return false;
 		
-		arcs.add(new Arc(src,dst,flow,futureFlow));	
+		arcs.add(new Arc(src,dst,flowData));	
 		return true;
 	}
 
@@ -112,12 +112,12 @@ class Graph {
 			a.updateFlow(multiplier);
 	}
 	
-	void updateArcLerps(float val) {
+	void updateArcYear(float year) {
 		Iterator it = arcs.iterator();
 		Arc a;
 		while(it.hasNext()) {
 			a = (Arc) it.next();
-			a.updateLerp(val);
+			a.updateYear(year);
 		}
 	}
 }

@@ -133,16 +133,17 @@
 			</div><!--/modal-->
 
 		</div><!--/editing-div-->
-	
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
-		
-		<span class="label">Selected Node</span>
-		<span id="selectedNode"></span>
-		<br>
+	
+		<div class="row">
+			<div class="span8"><span class="label">Selected Node</span><span id="selectedNode"></span></div>
+			<div class="span4"><span align="right" id="currentYear"><h3>1978</h3></span></div>
+		</div>
 		<span class="label">Year</span>
 		1978	
-		<input type="range" min="0" max="100" value="0" step="1" onchange="yearSliderChanged(this.value/100)" />
+		<input type="range" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />
 		2006
+		
 		<p>
 		The grey/blue 'bubbles/droplets' moving up/down represent carbon/water emissions of that node. 
 		<div id="individualControls">

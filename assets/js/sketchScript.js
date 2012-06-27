@@ -27,7 +27,7 @@ function loadGraphFromStaticJson() {
 			var arcs = data.graph.arcs;
 			for(i = 0; i < arcs.length; i++) {
 				var arc = arcs[i];
-				graphObj.addArc(arc.srcid, arc.dstid, arc.flow, arc.futureflow);
+				graphObj.addArc(arc.srcid, arc.dstid, arc.flow);
 			}
 		})  
 		.error(function(jqXHR, textStatus, errorThrown) {
@@ -71,7 +71,9 @@ function clearNodeInfo() {
 function yearSliderChanged(val) {
 	var pjs = Processing.getInstanceById('sketch');
 	var _graph = pjs.getGraph();
-	_graph.updateArcLerps(val);
+	_graph.updateArcYear(val);
+	html = "<h3>"+val+"</h3>";
+	document.getElementById("currentYear").innerHTML=html;
 }
 
 function changeColorScheme() {

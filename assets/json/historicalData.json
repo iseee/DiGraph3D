@@ -2,259 +2,258 @@
    "graph": {
       "nodes": [
          {
-            "level": 0, 
-            "name": "naturalgas", 
-            "id": 13
+            "level": 4, 
+            "name": "Pipeline", 
+            "id": 12
          }, 
          {
             "level": 4, 
             "name": "Industrial", 
-            "id": 16
+            "id": 11
          }, 
          {
             "level": 4, 
             "name": "Transportation", 
-            "id": 10
+            "id": 9
          }, 
          {
             "level": 4, 
             "name": "Residential/Commercial", 
-            "id": 15
-         }, 
-         {
-            "level": 0, 
-            "name": "coal", 
-            "id": 12
+            "id": 10
          }, 
          {
             "level": 2, 
-            "name": "electricity", 
-            "id": 1
-         }, 
-         {
-            "level": 0, 
-            "name": "petroleum", 
-            "id": 11
-         }, 
-         {
-            "level": 0, 
-            "name": "biomass", 
-            "id": 14
-         }, 
-         {
-            "level": 0, 
-            "name": "inRiverFlow", 
-            "id": 8
-         }, 
-         {
-            "level": 0, 
-            "name": "geoSteam", 
-            "id": 5
-         }, 
-         {
-            "level": 0, 
-            "name": "waterFall", 
+            "name": "Electricity", 
             "id": 3
          }, 
          {
             "level": 0, 
-            "name": "urainium", 
+            "name": "Uranium", 
+            "id": 0
+         }, 
+         {
+            "level": 0, 
+            "name": "Petroleum", 
+            "id": 1
+         }, 
+         {
+            "level": 0, 
+            "name": "Coal", 
             "id": 2
          }, 
          {
             "level": 0, 
-            "name": "solar", 
-            "id": 9
+            "name": "LiquidFuels", 
+            "id": 5
          }, 
          {
-            "level": 0, 
-            "name": "waterTide", 
+            "level": 1, 
+            "name": "Biomass/other", 
             "id": 6
          }, 
          {
             "level": 0, 
-            "name": "waterWave", 
-            "id": 7
-         }, 
-         {
-            "level": 4, 
-            "name": "Pipeline", 
-            "id": 17
-         }, 
-         {
-            "level": 0, 
-            "name": "wind", 
+            "name": "NaturalGas/NGL", 
             "id": 4
+         }, 
+         {
+            "level": 1, 
+            "name": "Hydro", 
+            "id": 7
          }
       ], 
       "arcs": [
          {
             "flow": 0.08362294, 
             "futureflow": 0.3431357, 
-            "srcid": 2, 
-            "dstid": 1
+            "srcid": 0, 
+            "dstid": 3
          }, 
          {
             "flow": 0.8427829, 
             "futureflow": 1.168099, 
-            "srcid": 3, 
-            "dstid": 1
+            "srcid": 7, 
+            "dstid": 3
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.01349799, 
-            "srcid": 4, 
-            "dstid": 1
-         }, 
-         {
-            "flow": 0.0, 
-            "futureflow": 0.0, 
-            "srcid": 5, 
-            "dstid": 1
+            "srcid": 6, 
+            "dstid": 3
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
             "srcid": 6, 
-            "dstid": 1
+            "dstid": 3
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
             "srcid": 7, 
-            "dstid": 1
+            "dstid": 3
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
-            "srcid": 8, 
-            "dstid": 1
+            "srcid": 7, 
+            "dstid": 3
+         }, 
+         {
+            "flow": 0.0, 
+            "futureflow": 0.0, 
+            "srcid": 7, 
+            "dstid": 3
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0004298269, 
-            "srcid": 9, 
-            "dstid": 1
+            "srcid": 6, 
+            "dstid": 3
+         }, 
+         {
+            "flow": 1.179687, 
+            "futureflow": 1.7699760000000002, 
+            "srcid": 2, 
+            "dstid": 3
+         }, 
+         {
+            "flow": 0.28162729999999997, 
+            "futureflow": 0.3684319, 
+            "srcid": 1, 
+            "dstid": 3
+         }, 
+         {
+            "flow": 0.3606626, 
+            "futureflow": 0.9846557, 
+            "srcid": 4, 
+            "dstid": 3
+         }, 
+         {
+            "flow": 0.03184953, 
+            "futureflow": 0.17606970000000002, 
+            "srcid": 6, 
+            "dstid": 3
          }, 
          {
             "flow": 0.001797, 
             "futureflow": 0.003496, 
-            "srcid": 1, 
-            "dstid": 10
+            "srcid": 3, 
+            "dstid": 9
          }, 
          {
             "flow": 1.727357, 
             "futureflow": 2.471484, 
-            "srcid": 11, 
-            "dstid": 10
+            "srcid": 1, 
+            "dstid": 9
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
-            "srcid": 12, 
-            "dstid": 10
+            "srcid": 2, 
+            "dstid": 9
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.001934833, 
-            "srcid": 13, 
-            "dstid": 10
+            "srcid": 4, 
+            "dstid": 9
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.01006617, 
-            "srcid": 14, 
-            "dstid": 10
+            "srcid": 6, 
+            "dstid": 9
          }, 
          {
             "flow": 0.6139789, 
             "futureflow": 1.073345, 
-            "srcid": 1, 
-            "dstid": 15
+            "srcid": 3, 
+            "dstid": 10
          }, 
          {
             "flow": 0.5241524, 
             "futureflow": 0.2206212, 
-            "srcid": 11, 
-            "dstid": 15
+            "srcid": 1, 
+            "dstid": 10
          }, 
          {
             "flow": 0.000799306, 
             "futureflow": 0.0, 
-            "srcid": 12, 
-            "dstid": 15
+            "srcid": 2, 
+            "dstid": 10
          }, 
          {
             "flow": 0.7277577, 
             "futureflow": 1.0501179999999999, 
-            "srcid": 13, 
-            "dstid": 15
+            "srcid": 4, 
+            "dstid": 10
          }, 
          {
             "flow": 0.05325297, 
             "futureflow": 0.09032899, 
-            "srcid": 14, 
-            "dstid": 15
+            "srcid": 6, 
+            "dstid": 10
          }, 
          {
             "flow": 0.5053176, 
             "futureflow": 0.8810782, 
-            "srcid": 1, 
-            "dstid": 16
+            "srcid": 3, 
+            "dstid": 11
          }, 
          {
             "flow": 1.083958, 
             "futureflow": 1.3831110000000002, 
-            "srcid": 11, 
-            "dstid": 16
+            "srcid": 1, 
+            "dstid": 11
          }, 
          {
             "flow": 0.2362704, 
             "futureflow": 0.05839951, 
-            "srcid": 12, 
-            "dstid": 16
+            "srcid": 2, 
+            "dstid": 11
          }, 
          {
             "flow": 1.094436, 
             "futureflow": 2.410702, 
-            "srcid": 13, 
-            "dstid": 16
+            "srcid": 4, 
+            "dstid": 11
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
-            "srcid": 14, 
-            "dstid": 16
+            "srcid": 6, 
+            "dstid": 11
          }, 
          {
             "flow": 0.005135, 
             "futureflow": 0.012821999999999998, 
-            "srcid": 1, 
-            "dstid": 17
+            "srcid": 3, 
+            "dstid": 12
          }, 
          {
             "flow": 0.00033431899999999997, 
             "futureflow": 0.0007864668, 
-            "srcid": 11, 
-            "dstid": 17
+            "srcid": 1, 
+            "dstid": 12
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
-            "srcid": 12, 
-            "dstid": 17
+            "srcid": 2, 
+            "dstid": 12
          }, 
          {
             "flow": 0.08540872000000001, 
             "futureflow": 0.1991684, 
-            "srcid": 13, 
-            "dstid": 17
+            "srcid": 4, 
+            "dstid": 12
          }, 
          {
             "flow": 0.0, 
             "futureflow": 0.0, 
-            "srcid": 14, 
-            "dstid": 17
+            "srcid": 6, 
+            "dstid": 12
          }
       ]
    }

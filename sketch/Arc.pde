@@ -2,16 +2,12 @@ class Arc {
 
 	Node source;
 	Node dest;
-//	float origFlow;
 	float flow;
 	PVector ctrlPt1;
 	PVector ctrlPt2;
 	int sourceOffset, destOffset;
 	float rate = 5;
 	boolean selectedForEditing = false;
-
-	// param for hack to show transistion between two 'states'
-//	float futureFlow;
 	
 	float[] flowByYears;
 
@@ -24,8 +20,8 @@ class Arc {
 		sourceOffset = source.associateOutArc(flow);
 		destOffset = dest.associateInArc(flow);
 
-		ctrlPt1 = new PVector(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
-		ctrlPt2 = new PVector(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
+		ctrlPt1 = new PVector();
+		ctrlPt2 = new PVector();
 	}
 
 	/*
@@ -54,6 +50,8 @@ class Arc {
 	}
 
 	void draw() {
+		ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
+		ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
 		float _width = SCALE * flow;
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end

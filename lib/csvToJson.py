@@ -106,6 +106,26 @@ finalDemandCsv.close()
 print "done"
 
 
+# read disposition data #
+#print "reading fuelDisposition.csv"
+#fuelDispositionCsv = open('fuelDisposition.csv', 'r')
+#
+#line = fuelDispositionCsv.readline()
+#assert line == 'entity: /year\n', "entity is not correct in fuelDisposition.csv"
+#line = fuelDispositionCsv.readline()
+#assert line == 'unit of measure: petajoule\n', "unit of measure is not correct"
+#line = fuelDispositionCsv.readline() # read header line
+#
+#for line in fuelDispositionCsv:
+#	split = line.split(',')
+#	fuelName = split[0].strip('"')
+#	dispType = split[1].strip('"')
+#	fuelNode = findMappedNode(fuelName)
+#	if fuelNode:
+#
+#fuelDispositionCsv.close();
+#print 'done'
+
 
 # format data for export to json
 data = {'graph':{'nodes':[{'name':name,'id':info.get('id'),'level':info.get('level')} for (name,info) in nodes.items()], 'arcs':arcs}}

@@ -5,93 +5,133 @@
 class Graph {
 
 	/*
-	 * nodes are arranged in 'levels'. A level is a section of the canvas. The canvas is split into five
-	 * sections, which we refer to as levels. A level consists of some nodes, which will be drawn stacked
-	 * vertically. This is kind of a hack. Rather than automatically determining the horizontal spacing
-	 * between nodes based on connectivity, we manually enter which level they should be in. So nodes that
-	 * are only sources, will be in level 1 (left most section of canvas), and nodes which are only destinations
-	 * are usually in level 5 (rightmost). The intermediate nodes which have both incoming and outgoing arcs, fill
-	 * the other intermediate levels
+	 * We use the term level to describe the horizontal positioning of a node. The canvas is divided
+	 * into 10 sections, determined by dx in updateNodePositions(). 
+	 * Canvas:
+	 * -------------------------------------------------------------
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * |     |     |     |     |     |     |     |     |     |     |
+	 * -------------------------------------------------------------
+	 * 0     1     2     3     4     5     6     7     8     9     10     LEVEL
+	 *
+	 * The level is specified in the json input data, and determines where that node will
+	 * be programatically placed on the canves. Nodes in the same level are placed evenly in 
+	 * the vertical space. Node positions can be manually edited in the browser.
+	 * We use a hashmap of hashmaps to store the nodes. This way we can place nodes of the same
+	 * level together, for easier vertical placement later. The inner hashmap, indexed by node id
+	 * somewhat speeds up individual node lookup for displaying info and editing etc.
 	 */
-	HashMap[] nodes  = {new HashMap(), new HashMap(), new HashMap(), new HashMap(), new HashMap()};
+	HashMap nodes  = new HashMap();
 	ArrayList<Arc> arcs;
+	boolean timelineAnimPlaying = false;
+	int animTimer = 0;
 
 	Graph() {
 		arcs = new ArrayList();
 	}
 
 	void addNode(Node node) {
-		nodes[node.level].put(node.id, node);
+		// if we have not seen this level, add a hashmap for it into the nodes map
+		if(!nodes.containsKey(node.level)) {
+			nodes.put(node.level, new HashMap());
+		}
+		// add the node, indexed by id, into the hashmap for its corresponding level
+		nodes.get(node.level).put(node.id, node);
 		updateNodePositions();
 	}
 
-	boolean addArc(int srcID, int dstID, float flow, float futureFlow) {
+	boolean addArc(int srcID, int dstID, float[] flowData) {
 		Node src = getNode(srcID);
 		Node dst = getNode(dstID);
 		if(src==null || dst==null) 
 			return false;
 		
-		arcs.add(new Arc(src,dst,flow,futureFlow));	
+		arcs.add(new Arc(src,dst,flowData));	
 		return true;
 	}
 
-	// update each level
+	/*
+	 * Arranges the nodes based on the 'level' they are in. Within each level, nodes
+	 * are spaced vertically evenly
+	 */
 	void updateNodePositions() {
 		// iterate over levels
-		for(int j = 0; j<nodes.length; j++) {	
-			float dy = height/float(nodes[j].size()+1);
+		Iterator levels = nodes.values().iterator();
+		HashMap level;
+		while(levels.hasNext()) {
+			level = (HashMap) levels.next();
+			float dy = height/float(level.size()+1);
 			float dx = width/10.0;
 			Node n;
-			Iterator it = nodes[j].values().iterator();
+			Iterator it = level.values().iterator();
 			int i = 1;
 			// iterate over nodes in this level
 			while(it.hasNext()){
 				n = (Node)it.next();
-				n.setPosition(-1*width/2+dx*(2*j+1), -1*height/2+i*dy);
+				n.setPosition(-1*width/2+dx*n.level, -1*height/2+i*dy);
 				i++;
 			}
 		}
 	}
 	
 	Node getNode(int id) {
-		boolean found = false;
 		Node n = null;
-		for(int i = 0; i < nodes.length; i++) {
-			n = (Node)nodes[i].get(id);
+		Iterator levels = nodes.values().iterator();
+		HashMap level;
+		while(levels.hasNext()) {
+			level = (HashMap) levels.next();
+			n = (Node)level.get(id);
 			if(null != n) {
-				found = true;
+				// found node
 				break;
 			}
 		}
 		return n;
 	}
 
-	/*
-	 * @params width of canvas
-	 *         height of canvas
-	 */
-	void draw(int width, int height) {
+	void draw() {
 		pushMatrix();
 		Arc a;
 		for(int i = 0; i < arcs.size(); i++) {
 			a = (Arc) arcs.get(i);
 			a.draw();
 		}
+		Iterator levels = nodes.values().iterator();
+		HashMap level;
 		Node n;
-		for(int i = 0; i < nodes.length; i++) {
-			Iterator it = nodes[i].values().iterator();
+		while(levels.hasNext()) {
+			level = (HashMap)levels.next();
+			Iterator it = level.values().iterator();
 			while(it.hasNext()) {
 				n = (Node)it.next(); 
 				n.draw();
 			}
 		}
 		popMatrix();
+
+		if(timelineAnimPlaying) {
+			incrementTimeline();
+		}
 	}
 
 	ArrayList<Node> getNodes() {
 		ArrayList result = new ArrayList();
-		for(int i = 0; i < nodes.length; ++i) {
-			result.addAll(nodes[i].values());
+		Iterator levels = nodes.values().iterator();
+		HashMap level;
+		while(levels.hasNext()) {
+			level = (HashMap)levels.next();
+			result.addAll(level.values());
 		}
 		return result;
 	}
@@ -116,12 +156,30 @@ class Graph {
 			a.updateFlow(multiplier);
 	}
 	
-	void updateArcLerps(float val) {
+	void updateArcYear(int year, float lerpVal) {
 		Iterator it = arcs.iterator();
 		Arc a;
 		while(it.hasNext()) {
 			a = (Arc) it.next();
-			a.updateLerp(val);
+			a.updateYear(year, lerpVal);
 		}
+	}
+
+	void toggle_timelineAnimPlaying() {
+		timelineAnimPlaying =  !timelineAnimPlaying;
+		animTimer = 0;
+	}
+
+	void incrementTimeline() {
+		// get current year, increment, update
+		int curYear = js.getTimelineYear();
+		animTimer++;
+		if(animTimer == 10) {
+			animTimer = 0;
+			curYear++;
+			curYear = curYear>2006?1978:curYear;
+			js.setTimelineYear(curYear);
+		}
+		updateArcYear(curYear, float(animTimer)/10.0);
 	}
 }

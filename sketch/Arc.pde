@@ -2,28 +2,26 @@ class Arc {
 
 	Node source;
 	Node dest;
-	float origFlow;
 	float flow;
 	PVector ctrlPt1;
 	PVector ctrlPt2;
 	int sourceOffset, destOffset;
 	float rate = 5;
 	boolean selectedForEditing = false;
-
-	// param for hack to show transistion between two 'states'
-	float futureFlow;
 	
-	Arc(Node source, Node dest, float flow, float futureFlow) {
+	float[] flowByYears;
+
+	// Assume flowData has at least two entries
+	Arc(Node source, Node dest, float[] flowData) {
 		this.source = source;
 		this.dest = dest;
-		this.flow = flow;
-		origFlow = flow;
+		flowByYears = flowData;
+		this.flow = flowByYears[0];
 		sourceOffset = source.associateOutArc(flow);
 		destOffset = dest.associateInArc(flow);
-		this.futureFlow = futureFlow;
 
-		ctrlPt1 = new PVector(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
-		ctrlPt2 = new PVector(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
+		ctrlPt1 = new PVector();
+		ctrlPt2 = new PVector();
 	}
 
 	/*
@@ -38,19 +36,22 @@ class Arc {
 	}
 
 	void updateFlow(float multiplier) {
-		setFlow(origFlow*multiplier);
+		setFlow(flowByYears[0]*multiplier);
 	}
 
-	/*
-	 * The arc can be between two different states, the original flow (origFlow) and
-	 * some future flow (futureFlow). We linearly interpolate between the two states
-	 * @param val: linear interpolation parameter, 0<=val<=1 (enforced by boundParam)
-	 */
-	void updateLerp(float val) {
-		setFlow(lerp(origFlow, futureFlow, boundParam(val)));
+	void updateYear(int year, float lerpVal) {
+		// there was a crazy bug, where if here you put nextYear = year+1, Processing would for some reason
+		// assign next year the value year with a one appended, rather than added. So if year was 1980,
+		// nextYear would get the value 19801! Using the ++ operator seems to work as expected. Very strange
+		int nextYear = year;
+		nextYear++;
+		nextYear = nextYear>2006?2006:nextYear;
+		setFlow(lerp(flowByYears[year-1978], flowByYears[nextYear-1978], lerpVal));
 	}
 
 	void draw() {
+		ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
+		ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
 		float _width = SCALE * flow;
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end

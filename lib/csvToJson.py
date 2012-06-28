@@ -29,12 +29,12 @@ arcs = list()
 
 # manually create the fuel nodes
 for (fuel,list) in fuelNamesWithMap:
-	nodes[fuel] = {'id':len(nodes), 'level':0}
+	nodes[fuel] = {'id':len(nodes), 'level':1}
 # add the electricity node
-nodes['Electricity']['level'] = 2
-# modify fuels that have no disposition data, they well be level 1
-nodes['Biomass/other']['level'] = 1 
-nodes['Hydro']['level'] = 1
+nodes['Electricity']['level'] = 6
+# modify fuels that have no disposition data
+nodes['Biomass/other']['level'] = 4 
+nodes['Hydro']['level'] = 4
 
 # read and interpret data, by assigning arcs between the fuel nodes and electricity nodes
 # there are two csv files with the elec gen data
@@ -97,7 +97,7 @@ for line in finalDemandCsv:
 	useName = split[0].strip('"')
 	fuelName = split[1].strip('"')
 	if useName not in nodes:
-		nodes[useName] = {'id':len(nodes)+1, 'level':4}
+		nodes[useName] = {'id':len(nodes)+1, 'level':9}
 	srcNode = findMappedNode(fuelName)
 	if srcNode:
 		arcs.append({ 'srcid':nodes[srcNode]['id'], 'dstid':nodes[useName]['id'], 'flow':[float(val)/1000 for val in split[2:]]})
@@ -121,7 +121,23 @@ print "done"
 #	fuelName = split[0].strip('"')
 #	dispType = split[1].strip('"')
 #	fuelNode = findMappedNode(fuelName)
+#	# create a unique dispNode for each fuel, put production and import in level 0, export in level 4, ignore use
 #	if fuelNode:
+#		if string.lower(dispType) == 'imports':
+#			dispNode = string.join([fuelNode, ' Import'])
+#			if dispNode not in nodes:
+#				nodes[dispNode] = {'id':len(nodes)+1, 'level':0}
+#			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+#		elif string.lower(dispType) == 'production':
+#			dispNode = string.join([fuelNode, ' Prod'])
+#			if dispNode not in nodes:
+#				nodes[dispNode] = {'id':len(nodes)+1, 'level':0}
+#			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+#		elif string.lower(dispType) == 'exports':
+#			dispNode = string.join([fuelNode, ' Export'])
+#			if dispNode not in nodes:
+#				nodes[dispNode] = {'id':len(nodes)+1, 'level':4}
+#			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 #
 #fuelDispositionCsv.close();
 #print 'done'

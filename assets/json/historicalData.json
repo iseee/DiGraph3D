@@ -2,62 +2,62 @@
    "graph": {
       "nodes": [
          {
-            "level": 4, 
+            "level": 9, 
             "name": "Pipeline", 
             "id": 12
          }, 
          {
-            "level": 4, 
+            "level": 9, 
             "name": "Industrial", 
             "id": 11
          }, 
          {
-            "level": 4, 
+            "level": 9, 
             "name": "Transportation", 
             "id": 9
          }, 
          {
-            "level": 4, 
+            "level": 9, 
             "name": "Residential/Commercial", 
             "id": 10
          }, 
          {
-            "level": 2, 
+            "level": 6, 
             "name": "Electricity", 
             "id": 3
          }, 
          {
-            "level": 0, 
+            "level": 1, 
             "name": "Uranium", 
             "id": 0
          }, 
          {
-            "level": 0, 
+            "level": 1, 
             "name": "Petroleum", 
             "id": 1
          }, 
          {
-            "level": 0, 
+            "level": 1, 
             "name": "Coal", 
             "id": 2
          }, 
          {
-            "level": 0, 
+            "level": 1, 
             "name": "LiquidFuels", 
             "id": 5
          }, 
          {
-            "level": 1, 
+            "level": 4, 
             "name": "Biomass/other", 
             "id": 6
          }, 
          {
-            "level": 0, 
+            "level": 1, 
             "name": "NaturalGas/NGL", 
             "id": 4
          }, 
          {
-            "level": 1, 
+            "level": 4, 
             "name": "Hydro", 
             "id": 7
          }

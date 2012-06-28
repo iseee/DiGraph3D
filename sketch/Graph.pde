@@ -37,7 +37,10 @@ class Graph {
 		return true;
 	}
 
-	// update each level
+	/*
+	 * Arranges the nodes based on the 'level' they are in. Within each level, nodes
+	 * are spaced vertically evenly
+	 */
 	void updateNodePositions() {
 		// iterate over levels
 		for(int j = 0; j<nodes.length; j++) {	
@@ -56,12 +59,11 @@ class Graph {
 	}
 	
 	Node getNode(int id) {
-		boolean found = false;
 		Node n = null;
 		for(int i = 0; i < nodes.length; i++) {
 			n = (Node)nodes[i].get(id);
 			if(null != n) {
-				found = true;
+				// found node
 				break;
 			}
 		}

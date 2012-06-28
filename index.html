@@ -134,23 +134,25 @@
 			</div><!--/modal-->
 
 		</div><!--/editing-div-->
-	
-		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 		
-		<span class="label">Selected Node</span>
-		<span id="selectedNode"></span>
-		<br>
-		<span class="label">See the future...</span>
-		Present Day
-		<input type="range" min="0" max="100" value="0" step="1" onchange="timeSliderChanged(this.value/100)" />
-		2050
-		<div id="individualControls">
+		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
+	
+		<div class="row">
+			<div class="span8"><span class="label">Selected Node</span><span id="selectedNode"></span></div>
+			<div class="span4"><span align="right" id="currentYear"><h3>1978</h3></span></div>
 		</div>
-
+		<div class="row">
+			<div class="span12">
+				<span class="label">Year</span>
+				1978<input type="range" id="yearSlider" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />2006
+				<a href="#" onclick="animControlClick();return false;"><i id="anim-icon" class="icon-play"></i></a>
+			</div>
+		</div>
+		<div id="individualControls"></div>
 
 		<div class="hero-unit">
 			<h1 id="about">About</h1>
-			<p>Interactive <a href="http://en.wikipedia.org/wiki/Sankey_diagram" target="_blank">Sankey diagram</a> built with <a href="http://processingjs.org/" target="_blank">Processing.js</a>. Visualizes Canada's energy flow, based on this <a href="assets/energyFlow.pdf" target="_blank">data</a>. The numbers used in this visualization are not exact; they have been modified slightly, and some have been omitted. This is just a prototype.</p>
+			<p>Interactive <a href="http://en.wikipedia.org/wiki/Sankey_diagram" target="_blank">Sankey diagram</a> built with <a href="http://processingjs.org/" target="_blank">Processing.js</a>. Visualizes Canada's energy flow, based on data from CanESS. This is just a prototype.</p>
 			<p>See the <a href="https://github.com/thejnich/DiGraph3D" target="_blank">code</a> on <a href="http://github.com" target="_blank">GitHub</a>.</p>
 			<p>Page styled with <a href="http://twitter.github.com/bootstrap/" target="_blank">Bootstrap from Twitter</a>.</p>
 			<h3 id="contact">Contact</h3>

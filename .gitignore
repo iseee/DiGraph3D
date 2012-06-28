@@ -46,3 +46,6 @@ build/config/buildinfo.properties
 *.zip
 *.tar
 *.gz
+
+#.csv
+*.csv

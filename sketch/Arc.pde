@@ -43,13 +43,14 @@ class Arc {
 		setFlow(flowByYears[0]*multiplier);
 	}
 
-	/*
-	 * The arc can be between two different states, the original flow (origFlow) and
-	 * some future flow (futureFlow). We linearly interpolate between the two states
-	 * @param val: linear interpolation parameter, 0<=val<=1 (enforced by boundParam)
-	 */
-	void updateYear(int year) {
-		setFlow(flowByYears[year-1978]);
+	void updateYear(int year, float lerpVal) {
+		// there was a crazy bug, where if here you put nextYear = year+1, Processing would for some reason
+		// assign next year the value year with a one appended, rather than added. So if year was 1980,
+		// nextYear would get the value 19801! Using the ++ operator seems to work as expected. Very strange
+		int nextYear = year;
+		nextYear++;
+		nextYear = nextYear>2006?2006:nextYear;
+		setFlow(lerp(flowByYears[year-1978], flowByYears[nextYear-1978], lerpVal));
 	}
 
 	void draw() {

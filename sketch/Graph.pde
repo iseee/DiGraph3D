@@ -16,6 +16,7 @@ class Graph {
 	HashMap[] nodes  = {new HashMap(), new HashMap(), new HashMap(), new HashMap(), new HashMap()};
 	ArrayList<Arc> arcs;
 	boolean timelineAnimPlaying = false;
+	int animTimer = 0;
 
 	Graph() {
 		arcs = new ArrayList();
@@ -84,8 +85,9 @@ class Graph {
 		}
 		popMatrix();
 
-		if(timelineAnimPlaying)
+		if(timelineAnimPlaying) {
 			incrementTimeline();
+		}
 	}
 
 	ArrayList<Node> getNodes() {
@@ -116,25 +118,30 @@ class Graph {
 			a.updateFlow(multiplier);
 	}
 	
-	void updateArcYear(float year) {
+	void updateArcYear(int year, float lerpVal) {
 		Iterator it = arcs.iterator();
 		Arc a;
 		while(it.hasNext()) {
 			a = (Arc) it.next();
-			a.updateYear(year);
+			a.updateYear(year, lerpVal);
 		}
 	}
 
 	void toggle_timelineAnimPlaying() {
 		timelineAnimPlaying =  !timelineAnimPlaying;
+		animTimer = 0;
 	}
 
 	void incrementTimeline() {
 		// get current year, increment, update
 		int curYear = js.getTimelineYear();
-		curYear++;
-		curYear = curYear>2006?1978:curYear;
-		js.setTimelineYear(curYear);
-		updateArcYear(curYear);
+		animTimer++;
+		if(animTimer == 10) {
+			animTimer = 0;
+			curYear++;
+			curYear = curYear>2006?1978:curYear;
+			js.setTimelineYear(curYear);
+		}
+		updateArcYear(curYear, float(animTimer)/10.0);
 	}
 }

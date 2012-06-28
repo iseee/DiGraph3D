@@ -71,7 +71,7 @@ function clearNodeInfo() {
 function yearSliderChanged(val) {
 	var pjs = Processing.getInstanceById('sketch');
 	var _graph = pjs.getGraph();
-	_graph.updateArcYear(val);
+	_graph.updateArcYear(val,0);
 	updateYearLabel(val);
 }
 

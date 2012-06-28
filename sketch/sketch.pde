@@ -11,6 +11,7 @@ int lastMouseX = 0;
 int lastMouseY = 0;
 int x_rotation = 0;
 int y_rotation = 0;
+int zoom = 0;
 
 PFont font;
 Graph _graph;
@@ -145,6 +146,7 @@ void draw() {
 
 	rotateX(x_rotation * PI/500);
 	rotateY(y_rotation * PI/500);
+	translate(0,0, zoom);
 	
 	_graph.draw(WIDTH, HEIGHT);
 }
@@ -295,6 +297,14 @@ void resetSelectedNodeColor() {
 			break;
 		}
 	}
+}
+
+void zoomIn() {
+	zoom += 10;
+}
+
+void zoomOut() {
+	zoom -= 10;
 }
 
 static class ColorScheme {

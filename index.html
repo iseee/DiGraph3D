@@ -54,13 +54,15 @@
     <div class="container">
 
       <h1>Interactive Sankey Diagram</h1>
-      <p>Click and drag to rotate the scene. Hover over red nodes to see node ID and radius.
-		<br>Click and drag a node to move it while in edit mode.
+      <p>Click and drag to rotate the scene. Hover over nodes to see node information.
 		<br>Press 'r' to reset rotation</p>
 		<br>
 
 		<button class="btn btn-primary btn-mini" id="editCheckBox" data-toggle="button" rel="tooltip" title="Click to show/hide the editing pane"><i class="icon-pencil icon-white"></i> Edit</button>
-		
+		<!--
+		<button class="btn btn-inverse btn-mini" id="zoomOutButton" rel="tooltip" title="Zoom Out" onclick="zoomOut()"><i class="icon-minus-sign icon-white"></i></button>
+		<button class="btn btn-inverse btn-mini" id="zoomInButton" rel="tooltip" title="Zoom In" onclick="zoomIn()"><i class="icon-plus-sign icon-white"></i></button>
+		-->
 		<div id="editing-div" style="display:none">
 			<div class="btn-toolbar">
 				<div class="btn-group">
@@ -142,8 +144,6 @@
 		Present Day
 		<input type="range" min="0" max="100" value="0" step="1" onchange="timeSliderChanged(this.value/100)" />
 		2050
-		<p>
-		The grey/blue 'bubbles/droplets' moving up/down represent carbon/water emissions of that node. 
 		<div id="individualControls">
 		</div>
 

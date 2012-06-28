@@ -135,6 +135,7 @@
 			</div><!--/modal-->
 
 		</div><!--/editing-div-->
+		
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 	
 		<div class="row">
@@ -144,8 +145,8 @@
 		<div class="row">
 			<div class="span12">
 				<span class="label">Year</span>
-				1978<input type="range" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />2006
-<!--				<i class="icon-play"></i><i class="icon-pause"></i>		i-->
+				1978<input type="range" id="yearSlider" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />2006
+				<a href="#" onclick="animControlClick();return false;"><i id="anim-icon" class="icon-play"></i></a>
 			</div>
 		</div>
 		<div id="individualControls"></div>

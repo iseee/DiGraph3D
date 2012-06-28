@@ -72,8 +72,21 @@ function yearSliderChanged(val) {
 	var pjs = Processing.getInstanceById('sketch');
 	var _graph = pjs.getGraph();
 	_graph.updateArcYear(val);
+	updateYearLabel(val);
+}
+
+function updateYearLabel(val) {
 	html = "<h3>"+val+"</h3>";
 	document.getElementById("currentYear").innerHTML=html;
+}
+
+function getTimelineYear() {
+	return jQuery('#yearSlider').val();
+}
+
+function setTimelineYear(year) {
+	jQuery('#yearSlider').val(year);
+	updateYearLabel(year);
 }
 
 function changeColorScheme() {
@@ -142,6 +155,22 @@ function resetSelectedNodeColor() {
 	pjs.resetSelectedNodeColor();
 }
 
+var playing = false;
+function animControlClick() {
+	if(playing) {
+		playing = false;
+		jQuery('#anim-icon').addClass('icon-play');
+		jQuery('#anim-icon').removeClass('icon-pause');
+	}
+	else {
+		playing = true;
+		jQuery('#anim-icon').addClass('icon-pause');
+		jQuery('#anim-icon').removeClass('icon-play');
+	}
+	var pjs = Processing.getInstanceById('sketch');
+	var _graph = pjs.getGraph();
+	_graph.toggle_timelineAnimPlaying();
+}
 
 window.onload = function loadScript() {
 	bindJavascript();

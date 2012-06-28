@@ -28,6 +28,8 @@ interface JavaScript {
 	void clearNodeInfo();
 	String getColorPickerValue();
 	void setColorPickerValue(String val);
+	int getTimelineYear();
+	void setTimelineYear(int year);
 }
 
 /*

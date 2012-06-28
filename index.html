@@ -139,16 +139,14 @@
 			<div class="span8"><span class="label">Selected Node</span><span id="selectedNode"></span></div>
 			<div class="span4"><span align="right" id="currentYear"><h3>1978</h3></span></div>
 		</div>
-		<span class="label">Year</span>
-		1978	
-		<input type="range" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />
-		2006
-		
-		<p>
-		The grey/blue 'bubbles/droplets' moving up/down represent carbon/water emissions of that node. 
-		<div id="individualControls">
+		<div class="row">
+			<div class="span12">
+				<span class="label">Year</span>
+				1978<input type="range" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />2006
+<!--				<i class="icon-play"></i><i class="icon-pause"></i>		i-->
+			</div>
 		</div>
-
+		<div id="individualControls"></div>
 
 		<div class="hero-unit">
 			<h1 id="about">About</h1>

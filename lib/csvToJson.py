@@ -3,7 +3,7 @@ import string
 
 
 # level zero nodes
-fuelNamesWithMap = [	('Uranium',['urainium']), # note urainium is mispelles in current csv files
+fuelNamesWithMap = [	('Uranium',['urainium']), # note urainium is mispelled in current csv files
 							('Petroleum', ['crudeOil', 'refPetPrd', 'petroleum']),
 							('Coal',['coal']),
 							('Electricity', ['electricity']),

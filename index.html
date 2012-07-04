@@ -59,10 +59,8 @@
 		<br>
 
 		<button class="btn btn-primary btn-mini" id="editCheckBox" data-toggle="button" rel="tooltip" title="Click to show/hide the editing pane"><i class="icon-pencil icon-white"></i> Edit</button>
-		<!--
 		<button class="btn btn-inverse btn-mini" id="zoomOutButton" rel="tooltip" title="Zoom Out" onclick="zoomOut()"><i class="icon-minus-sign icon-white"></i></button>
 		<button class="btn btn-inverse btn-mini" id="zoomInButton" rel="tooltip" title="Zoom In" onclick="zoomIn()"><i class="icon-plus-sign icon-white"></i></button>
-		-->
 		<div id="editing-div" style="display:none">
 			<div class="btn-toolbar">
 				<div class="btn-group">
@@ -138,14 +136,16 @@
 		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
 	
 		<div class="row">
-			<div class="span8"><span class="label">Selected Node</span><span id="selectedNode"></span></div>
-			<div class="span4"><span align="right" id="currentYear"><h3>1978</h3></span></div>
-		</div>
-		<div class="row">
-			<div class="span12">
+			<div class="span6">
 				<span class="label">Year</span>
+				<span id="currentYear" style="font-size:1.5em; font-weight:bold">1978</span>
 				1978<input type="range" id="yearSlider" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />2006
 				<a href="#" onclick="animControlClick();return false;"><i id="anim-icon" class="icon-play"></i></a>
+			</div>
+			<div class="span6">
+				<span id="selectedNodeTitle" style="display:none"></span>
+				<span id="selectedNodeContent" style="display:none"></span>
+				<span align="center" id="infoPopoverSrc" style="visibility:hidden"></span>
 			</div>
 		</div>
 		<div id="individualControls"></div>

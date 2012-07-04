@@ -60,12 +60,24 @@ function bindJavascript() {
 }
 
 function displaySelectedNodeInfo(name, flow, carbonFactor, waterFactor) {
-	html = "<b>"+name + "</b>: <i>TotalFlow</i>=<b>"+flow.toFixed(2)+" </b> Exajoules <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
-	document.getElementById("selectedNode").innerHTML=html;
+	htmlTitle = "<b>"+name + "</b>";
+	jQuery('#selectedNodeTitle').html(htmlTitle);
+	htmlContent = "<i>TotalFlow</i>=<b>"+flow.toFixed(2)+" </b> Exajoules <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
+	jQuery('#selectedNodeContent').html(htmlContent);
+	jQuery('#infoPopoverSrc').popover('show');
+}
+
+function getPopoverContent() {
+	return jQuery('#selectedNodeContent').html();	
+}
+
+function getPopoverTitle() {
+	return jQuery('#selectedNodeTitle').html();
 }
 
 function clearNodeInfo() {
-	document.getElementById("selectedNode").innerHTML="";
+	//document.getElementById("selectedNode").innerHTML="";
+	jQuery('#infoPopoverSrc').popover('hide');
 }
 
 function yearSliderChanged(val) {
@@ -76,8 +88,7 @@ function yearSliderChanged(val) {
 }
 
 function updateYearLabel(val) {
-	html = "<h3>"+val+"</h3>";
-	document.getElementById("currentYear").innerHTML=html;
+	document.getElementById("currentYear").innerHTML=val;
 }
 
 function getTimelineYear() {
@@ -180,5 +191,6 @@ window.onload = function loadScript() {
 		editCheckboxChange(!$(this).hasClass('active')); 
 	});
 	jQuery("button[rel=tooltip]").tooltip();
+	jQuery('#infoPopoverSrc').popover({trigger:'manual', placement:'top', title: function() {return getPopoverTitle();}, content: function() {return getPopoverContent();}});
 //	renderIndividualControls();
 }

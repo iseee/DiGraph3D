@@ -6,12 +6,19 @@ color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
 boolean EDITING = false;
 int BAND_STEPS = 300;
+int PAN_DELTA = 10;
+
+int PRODUCTION_NODE_LEVEL = -1;
+int IMPORT_NODE_LEVEL = -2;
+int EXPORT_NODE_LEVEL = -3;
 
 int lastMouseX = 0;
 int lastMouseY = 0;
 int x_rotation = 0;
 int y_rotation = 0;
 int zoom = 0;
+int panX = 0;
+int panY = 0;
 
 PFont font;
 Graph _graph;
@@ -61,7 +68,7 @@ void draw() {
 
 	rotateX(x_rotation * PI/500);
 	rotateY(y_rotation * PI/500);
-	translate(0,0, zoom);
+	translate(panX,panY, zoom);
 
 	if(null != _graph)
 		_graph.draw();
@@ -156,6 +163,20 @@ void updateArcFlow(int arcIndex, float multiplier){
 void keyPressed() {
 	if(key == 'r' || key == 'R')
 		resetRotation();
+	else if(key == ',')
+		zoomOut();
+	else if(key == '.')
+		zoomIn();
+	else if(key == CODED) {
+		if(keyCode == UP) 
+			pan(0,PAN_DELTA);
+		else if(keyCode == DOWN)
+			pan(0,-PAN_DELTA);
+		else if(keyCode == LEFT)
+			pan(PAN_DELTA,0);
+		else if(keyCode == RIGHT)
+			pan(-PAN_DELTA,0);
+	}
 }
 
 void resetRotation() {
@@ -219,6 +240,11 @@ void zoomIn() {
 
 void zoomOut() {
 	zoom -= 10;
+}
+
+void pan(int dx, int dy) {
+	panX += dx;
+	panY += dy;
 }
 
 static class ColorScheme {

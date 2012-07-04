@@ -157,11 +157,10 @@ class Node {
 				start.set(position);
 				start.add(0, getFlow()*SCALE/2+5, 0);
 				waterDropletAnim.initiate(start, waterEmission*getFlow());
+				if(null != js)
+					js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
 			}
 			alpha = 255;
-			if(null != js) {
-				js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
-			}
 			if(!EDITING)
 				drawEmissions();
 		}

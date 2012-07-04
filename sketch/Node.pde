@@ -22,6 +22,11 @@ class Node {
 		initialize(id, name, level);	
 	}
 
+	Node(int id, String name, int level, string nodeColor) {
+		initialize(id, name, level);	
+		nodeBaseColor = parseColorFromString(nodeColor);
+	}
+
 	Node(int id, String name, int level, float carbonEmission, float waterEmission) {
 		initialize(id, name, level);
 		this.carbonEmission = boundParam(carbonEmission);
@@ -151,6 +156,20 @@ class Node {
 		return getFlow()*SCALE/2;
 	}
 
+	/*
+	 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
+	 * then, processing can only create colors from integer values, so using the colorToBe int as 
+	 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
+	 */
+	color parseColorFromString(string colorString) {
+		String[] split = splitTokens(colorString, "#");
+		int colorToBe = unhex(split[0]);
+		int r = colorToBe  >> 16 & 0xFF;
+		int g = colorToBe >> 8 & 0xFF;
+		int b = colorToBe & 0xFF;
+		return color(r,g,b,255);
+	}
+
 	void draw() {
 		// don't draw nodes with negative levels, these are special nodes
 		if(level < 0) return;
@@ -189,18 +208,8 @@ class Node {
 			stroke(ColorScheme.getEditingColor());
 			strokeWeight(2);
 			
-			/*
-			 * colorpicker returns string of hex representation, prefixed with #
-			 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
-			 * then, processing can only create colors from integer values, so using the colorToBe int as 
-			 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
-			 */
-			String[] split = splitTokens(js.getColorPickerValue(), "#");
-			int colorToBe = unhex(split[0]);
-			int r = colorToBe  >> 16 & 0xFF;
-			int g = colorToBe >> 8 & 0xFF;
-			int b = colorToBe & 0xFF;
-			nodeBaseColor = color(r,g,b,255);
+			//colorpicker returns string of hex representation, prefixed with #
+			nodeBaseColor = parseColorFromString(js.getColorPickerValue());
 		}
 		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();

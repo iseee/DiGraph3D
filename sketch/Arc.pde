@@ -63,11 +63,11 @@ class Arc {
 			if(source.level == -1)
 				topOfBandSrc = topOfBandDst;
 			else 
-				topOfBandSrc = topOfBandDst+30;
+				topOfBandSrc = dest.getY()+dest.getHalfHeight()+10;
 		}
 		else if(dest.level == -3) {
 			topOfBandSrc = source.getOutArcPosition(sourceOffset);	
-			topOfBandDst = topOfBandSrc-30;
+			topOfBandDst = source.getY()+source.getHalfHeight()+10;
 		}
 		else {
 			topOfBandSrc = source.getOutArcPosition(sourceOffset);	
@@ -110,18 +110,18 @@ class Arc {
 		// handle special source/dest nodes with negative levels
 		if(source.level < 0) {
 			if(source.level == -1)
-				ctrlPt1.set(dest.getX()-20, dest.getY(), 0);
+				ctrlPt1.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
 			else
-				ctrlPt1.set(dest.getX()-20, dest.getY()+30, 0);
-			ctrlPt2.set(dest.getX()-10, dest.getY(), 0);
+				ctrlPt1.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
+			ctrlPt2.set(dest.getX()-10, dest.getInArcPosition(destOffset), 0);
 		}
 		else if(dest.level == -3) {
-			ctrlPt1.set(source.getX()+10, source.getY(), 0);
-			ctrlPt2.set(source.getX()+20, source.getY(), 0);
+			ctrlPt1.set(source.getX()+10, source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt2.set(source.getX()+20, source.getOutArcPosition(sourceOffset), 0);
 		}
 		else {
-			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
-			ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY()+30, 0);
+			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getInArcPosition(destOffset), 0);
 		}
 	}
 
@@ -157,10 +157,10 @@ class Arc {
 		for(int i = 0; i < steps; i++) {
 			t = i/float(steps);	
 			x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
-			y = bezierPoint(srcTop, ctrlPt1.y-_width/2, ctrlPt2.y-_width/2, dstTop, t);
+			y = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
 			z = 0;
 			vertex(x,y,z);
-			y = bezierPoint(srcTop+_width, ctrlPt1.y+_width/2, ctrlPt2.y+_width/2, dstTop+_width, t);
+			y = bezierPoint(srcTop+_width, ctrlPt1.y+_width, ctrlPt2.y+_width, dstTop+_width, t);
 			vertex(x,y,z);
 		}
 		endShape();
@@ -172,12 +172,12 @@ class Arc {
 			// top line
 			beginShape();
 			vertex(source_x,srcTop,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y-_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y-_width/2,ctrlPt2.z, dest_x,dstTop,0); // cp1,cp2,end
+			bezierVertex(ctrlPt1.x,ctrlPt1.y,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y,ctrlPt2.z, dest_x,dstTop,0); // cp1,cp2,end
 			endShape();
 			// bottom line
 			beginShape();
 			vertex(source_x,srcTop+_width,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width/2,ctrlPt2.z, dest_x,dstTop+_width,0); // cp1,cp2,end
+			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width,ctrlPt2.z, dest_x,dstTop+_width,0); // cp1,cp2,end
 			endShape();
 			stroke(100);
 			noStroke();

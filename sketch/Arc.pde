@@ -42,7 +42,9 @@ class Arc {
 	void updateYear(int year, float lerpVal) {
 		// there was a crazy bug, where if here you put nextYear = year+1, Processing would for some reason
 		// assign next year the value year with a one appended, rather than added. So if year was 1980,
-		// nextYear would get the value 19801! Using the ++ operator seems to work as expected. Very strange
+		// nextYear would get the value 19801! Using the ++ operator seems to work as expected. 
+		// I think it has to do with no expilcity typing in javascript. So if you say '5'+4 you get '54'. 
+		// Even if you meant it to be numbers.
 		int nextYear = year;
 		nextYear++;
 		nextYear = nextYear>2006?2006:nextYear;
@@ -50,22 +52,50 @@ class Arc {
 	}
 
 	void draw() {
-		ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
-		ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY(), 0);
+		setControlPoints();
 		float _width = SCALE * flow;
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end
-		float topOfBandSrc = source.getOutArcPosition(sourceOffset);	
-		float topOfBandDst = dest.getInArcPosition(destOffset);
+		float topOfBandSrc;
+		float topOfBandDst;
+		if(source.level < 0) {
+			topOfBandDst = dest.getInArcPosition(destOffset);
+			if(source.level == -1)
+				topOfBandSrc = topOfBandDst;
+			else 
+				topOfBandSrc = topOfBandDst+30;
+		}
+		else if(dest.level == -3) {
+			topOfBandSrc = source.getOutArcPosition(sourceOffset);	
+			topOfBandDst = topOfBandSrc-30;
+		}
+		else {
+			topOfBandSrc = source.getOutArcPosition(sourceOffset);	
+			topOfBandDst = dest.getInArcPosition(destOffset);
+		}
+		
+		float source_x, dest_x;
+		if(source.level < 0) {
+			dest_x = dest.getX();
+			source_x = dest_x - 50;
+		}
+		else if(dest.level < 0) {
+			source_x = source.getX();
+			dest_x = source_x + 50;
+		}
+		else {
+			source_x = source.getX();
+			dest_x = dest.getX();
+		}
 
-		drawBand(_width, topOfBandSrc, topOfBandDst);
+		drawBand(_width, topOfBandSrc, topOfBandDst, source_x, dest_x);
 
 		// if the source or destination or the arc is selected, draw a sphere 'flowing' along the arc
-		if( (source.isSelected || dest.isSelected) && !EDITING) {
+		if( (source.isSelected || dest.isSelected) && !EDITING && source.level>0 && dest.level>0) {
 			fill(ColorScheme.getArcColor(_width,5,25,false));
 			float steps = 150/rate;
 			float t = (frameCount % steps)/steps;
-			float x = bezierPoint(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
+			float x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
 			float y = bezierPoint(topOfBandSrc+_width/2, ctrlPt1.y, ctrlPt2.y, topOfBandDst+_width/2, t);
 			float z = 0; 
 			pushMatrix();
@@ -76,7 +106,27 @@ class Arc {
 		}
 	}
 
+	void setControlPoints() {
+		// handle special source/dest nodes with negative levels
+		if(source.level < 0) {
+			if(source.level == -1)
+				ctrlPt1.set(dest.getX()-20, dest.getY(), 0);
+			else
+				ctrlPt1.set(dest.getX()-20, dest.getY()+30, 0);
+			ctrlPt2.set(dest.getX()-10, dest.getY(), 0);
+		}
+		else if(dest.level == -3) {
+			ctrlPt1.set(source.getX()+10, source.getY(), 0);
+			ctrlPt2.set(source.getX()+20, source.getY(), 0);
+		}
+		else {
+			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getY(), 0);
+			ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getY()+30, 0);
+		}
+	}
+
 	void showArcInfo(float topSrc, float topDst) {
+		if(source.level < 0 || dest.level < 0) return;
 		fill(ColorScheme.getTextColor());
 		textSize(15);
 		if(source.isSelected) {
@@ -96,7 +146,7 @@ class Arc {
 	 * other arcs are associated with it, and their size. The source must be queried for this
 	 * @param dstTop: similar to srcTop, but the y coord at the destination, rather than source
 	 */
-	void drawBand(float _width, float srcTop, float dstTop) {
+	void drawBand(float _width, float srcTop, float dstTop, float source_x, float dest_x) {
 		noStroke();
 		int steps = BAND_STEPS;
 		float t;
@@ -106,7 +156,7 @@ class Arc {
 		beginShape(QUAD_STRIP);
 		for(int i = 0; i < steps; i++) {
 			t = i/float(steps);	
-			x = bezierPoint(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
+			x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
 			y = bezierPoint(srcTop, ctrlPt1.y-_width/2, ctrlPt2.y-_width/2, dstTop, t);
 			z = 0;
 			vertex(x,y,z);
@@ -121,13 +171,13 @@ class Arc {
 			strokeWeight(2);
 			// top line
 			beginShape();
-			vertex(source.getX(),srcTop,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y-_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y-_width/2,ctrlPt2.z, dest.getX(),dstTop,0); // cp1,cp2,end
+			vertex(source_x,srcTop,0); // start
+			bezierVertex(ctrlPt1.x,ctrlPt1.y-_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y-_width/2,ctrlPt2.z, dest_x,dstTop,0); // cp1,cp2,end
 			endShape();
 			// bottom line
 			beginShape();
-			vertex(source.getX(),srcTop+_width,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width/2,ctrlPt2.z, dest.getX(),dstTop+_width,0); // cp1,cp2,end
+			vertex(source_x,srcTop+_width,0); // start
+			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width/2,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width/2,ctrlPt2.z, dest_x,dstTop+_width,0); // cp1,cp2,end
 			endShape();
 			stroke(100);
 			noStroke();
@@ -151,15 +201,6 @@ class Arc {
 			int botY = bezierPoint(srcTop+_width, ctrlPt1.y+_width/2, ctrlPt2.y+_width/2, dstTop+_width, t);
 			float top_screen_y = screenY(0, topY, 0);
 			float bot_screen_y = screenY(0, botY, 0);
-			/* debug println's
-			println("between "+source.name+" and "+dest.name);
-			println(t);
-			println("topY: "+topY);
-			println("botY: "+botY);
-			println("top_screen_y: "+top_screen_y);
-			println("bot_screen_y: "+bot_screen_y);
-			println("mouseY: "+mouseY);
-			*/
 			if(mouseY > top_screen_y && mouseY < bot_screen_y)
 				return true;
 		}

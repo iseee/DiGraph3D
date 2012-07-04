@@ -143,8 +143,17 @@ class Node {
 		}
 	}
 
+	float getHalfWidth() {
+		return getFlow()*SCALE/8;
+	}
+
+	float getHalfHeight() {
+		return getFlow()*SCALE/2;
+	}
 
 	void draw() {
+		// don't draw nodes with negative levels, these are special nodes
+		if(level < 0) return;
 		float alpha = 100;
 		if(selected()){
 			if(!isSelected) { // means node just became selected
@@ -172,8 +181,8 @@ class Node {
 			}
 		}
 
-		float half_width = getFlow()*SCALE/8;
-		float half_height = getFlow()*SCALE/2;
+		float half_width = getHalfWidth();
+		float half_height = getHalfHeight();
 
 		noStroke();
 		if(selectedForEditing && EDITING) {
@@ -195,7 +204,9 @@ class Node {
 		}
 		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
-		translate(position.x, position.y, 0);
+		translate(position.x, position.y, 1);
+		rect(-half_width, -half_height, 2*half_width, 2*half_height);
+		/*
 		// draw a hexahedron to represent the node
 		//sides
 		beginShape(QUAD_STRIP);
@@ -224,6 +235,7 @@ class Node {
 		vertex(half_width, -half_height, half_width);	//6
 		vertex(-half_width, -half_height, half_width);	//8
 		endShape();
+		*/
 	
 		// label
 		textSize(12);

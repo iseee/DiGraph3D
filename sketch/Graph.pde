@@ -31,6 +31,8 @@ class Graph {
 	 * We use a hashmap of hashmaps to store the nodes. This way we can place nodes of the same
 	 * level together, for easier vertical placement later. The inner hashmap, indexed by node id
 	 * somewhat speeds up individual node lookup for displaying info and editing etc.
+	 * Negative levels are reserved for special nodes. These nodes are not drawn, and are positioned
+	 * relative to another node. They are used to conceptually represent import/export/production 
 	 */
 	HashMap nodes  = new HashMap();
 	ArrayList<Arc> arcs;

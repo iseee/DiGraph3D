@@ -56,6 +56,7 @@ void setup() {
 }
 
 void draw() {
+	ambientLight(255,255,255);
 	background(ColorScheme.getBgColor());
 
 	float cameraY = HEIGHT/2.0;

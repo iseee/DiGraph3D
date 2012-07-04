@@ -107,40 +107,40 @@ print "done"
 
 
 # read disposition data #
-#print "reading fuelDisposition.csv"
-#fuelDispositionCsv = open('fuelDisposition.csv', 'r')
-#
-#line = fuelDispositionCsv.readline()
-#assert line == 'entity: /year\n', "entity is not correct in fuelDisposition.csv"
-#line = fuelDispositionCsv.readline()
-#assert line == 'unit of measure: petajoule\n', "unit of measure is not correct"
-#line = fuelDispositionCsv.readline() # read header line
-#
-#for line in fuelDispositionCsv:
-#	split = line.split(',')
-#	fuelName = split[0].strip('"')
-#	dispType = split[1].strip('"')
-#	fuelNode = findMappedNode(fuelName)
-#	# create a unique dispNode for each fuel, put production and import in level 0, export in level 4, ignore use
-#	if fuelNode:
-#		if string.lower(dispType) == 'imports':
-#			dispNode = string.join([fuelNode, ' Import'])
-#			if dispNode not in nodes:
-#				nodes[dispNode] = {'id':len(nodes)+1, 'level':0}
-#			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
-#		elif string.lower(dispType) == 'production':
-#			dispNode = string.join([fuelNode, ' Prod'])
-#			if dispNode not in nodes:
-#				nodes[dispNode] = {'id':len(nodes)+1, 'level':0}
-#			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
-#		elif string.lower(dispType) == 'exports':
-#			dispNode = string.join([fuelNode, ' Export'])
-#			if dispNode not in nodes:
-#				nodes[dispNode] = {'id':len(nodes)+1, 'level':4}
-#			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
-#
-#fuelDispositionCsv.close();
-#print 'done'
+print "reading fuelDisposition.csv"
+fuelDispositionCsv = open('fuelDisposition.csv', 'r')
+
+line = fuelDispositionCsv.readline()
+assert line == 'entity: /year\n', "entity is not correct in fuelDisposition.csv"
+line = fuelDispositionCsv.readline()
+assert line == 'unit of measure: petajoule\n', "unit of measure is not correct"
+line = fuelDispositionCsv.readline() # read header line
+
+for line in fuelDispositionCsv:
+	split = line.split(',')
+	fuelName = split[0].strip('"')
+	dispType = split[1].strip('"')
+	fuelNode = findMappedNode(fuelName)
+	# create a unique dispNode for each fuel, put production and import in level 0, export in level 4, ignore use
+	if fuelNode:
+		if string.lower(dispType) == 'imports':
+			dispNode = string.join([fuelNode, ' Import'])
+			if dispNode not in nodes:
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-2}
+			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+		elif string.lower(dispType) == 'production':
+			dispNode = string.join([fuelNode, ' Prod'])
+			if dispNode not in nodes:
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-1}
+			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+		elif string.lower(dispType) == 'exports':
+			dispNode = string.join([fuelNode, ' Export'])
+			if dispNode not in nodes:
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-3}
+			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+
+fuelDispositionCsv.close();
+print 'done'
 
 
 # format data for export to json

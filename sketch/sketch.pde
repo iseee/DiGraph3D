@@ -56,7 +56,6 @@ void setup() {
 }
 
 void draw() {
-	lights();
 	background(ColorScheme.getBgColor());
 
 	float cameraY = HEIGHT/2.0;
@@ -270,7 +269,7 @@ static class ColorScheme {
 	 * Processing doesn't seem to currently support enums, so for the dark/light scheme we just
 	 * hack using ints for now, 0=dark, 1=light
 	 */
-	static int currentScheme = 0;
+	static int currentScheme = 1;
 
 	static void changeColorScheme() {
 		if(currentScheme == 0)
@@ -289,7 +288,7 @@ static class ColorScheme {
 			return darkSchemeColor;
 		if(currentScheme == 1)
 			return lightSchemeColor;
-		return darkSchemeColor; //default
+		return lightSchemeColor; //default
 	}
 
 	static color getBgColor() {
@@ -307,12 +306,12 @@ static class ColorScheme {
 	 */
 
 	static color getArcColor(float width, float min, float max, boolean selected) {
-		int alpha = selected?255:100;
+		int alpha = selected?100:255;
 		return color(0, map(width, min, max, 0, 255), 255, alpha);
 	}
 
 	static int getNodeAlpha(boolean selected) {
-		int alpha=selected?255:100;	
+		int alpha=selected?100:255;	
 		return alpha;
 	}
 

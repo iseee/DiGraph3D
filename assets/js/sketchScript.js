@@ -59,10 +59,27 @@ function bindJavascript() {
 		setTimeout(bindJavascript, 250);
 }
 
-function displaySelectedNodeInfo(name, flow, carbonFactor, waterFactor) {
-	htmlTitle = "<b>"+name + "</b>";
+function displaySelectedNodeInfo(node) {
+	htmlTitle = "<b>"+node.name + "</b>";
 	jQuery('#selectedNodeTitle').html(htmlTitle);
-	htmlContent = "<i>TotalFlow</i>=<b>"+flow.toFixed(2)+" </b> Exajoules <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
+	var flow = node.getFlow();
+	var htmlContent = '';
+	htmlContent += '<table class="table table-condensed"><thead><tr>';
+	htmlContent += '<th>Source</th><th>Amount (EJ)</th';
+	htmlContent += '</tr></thead>'
+	htmlContent += '<tbody>'
+	htmlContent += '<tr><td>Import</td><td>0.0</td></tr>';
+	htmlContent += '<tr><td>Production</td><td>0.0</td></tr>';
+	htmlContent += "<tr><td>TotalFlow</td><td><b>"+flow.toFixed(2)+"</b></td></tr>";
+	htmlContent += "</tbody></table>";
+	htmlContent += '<table class="table table-condensed"><thead><tr>';
+	htmlContent += '<th>Dest</th><th>Amount (EJ)</th';
+	htmlContent += '</tr></thead>'
+	htmlContent += '<tbody>'
+	htmlContent += '<tr><td>Export</td><td>0.0</td></tr>';
+	htmlContent += '<tr><td>Use</td><td>0.0</td></tr>';
+	htmlContent += "<tr><td>TotalFlow</td><td><b>"+flow.toFixed(2)+"</b></td></tr>";
+	htmlContent += "</tbody></table>";
 	jQuery('#selectedNodeContent').html(htmlContent);
 	jQuery('#infoPopoverSrc').popover('show');
 }

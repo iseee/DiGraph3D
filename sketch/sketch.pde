@@ -31,7 +31,7 @@ JavaScript js;
  * somewhere in your js, you can call it straight from processing code.
  */
 interface JavaScript {
-	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
+	void displaySelectedNodeInfo(Node node);	
 	void clearNodeInfo();
 	String getColorPickerValue();
 	void setColorPickerValue(String val);

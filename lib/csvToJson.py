@@ -3,17 +3,17 @@ import string
 
 
 # level zero nodes
-fuelNamesWithMap = [	('Uranium',['urainium']), # note urainium is mispelled in current csv files
-							('Petroleum', ['crudeOil', 'refPetPrd', 'petroleum']),
-							('Coal',['coal']),
-							('Electricity', ['electricity']),
-							('NaturalGas/NGL',['naturalGas', 'NGL']),
-							('LiquidFuels',['hydrogen', 'otherLiqFuel']),
-							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar']),
-							('Hydro',['waterFall', 'waterTide', 'waterWave', 'inRiverFlow']) ]
+fuelNamesWithMap = [	('Uranium',['urainium'], '#ff0000'), # note urainium is mispelled in current csv files
+							('Petroleum', ['crudeOil', 'refPetPrd', 'petroleum'], '#ff00e0'),
+							('Coal',['coal'], '#000000'),
+							('Electricity', ['electricity'], '#bd6534'),
+							('NaturalGas/NGL',['naturalGas', 'NGL'], '#5797c9'),
+							('LiquidFuels',['hydrogen', 'otherLiqFuel'], '#78ca92'),
+							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar'], '#367a2d'),
+							('Hydro',['waterFall', 'waterTide', 'waterWave', 'inRiverFlow'], '#5376b3') ]
 
 def findMappedNode(csvName):
-	for (node, list) in fuelNamesWithMap:
+	for (node, list, color) in fuelNamesWithMap:
 		for l in list:
 			lLower = string.lower(l)
 			csvLower = string.lower(csvName)
@@ -22,14 +22,24 @@ def findMappedNode(csvName):
 	print 'Could not find mapped node for %s' % csvName
 	return ""
 
+def findMappedColor(nodeName):
+	for (node, list, color) in fuelNamesWithMap:
+		lower = string.lower(node).strip()
+		nodeNameLower = string.lower(nodeName).strip()
+		if lower == nodeNameLower:
+				return color
+	print 'Could not find mapped color for %s' % nodeName
+	return "" 
+
+
 
 
 nodes = dict() 
 arcs = list() 
 
 # manually create the fuel nodes
-for (fuel,list) in fuelNamesWithMap:
-	nodes[fuel] = {'id':len(nodes), 'level':1}
+for (fuel,list,color) in fuelNamesWithMap:
+	nodes[fuel] = {'id':len(nodes), 'level':1, 'color':color}
 # add the electricity node
 nodes['Electricity']['level'] = 6
 # modify fuels that have no disposition data
@@ -126,25 +136,25 @@ for line in fuelDispositionCsv:
 		if string.lower(dispType) == 'imports':
 			dispNode = string.join([fuelNode, ' Import'])
 			if dispNode not in nodes:
-				nodes[dispNode] = {'id':len(nodes)+1, 'level':-2}
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-2, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 		elif string.lower(dispType) == 'production':
 			dispNode = string.join([fuelNode, ' Prod'])
 			if dispNode not in nodes:
-				nodes[dispNode] = {'id':len(nodes)+1, 'level':-1}
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-1, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 		elif string.lower(dispType) == 'exports':
 			dispNode = string.join([fuelNode, ' Export'])
 			if dispNode not in nodes:
-				nodes[dispNode] = {'id':len(nodes)+1, 'level':-3}
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-3, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 
-fuelDispositionCsv.close();
+fuelDispositionCsv.close()
 print 'done'
 
 
 # format data for export to json
-data = {'graph':{'nodes':[{'name':name,'id':info.get('id'),'level':info.get('level')} for (name,info) in nodes.items()], 'arcs':arcs}}
+data = {'graph':{'nodes':[{'name':name,'id':info.get('id'),'level':info.get('level'), 'color':info.get('color')} for (name,info) in nodes.items()], 'arcs':arcs}}
 
 # write to json file
 jsonFile = open('../assets/json/historicalData.json', 'w')

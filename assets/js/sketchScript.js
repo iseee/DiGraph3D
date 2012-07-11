@@ -22,7 +22,7 @@ function loadGraphFromStaticJson() {
 			var nodes = data.graph.nodes;
 			for(i = 0; i < nodes.length; i++) {
 				var node = nodes[i];
-				graphObj.addNode(new pjs.Node(node.id, node.name, node.level));	
+				graphObj.addNode(new pjs.Node(node.id, node.name, node.level, node.color));	
 			}
 			var arcs = data.graph.arcs;
 			for(i = 0; i < arcs.length; i++) {

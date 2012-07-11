@@ -77,11 +77,11 @@ class Arc {
 		float source_x, dest_x;
 		if(source.level < 0) {
 			dest_x = dest.getX();
-			source_x = dest_x - 50;
+			source_x = dest_x - 60;
 		}
 		else if(dest.level < 0) {
 			source_x = source.getX();
-			dest_x = source_x + 50;
+			dest_x = source_x + 60;
 		}
 		else {
 			source_x = source.getX();
@@ -110,14 +110,14 @@ class Arc {
 		// handle special source/dest nodes with negative levels
 		if(source.level < 0) {
 			if(source.level == -1)
-				ctrlPt1.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
+				ctrlPt1.set(dest.getX()-40, dest.getInArcPosition(destOffset), 0);
 			else
-				ctrlPt1.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
-			ctrlPt2.set(dest.getX()-10, dest.getInArcPosition(destOffset), 0);
+				ctrlPt1.set(dest.getX()-40, dest.getY()+dest.getHalfHeight()+10, 0);
+			ctrlPt2.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
 		}
 		else if(dest.level == -3) {
-			ctrlPt1.set(source.getX()+10, source.getOutArcPosition(sourceOffset), 0);
-			ctrlPt2.set(source.getX()+20, source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt1.set(source.getX()+20, source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt2.set(source.getX()+40, source.getY()+source.getHalfHeight()+10, 0);
 		}
 		else {
 			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getOutArcPosition(sourceOffset), 0);

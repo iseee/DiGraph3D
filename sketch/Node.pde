@@ -24,7 +24,8 @@ class Node {
 
 	Node(int id, String name, int level, string nodeColor) {
 		initialize(id, name, level);	
-		nodeBaseColor = parseColorFromString(nodeColor);
+		if(nodeColor != null)
+			nodeBaseColor = parseColorFromString(nodeColor);
 	}
 
 	Node(int id, String name, int level, float carbonEmission, float waterEmission) {

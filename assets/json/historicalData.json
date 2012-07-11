@@ -2,151 +2,181 @@
    "graph": {
       "nodes": [
          {
+            "color": "#000000", 
             "level": -1, 
             "name": "Coal  Prod", 
             "id": 25
          }, 
          {
+            "color": "#78ca92", 
             "level": -1, 
             "name": "LiquidFuels  Prod", 
             "id": 16
          }, 
          {
+            "color": "#ff00e0", 
             "level": -3, 
             "name": "Petroleum  Export", 
             "id": 14
          }, 
          {
+            "color": "#bd6534", 
             "level": 6, 
             "name": "Electricity", 
             "id": 3
          }, 
          {
+            "color": "#ff0000", 
             "level": 1, 
             "name": "Uranium", 
             "id": 0
          }, 
          {
+            "color": "#5797c9", 
             "level": 1, 
             "name": "NaturalGas/NGL", 
             "id": 4
          }, 
          {
+            "color": "#5376b3", 
             "level": 4, 
             "name": "Hydro", 
             "id": 7
          }, 
          {
+            "color": null, 
             "level": 9, 
             "name": "Transportation", 
             "id": 9
          }, 
          {
+            "color": "#ff0000", 
             "level": -3, 
             "name": "Uranium  Export", 
             "id": 29
          }, 
          {
+            "color": "#5797c9", 
             "level": -2, 
             "name": "NaturalGas/NGL  Import", 
             "id": 24
          }, 
          {
+            "color": "#5797c9", 
             "level": -3, 
             "name": "NaturalGas/NGL  Export", 
             "id": 23
          }, 
          {
+            "color": "#ff00e0", 
             "level": -2, 
             "name": "Petroleum  Import", 
             "id": 15
          }, 
          {
+            "color": "#ff00e0", 
             "level": -1, 
             "name": "Petroleum  Prod", 
             "id": 13
          }, 
          {
+            "color": "#bd6534", 
             "level": -1, 
             "name": "Electricity  Prod", 
             "id": 19
          }, 
          {
+            "color": null, 
             "level": 9, 
             "name": "Pipeline", 
             "id": 12
          }, 
          {
+            "color": null, 
             "level": 9, 
             "name": "Residential/Commercial", 
             "id": 10
          }, 
          {
+            "color": "#367a2d", 
             "level": 4, 
             "name": "Biomass/other", 
             "id": 6
          }, 
          {
+            "color": "#ff00e0", 
             "level": 1, 
             "name": "Petroleum", 
             "id": 1
          }, 
          {
+            "color": "#bd6534", 
             "level": -2, 
             "name": "Electricity  Import", 
             "id": 21
          }, 
          {
+            "color": "#bd6534", 
             "level": -3, 
             "name": "Electricity  Export", 
             "id": 20
          }, 
          {
+            "color": "#000000", 
             "level": 1, 
             "name": "Coal", 
             "id": 2
          }, 
          {
+            "color": "#000000", 
             "level": -2, 
             "name": "Coal  Import", 
             "id": 27
          }, 
          {
+            "color": "#ff0000", 
             "level": -2, 
             "name": "Uranium  Import", 
             "id": 30
          }, 
          {
+            "color": "#ff0000", 
             "level": -1, 
             "name": "Uranium  Prod", 
             "id": 28
          }, 
          {
+            "color": null, 
             "level": 9, 
             "name": "Industrial", 
             "id": 11
          }, 
          {
+            "color": "#78ca92", 
             "level": -2, 
             "name": "LiquidFuels  Import", 
             "id": 18
          }, 
          {
+            "color": "#000000", 
             "level": -3, 
             "name": "Coal  Export", 
             "id": 26
          }, 
          {
+            "color": "#78ca92", 
             "level": 1, 
             "name": "LiquidFuels", 
             "id": 5
          }, 
          {
+            "color": "#5797c9", 
             "level": -1, 
             "name": "NaturalGas/NGL  Prod", 
             "id": 22
          }, 
          {
+            "color": "#78ca92", 
             "level": -3, 
             "name": "LiquidFuels  Export", 
             "id": 17

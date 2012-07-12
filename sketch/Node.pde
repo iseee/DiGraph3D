@@ -193,6 +193,7 @@ class Node {
 		if(selected()){
 			if(!isSelected) { // means node just became selected
 				isSelected = true;
+				SOME_NODE_SELECTED = true;
 				// start animations
 				PVector start = new PVector();
 				start.set(position);
@@ -211,6 +212,7 @@ class Node {
 		else {
 			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected
 				isSelected = false;
+				SOME_NODE_SELECTED = false;
 				if(js != null)
 					js.clearNodeInfo();
 			}

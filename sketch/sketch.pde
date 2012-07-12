@@ -5,6 +5,7 @@ int TEXT_Z = 50;
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
 boolean EDITING = false;
+boolean SOME_NODE_SELECTED = false;
 int BAND_STEPS = 300;
 int PAN_DELTA = 10;
 
@@ -312,7 +313,10 @@ static class ColorScheme {
 	}
 
 	static int getNodeAlpha(boolean selected) {
-		int alpha=selected?100:255;	
+		int alpha  = 255;	
+		if(SOME_NODE_SELECTED && !selected)
+			alpha = 100;
+		
 		return alpha;
 	}
 

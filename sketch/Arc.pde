@@ -152,7 +152,7 @@ class Arc {
 		float t;
 		float x, y, z;
 		
-		fill(source.nodeBaseColor, ColorScheme.getNodeAlpha(source.isSelected || dest.isSelected));
+		fill(source.nodeCurrentColor, ColorScheme.getNodeAlpha(source.isSelected || dest.isSelected));
 		beginShape(QUAD_STRIP);
 		for(int i = 0; i < steps; i++) {
 			t = i/float(steps);	

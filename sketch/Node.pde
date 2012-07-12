@@ -17,6 +17,7 @@ class Node {
 	WaterDropletAnimation waterDropletAnim;
 	boolean selectedForEditing = false;
 	color nodeBaseColor = ColorScheme.getNodeBaseColor();
+	color nodeCurrentColor;
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
@@ -26,6 +27,7 @@ class Node {
 		initialize(id, name, level);	
 		if(nodeColor != null)
 			nodeBaseColor = parseColorFromString(nodeColor);
+			nodeCurrentColor = nodeBaseColor;
 	}
 
 	Node(int id, String name, int level, float carbonEmission, float waterEmission) {
@@ -210,9 +212,9 @@ class Node {
 			strokeWeight(2);
 			
 			//colorpicker returns string of hex representation, prefixed with #
-			nodeBaseColor = parseColorFromString(js.getColorPickerValue());
+			nodeCurrentColor = parseColorFromString(js.getColorPickerValue());
 		}
-		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
+		fill(nodeCurrentColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
 		translate(position.x, position.y, 1);
 		rect(-half_width, -half_height, 2*half_width, 2*half_height);

@@ -216,9 +216,9 @@ void resetAllNodeColors() {
 	Node n = null;
 	while(it.hasNext()) {
 		n = (Node) it.next();
-		n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+		n.nodeCurrentColor = n.nodeBaseColor;
 	}
-	js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+	js.setColorPickerValue("#"+hex(n.nodeCurrentColor,6));
 }
 
 void resetSelectedNodeColor() {
@@ -227,8 +227,8 @@ void resetSelectedNodeColor() {
 	while(it.hasNext()) {
 		n = (Node) it.next();
 		if(n.selectedForEditing) {
-			n.nodeBaseColor = ColorScheme.getNodeBaseColor();
-			js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+			n.nodeCurrentColor = n.nodeBaseColor;
+			js.setColorPickerValue("#"+hex(n.nodeCurrentColor,6));
 			break;
 		}
 	}

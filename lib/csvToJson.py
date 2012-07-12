@@ -134,17 +134,17 @@ for line in fuelDispositionCsv:
 	# create a unique dispNode for each fuel, put production and import in level 0, export in level 4, ignore use
 	if fuelNode:
 		if string.lower(dispType) == 'imports':
-			dispNode = string.join([fuelNode, ' Import'])
+			dispNode = string.join([fuelName, ' Import'])
 			if dispNode not in nodes:
 				nodes[dispNode] = {'id':len(nodes)+1, 'level':-2, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 		elif string.lower(dispType) == 'production':
-			dispNode = string.join([fuelNode, ' Prod'])
+			dispNode = string.join([fuelName, ' Prod'])
 			if dispNode not in nodes:
 				nodes[dispNode] = {'id':len(nodes)+1, 'level':-1, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 		elif string.lower(dispType) == 'exports':
-			dispNode = string.join([fuelNode, ' Export'])
+			dispNode = string.join([fuelName, ' Export'])
 			if dispNode not in nodes:
 				nodes[dispNode] = {'id':len(nodes)+1, 'level':-3, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )

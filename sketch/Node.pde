@@ -5,6 +5,11 @@ class Node {
 	float inStartX;
 	ArrayList assocInArcPositions;
 	ArrayList assocOutArcPositions;
+	// incident arc lists. This is an afterthought, and in the future should be incorporated
+	// with the above position lists. For now just needed to get data of incident nodes when
+	// displaying node info
+	ArrayList inArcs;
+	ArrayList outArcs;
 	String name;
 	int level;
 	float inFlow = 0;
@@ -40,6 +45,8 @@ class Node {
 		position = new PVector(0,0,0);
 		assocInArcPositions = new ArrayList();
 		assocOutArcPositions = new ArrayList();
+		inArcs = new ArrayList();
+		outArcs = new ArrayList();
 		this.id = id;
 		this.name = name;
 		this.level = level;
@@ -81,7 +88,8 @@ class Node {
 		return position.z;
 	}
 
-	int associateInArc(float flowIncrease) {
+	int associateInArc(Arc a) {
+		float flowIncrease = a.flow;
 		inFlow+=flowIncrease;	
 		if(assocInArcPositions.size() > 0) {
 			float prevElem = (Float) assocInArcPositions.get(assocInArcPositions.size()-1);
@@ -91,11 +99,14 @@ class Node {
 			assocInArcPositions.add(flowIncrease*SCALE);	
 		}
 		
-		return assocInArcPositions.size() - 1;
+		// add arc to the incident in arc list
+		inArcs.add(a);
 
+		return assocInArcPositions.size() - 1;
 	}
 
-	int associateOutArc(float flowIncrease) {
+	int associateOutArc(Arc a) {
+		float flowIncrease = a.flow;
 		outFlow+=flowIncrease;
 		if(assocOutArcPositions.size() > 0) {
 			float prevElem = (Float) assocOutArcPositions.get(assocOutArcPositions.size()-1);
@@ -104,9 +115,11 @@ class Node {
 		else {
 			assocOutArcPositions.add(flowIncrease*SCALE);	
 		}
+
+		// add arc to the incident out arc list
+		outArcs.add(a);
 		
 		return assocOutArcPositions.size() - 1;
-
 	}
 
 	float getInArcPosition(int index) {

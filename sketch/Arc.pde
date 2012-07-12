@@ -17,8 +17,8 @@ class Arc {
 		this.dest = dest;
 		flowByYears = flowData;
 		this.flow = flowByYears[0];
-		sourceOffset = source.associateOutArc(flow);
-		destOffset = dest.associateInArc(flow);
+		sourceOffset = source.associateOutArc(this);
+		destOffset = dest.associateInArc(this);
 
 		ctrlPt1 = new PVector();
 		ctrlPt2 = new PVector();

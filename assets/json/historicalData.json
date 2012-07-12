@@ -2,22 +2,28 @@
    "graph": {
       "nodes": [
          {
-            "color": "#000000", 
-            "level": -1, 
-            "name": "Coal  Prod", 
-            "id": 25
-         }, 
-         {
             "color": "#78ca92", 
             "level": -1, 
-            "name": "LiquidFuels  Prod", 
-            "id": 16
+            "name": "otherLiqFuel  Prod", 
+            "id": 19
          }, 
          {
-            "color": "#ff00e0", 
+            "color": "#bd6534", 
+            "level": -2, 
+            "name": "electricity  Import", 
+            "id": 24
+         }, 
+         {
+            "color": "#5797c9", 
             "level": -3, 
-            "name": "Petroleum  Export", 
-            "id": 14
+            "name": "naturalGas  Export", 
+            "id": 29
+         }, 
+         {
+            "color": "#5797c9", 
+            "level": -1, 
+            "name": "NGL  Prod", 
+            "id": 31
          }, 
          {
             "color": "#bd6534", 
@@ -26,10 +32,46 @@
             "id": 3
          }, 
          {
+            "color": "#5797c9", 
+            "level": -2, 
+            "name": "naturalGas  Import", 
+            "id": 30
+         }, 
+         {
             "color": "#ff0000", 
             "level": 1, 
             "name": "Uranium", 
             "id": 0
+         }, 
+         {
+            "color": "#ff00e0", 
+            "level": -1, 
+            "name": "crudeOil  Prod", 
+            "id": 25
+         }, 
+         {
+            "color": "#78ca92", 
+            "level": -3, 
+            "name": "hydrogen  Export", 
+            "id": 17
+         }, 
+         {
+            "color": "#ff0000", 
+            "level": -3, 
+            "name": "urainium  Export", 
+            "id": 38
+         }, 
+         {
+            "color": "#ff0000", 
+            "level": -1, 
+            "name": "urainium  Prod", 
+            "id": 37
+         }, 
+         {
+            "color": "#5797c9", 
+            "level": -3, 
+            "name": "NGL  Export", 
+            "id": 32
          }, 
          {
             "color": "#5797c9", 
@@ -38,10 +80,22 @@
             "id": 4
          }, 
          {
+            "color": "#ff00e0", 
+            "level": -2, 
+            "name": "crudeOil  Import", 
+            "id": 27
+         }, 
+         {
             "color": "#5376b3", 
             "level": 4, 
             "name": "Hydro", 
             "id": 7
+         }, 
+         {
+            "color": "#bd6534", 
+            "level": -1, 
+            "name": "electricity  Prod", 
+            "id": 22
          }, 
          {
             "color": null, 
@@ -50,40 +104,40 @@
             "id": 9
          }, 
          {
-            "color": "#ff0000", 
-            "level": -3, 
-            "name": "Uranium  Export", 
-            "id": 29
-         }, 
-         {
-            "color": "#5797c9", 
+            "color": "#78ca92", 
             "level": -2, 
-            "name": "NaturalGas/NGL  Import", 
-            "id": 24
-         }, 
-         {
-            "color": "#5797c9", 
-            "level": -3, 
-            "name": "NaturalGas/NGL  Export", 
-            "id": 23
-         }, 
-         {
-            "color": "#ff00e0", 
-            "level": -2, 
-            "name": "Petroleum  Import", 
-            "id": 15
-         }, 
-         {
-            "color": "#ff00e0", 
-            "level": -1, 
-            "name": "Petroleum  Prod", 
-            "id": 13
+            "name": "hydrogen  Import", 
+            "id": 18
          }, 
          {
             "color": "#bd6534", 
+            "level": -3, 
+            "name": "electricity  Export", 
+            "id": 23
+         }, 
+         {
+            "color": "#5797c9", 
             "level": -1, 
-            "name": "Electricity  Prod", 
-            "id": 19
+            "name": "naturalGas  Prod", 
+            "id": 28
+         }, 
+         {
+            "color": "#ff00e0", 
+            "level": -2, 
+            "name": "refPetPrd  Import", 
+            "id": 15
+         }, 
+         {
+            "color": "#000000", 
+            "level": -2, 
+            "name": "coal  Import", 
+            "id": 36
+         }, 
+         {
+            "color": "#ff00e0", 
+            "level": -3, 
+            "name": "refPetPrd  Export", 
+            "id": 14
          }, 
          {
             "color": null, 
@@ -110,16 +164,10 @@
             "id": 1
          }, 
          {
-            "color": "#bd6534", 
-            "level": -2, 
-            "name": "Electricity  Import", 
-            "id": 21
-         }, 
-         {
-            "color": "#bd6534", 
+            "color": "#000000", 
             "level": -3, 
-            "name": "Electricity  Export", 
-            "id": 20
+            "name": "coal  Export", 
+            "id": 35
          }, 
          {
             "color": "#000000", 
@@ -128,22 +176,40 @@
             "id": 2
          }, 
          {
+            "color": "#ff0000", 
+            "level": -2, 
+            "name": "urainium  Import", 
+            "id": 39
+         }, 
+         {
+            "color": "#78ca92", 
+            "level": -3, 
+            "name": "otherLiqFuel  Export", 
+            "id": 20
+         }, 
+         {
+            "color": "#5797c9", 
+            "level": -2, 
+            "name": "NGL  Import", 
+            "id": 33
+         }, 
+         {
+            "color": "#78ca92", 
+            "level": -2, 
+            "name": "otherLiqFuel  Import", 
+            "id": 21
+         }, 
+         {
             "color": "#000000", 
-            "level": -2, 
-            "name": "Coal  Import", 
-            "id": 27
-         }, 
-         {
-            "color": "#ff0000", 
-            "level": -2, 
-            "name": "Uranium  Import", 
-            "id": 30
-         }, 
-         {
-            "color": "#ff0000", 
             "level": -1, 
-            "name": "Uranium  Prod", 
-            "id": 28
+            "name": "coal  Prod", 
+            "id": 34
+         }, 
+         {
+            "color": "#ff00e0", 
+            "level": -3, 
+            "name": "crudeOil  Export", 
+            "id": 26
          }, 
          {
             "color": null, 
@@ -153,33 +219,21 @@
          }, 
          {
             "color": "#78ca92", 
-            "level": -2, 
-            "name": "LiquidFuels  Import", 
-            "id": 18
-         }, 
-         {
-            "color": "#000000", 
-            "level": -3, 
-            "name": "Coal  Export", 
-            "id": 26
-         }, 
-         {
-            "color": "#78ca92", 
             "level": 1, 
             "name": "LiquidFuels", 
             "id": 5
          }, 
          {
-            "color": "#5797c9", 
+            "color": "#78ca92", 
             "level": -1, 
-            "name": "NaturalGas/NGL  Prod", 
-            "id": 22
+            "name": "hydrogen  Prod", 
+            "id": 16
          }, 
          {
-            "color": "#78ca92", 
-            "level": -3, 
-            "name": "LiquidFuels  Export", 
-            "id": 17
+            "color": "#ff00e0", 
+            "level": -1, 
+            "name": "refPetPrd  Prod", 
+            "id": 13
          }
       ], 
       "arcs": [
@@ -1545,7 +1599,7 @@
                0.004533636000000001, 
                0.01409005
             ], 
-            "srcid": 16, 
+            "srcid": 19, 
             "dstid": 5
          }, 
          {
@@ -1581,7 +1635,7 @@
                0.005222584999999999
             ], 
             "srcid": 5, 
-            "dstid": 17
+            "dstid": 20
          }, 
          {
             "flow": [
@@ -1615,7 +1669,7 @@
                0.005176961000000001, 
                0.001198701
             ], 
-            "srcid": 18, 
+            "srcid": 21, 
             "dstid": 5
          }, 
          {
@@ -1650,7 +1704,7 @@
                2.1749319999999996, 
                2.1018850000000002
             ], 
-            "srcid": 19, 
+            "srcid": 22, 
             "dstid": 3
          }, 
          {
@@ -1686,7 +1740,7 @@
                0.35211000000000003
             ], 
             "srcid": 3, 
-            "dstid": 20
+            "dstid": 23
          }, 
          {
             "flow": [
@@ -1720,7 +1774,7 @@
                0.07013375000000001, 
                0.08685772
             ], 
-            "srcid": 21, 
+            "srcid": 24, 
             "dstid": 3
          }, 
          {
@@ -1755,7 +1809,7 @@
                5.842883, 
                5.977496
             ], 
-            "srcid": 13, 
+            "srcid": 25, 
             "dstid": 1
          }, 
          {
@@ -1791,7 +1845,7 @@
                4.189385000000001
             ], 
             "srcid": 1, 
-            "dstid": 14
+            "dstid": 26
          }, 
          {
             "flow": [
@@ -1825,7 +1879,7 @@
                2.771065, 
                2.548132
             ], 
-            "srcid": 15, 
+            "srcid": 27, 
             "dstid": 1
          }, 
          {
@@ -1860,7 +1914,7 @@
                7.192483, 
                7.219723
             ], 
-            "srcid": 22, 
+            "srcid": 28, 
             "dstid": 4
          }, 
          {
@@ -1896,7 +1950,7 @@
                4.087831
             ], 
             "srcid": 4, 
-            "dstid": 23
+            "dstid": 29
          }, 
          {
             "flow": [
@@ -1930,7 +1984,7 @@
                1.570485, 
                1.597258
             ], 
-            "srcid": 24, 
+            "srcid": 30, 
             "dstid": 4
          }, 
          {
@@ -1965,7 +2019,7 @@
                0.6585345, 
                0.7224382
             ], 
-            "srcid": 22, 
+            "srcid": 31, 
             "dstid": 4
          }, 
          {
@@ -2001,7 +2055,7 @@
                0.24364660000000002
             ], 
             "srcid": 4, 
-            "dstid": 23
+            "dstid": 32
          }, 
          {
             "flow": [
@@ -2035,7 +2089,7 @@
                0.013900000000000001, 
                0.017545
             ], 
-            "srcid": 24, 
+            "srcid": 33, 
             "dstid": 4
          }, 
          {
@@ -2070,7 +2124,7 @@
                1.424367, 
                1.336284
             ], 
-            "srcid": 25, 
+            "srcid": 34, 
             "dstid": 2
          }, 
          {
@@ -2106,7 +2160,7 @@
                0.6998613
             ], 
             "srcid": 2, 
-            "dstid": 26
+            "dstid": 35
          }, 
          {
             "flow": [
@@ -2140,7 +2194,7 @@
                1.421256, 
                1.3417670000000002
             ], 
-            "srcid": 27, 
+            "srcid": 36, 
             "dstid": 2
          }, 
          {
@@ -2175,7 +2229,7 @@
                2.802289, 
                2.8353870000000003
             ], 
-            "srcid": 28, 
+            "srcid": 37, 
             "dstid": 0
          }, 
          {
@@ -2211,7 +2265,7 @@
                2.47735
             ], 
             "srcid": 0, 
-            "dstid": 29
+            "dstid": 38
          }, 
          {
             "flow": [
@@ -2245,7 +2299,7 @@
                7.303298e-08, 
                5.278758e-08
             ], 
-            "srcid": 30, 
+            "srcid": 39, 
             "dstid": 0
          }
       ]

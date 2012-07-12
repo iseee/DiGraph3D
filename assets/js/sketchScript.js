@@ -68,17 +68,27 @@ function displaySelectedNodeInfo(node) {
 	htmlContent += '<th>Source</th><th>Amount (EJ)</th';
 	htmlContent += '</tr></thead>'
 	htmlContent += '<tbody>'
-	htmlContent += '<tr><td>Import</td><td>0.0</td></tr>';
-	htmlContent += '<tr><td>Production</td><td>0.0</td></tr>';
-	htmlContent += "<tr><td>TotalFlow</td><td><b>"+flow.toFixed(2)+"</b></td></tr>";
+	var inArcs = node.inArcs;
+	var totalIn = 0;
+	for(i = 0; i < inArcs.size(); i++) {
+		var arc = inArcs.get(i);
+		htmlContent += '<tr><td>'+arc.source.name+'</td><td>'+arc.flow.toFixed(2)+'</td></tr>';
+		totalIn += arc.flow;
+	}
+	htmlContent += "<tr><td>Total</td><td><b>"+totalIn.toFixed(2)+"</b></td></tr>";
 	htmlContent += "</tbody></table>";
 	htmlContent += '<table class="table table-condensed"><thead><tr>';
 	htmlContent += '<th>Dest</th><th>Amount (EJ)</th';
 	htmlContent += '</tr></thead>'
 	htmlContent += '<tbody>'
-	htmlContent += '<tr><td>Export</td><td>0.0</td></tr>';
-	htmlContent += '<tr><td>Use</td><td>0.0</td></tr>';
-	htmlContent += "<tr><td>TotalFlow</td><td><b>"+flow.toFixed(2)+"</b></td></tr>";
+	var outArcs = node.outArcs;
+	var totalOut = 0;
+	for(i = 0; i < outArcs.size(); i++) {
+		var arc = outArcs.get(i);
+		htmlContent += '<tr><td>'+arc.dest.name+'</td><td>'+arc.flow.toFixed(2)+'</td></tr>';
+		totalOut += arc.flow;
+	}
+	htmlContent += "<tr><td>Total</td><td><b>"+totalOut.toFixed(2)+"</b></td></tr>";
 	htmlContent += "</tbody></table>";
 	jQuery('#selectedNodeContent').html(htmlContent);
 	jQuery('#infoPopoverSrc').popover('show');

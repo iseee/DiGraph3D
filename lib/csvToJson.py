@@ -4,17 +4,16 @@ import string
 
 # level zero nodes
 fuelNamesWithMap = [	('Uranium',['urainium'], '#ff0000'), # note urainium is mispelled in current csv files
-							('Petroleum', ['crudeOil', 'refPetPrd', 'petroleum'], '#ff00e0'),
+							('Crude Oil', ['crudeOil'] , '#ff00e0'),
+							('RefinedPetrol', ['refPetPrd', 'petroleum'], '#dd00ff'),
 							('Coal',['coal'], '#000000'),
 							('Electricity', ['electricity'], '#bd6534'),
 							('NaturalGas/NGL',['naturalGas', 'NGL'], '#5797c9'),
-							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar'], '#367a2d'),
+							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar', 'hydrogen', 'otherLiqFuel'], '#367a2d'),
 							('Hydro',['waterFall', 'waterTide', 'waterWave', 'inRiverFlow'], '#5376b3') ]
 
 def findMappedNode(csvName):
 	csvLower = string.lower(csvName)
-	if csvLower == 'hydrogen' or csvLower == 'otherliqfuel':
-		return ""
 	for (node, list, color) in fuelNamesWithMap:
 		for l in list:
 			lLower = string.lower(l)
@@ -43,9 +42,7 @@ for (fuel,list,color) in fuelNamesWithMap:
 	nodes[fuel] = {'id':len(nodes), 'level':1, 'color':color}
 # add the electricity node
 nodes['Electricity']['level'] = 6
-# modify fuels that have no disposition data
-nodes['Biomass/other']['level'] = 4 
-nodes['Hydro']['level'] = 4
+nodes['RefinedPetrol']['level']= 4
 
 # read and interpret data, by assigning arcs between the fuel nodes and electricity nodes
 # there are two csv files with the elec gen data
@@ -119,7 +116,6 @@ print "done"
 
 # read disposition data #
 print "reading fuelDisposition.csv..."
-print "We intentionally ignore hydrogen and otherLiqFuels, they are insignificantly small amounts"
 fuelDispositionCsv = open('fuelDisposition.csv', 'r')
 
 line = fuelDispositionCsv.readline()
@@ -133,7 +129,8 @@ for line in fuelDispositionCsv:
 	fuelName = split[0].strip('"')
 	dispType = split[1].strip('"')
 	fuelNode = findMappedNode(fuelName)
-	# create a unique dispNode for each fuel, put production and import in level 0, export in level 4, ignore use
+	# create a unique dispNode for each fuel, ignore use for now
+	# use special negative levels for the import, export, production nodes
 	if fuelNode:
 		if string.lower(dispType) == 'imports':
 			dispNode = string.join([fuelName, ' Import'])
@@ -143,7 +140,11 @@ for line in fuelDispositionCsv:
 		elif string.lower(dispType) == 'production':
 			dispNode = string.join([fuelName, ' Prod'])
 			if dispNode not in nodes:
-				nodes[dispNode] = {'id':len(nodes)+1, 'level':-1, 'color':findMappedColor(fuelNode)}
+				# refined petroleum production is a special case. It is produced from crude oil
+				if fuelName == 'refPetPrd':
+					dispNode = 'Crude Oil'		
+				else:
+					nodes[dispNode] = {'id':len(nodes)+1, 'level':-1, 'color':findMappedColor(fuelNode)}
 			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
 		elif string.lower(dispType) == 'exports':
 			dispNode = string.join([fuelName, ' Export'])

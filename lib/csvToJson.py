@@ -8,15 +8,16 @@ fuelNamesWithMap = [	('Uranium',['urainium'], '#ff0000'), # note urainium is mis
 							('Coal',['coal'], '#000000'),
 							('Electricity', ['electricity'], '#bd6534'),
 							('NaturalGas/NGL',['naturalGas', 'NGL'], '#5797c9'),
-							('LiquidFuels',['hydrogen', 'otherLiqFuel'], '#78ca92'),
 							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar'], '#367a2d'),
 							('Hydro',['waterFall', 'waterTide', 'waterWave', 'inRiverFlow'], '#5376b3') ]
 
 def findMappedNode(csvName):
+	csvLower = string.lower(csvName)
+	if csvLower == 'hydrogen' or csvLower == 'otherliqfuel':
+		return ""
 	for (node, list, color) in fuelNamesWithMap:
 		for l in list:
 			lLower = string.lower(l)
-			csvLower = string.lower(csvName)
 			if lLower == csvLower:
 				return node
 	print 'Could not find mapped node for %s' % csvName
@@ -117,7 +118,8 @@ print "done"
 
 
 # read disposition data #
-print "reading fuelDisposition.csv"
+print "reading fuelDisposition.csv..."
+print "We intentionally ignore hydrogen and otherLiqFuels, they are insignificantly small amounts"
 fuelDispositionCsv = open('fuelDisposition.csv', 'r')
 
 line = fuelDispositionCsv.readline()

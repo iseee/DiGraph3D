@@ -202,7 +202,7 @@ class Node {
 				start.set(position);
 				start.add(0, getFlow()*SCALE/2+5, 0);
 				waterDropletAnim.initiate(start, waterEmission*getFlow());
-				if(null != js)
+				if(null != js && !EDITING)
 					js.displaySelectedNodeInfo(this);
 			}
 			alpha = 255;

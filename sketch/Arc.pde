@@ -88,7 +88,7 @@ class Arc {
 			dest_x = dest.getX();
 		}
 
-		drawBand(_width, topOfBandSrc, topOfBandDst, source_x, dest_x);
+		drawBand(_width, topOfBandSrc, topOfBandDst, source_x+8, dest_x-8);
 
 		// if the source or destination or the arc is selected, draw a sphere 'flowing' along the arc
 		if( (source.isSelected || dest.isSelected) && !EDITING && source.level>0 && dest.level>0) {

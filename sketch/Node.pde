@@ -165,7 +165,7 @@ class Node {
 	}
 
 	float getHalfWidth() {
-		return getFlow()*SCALE/8;
+		return 12; //getFlow()*SCALE/8;
 	}
 
 	float getHalfHeight() {
@@ -232,7 +232,9 @@ class Node {
 		fill(nodeCurrentColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
 		translate(position.x, position.y, 1);
+		stroke(100);
 		rect(-half_width, -half_height, 2*half_width, 2*half_height);
+		noStroke();
 		/*
 		// draw a hexahedron to represent the node
 		//sides

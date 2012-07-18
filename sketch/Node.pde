@@ -5,6 +5,11 @@ class Node {
 	float inStartX;
 	ArrayList assocInArcPositions;
 	ArrayList assocOutArcPositions;
+	// incident arc lists. This is an afterthought, and in the future should be incorporated
+	// with the above position lists. For now just needed to get data of incident nodes when
+	// displaying node info
+	ArrayList inArcs;
+	ArrayList outArcs;
 	String name;
 	int level;
 	float inFlow = 0;
@@ -17,9 +22,17 @@ class Node {
 	WaterDropletAnimation waterDropletAnim;
 	boolean selectedForEditing = false;
 	color nodeBaseColor = ColorScheme.getNodeBaseColor();
+	color nodeCurrentColor;
 
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
+	}
+
+	Node(int id, String name, int level, string nodeColor) {
+		initialize(id, name, level);	
+		if(nodeColor != null)
+			nodeBaseColor = parseColorFromString(nodeColor);
+			nodeCurrentColor = nodeBaseColor;
 	}
 
 	Node(int id, String name, int level, float carbonEmission, float waterEmission) {
@@ -32,6 +45,8 @@ class Node {
 		position = new PVector(0,0,0);
 		assocInArcPositions = new ArrayList();
 		assocOutArcPositions = new ArrayList();
+		inArcs = new ArrayList();
+		outArcs = new ArrayList();
 		this.id = id;
 		this.name = name;
 		this.level = level;
@@ -73,7 +88,8 @@ class Node {
 		return position.z;
 	}
 
-	int associateInArc(float flowIncrease) {
+	int associateInArc(Arc a) {
+		float flowIncrease = a.flow;
 		inFlow+=flowIncrease;	
 		if(assocInArcPositions.size() > 0) {
 			float prevElem = (Float) assocInArcPositions.get(assocInArcPositions.size()-1);
@@ -83,11 +99,14 @@ class Node {
 			assocInArcPositions.add(flowIncrease*SCALE);	
 		}
 		
-		return assocInArcPositions.size() - 1;
+		// add arc to the incident in arc list
+		inArcs.add(a);
 
+		return assocInArcPositions.size() - 1;
 	}
 
-	int associateOutArc(float flowIncrease) {
+	int associateOutArc(Arc a) {
+		float flowIncrease = a.flow;
 		outFlow+=flowIncrease;
 		if(assocOutArcPositions.size() > 0) {
 			float prevElem = (Float) assocOutArcPositions.get(assocOutArcPositions.size()-1);
@@ -96,9 +115,11 @@ class Node {
 		else {
 			assocOutArcPositions.add(flowIncrease*SCALE);	
 		}
+
+		// add arc to the incident out arc list
+		outArcs.add(a);
 		
 		return assocOutArcPositions.size() - 1;
-
 	}
 
 	float getInArcPosition(int index) {
@@ -143,12 +164,36 @@ class Node {
 		}
 	}
 
+	float getHalfWidth() {
+		return getFlow()*SCALE/8;
+	}
+
+	float getHalfHeight() {
+		return getFlow()*SCALE/2;
+	}
+
+	/*
+	 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
+	 * then, processing can only create colors from integer values, so using the colorToBe int as 
+	 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
+	 */
+	color parseColorFromString(string colorString) {
+		String[] split = splitTokens(colorString, "#");
+		int colorToBe = unhex(split[0]);
+		int r = colorToBe  >> 16 & 0xFF;
+		int g = colorToBe >> 8 & 0xFF;
+		int b = colorToBe & 0xFF;
+		return color(r,g,b,255);
+	}
 
 	void draw() {
+		// don't draw nodes with negative levels, these are special nodes
+		if(level < 0) return;
 		float alpha = 100;
 		if(selected()){
 			if(!isSelected) { // means node just became selected
 				isSelected = true;
+				SOME_NODE_SELECTED = true;
 				// start animations
 				PVector start = new PVector();
 				start.set(position);
@@ -157,8 +202,8 @@ class Node {
 				start.set(position);
 				start.add(0, getFlow()*SCALE/2+5, 0);
 				waterDropletAnim.initiate(start, waterEmission*getFlow());
-				if(null != js)
-					js.displaySelectedNodeInfo(name, getFlow(), carbonEmission, waterEmission);
+				if(null != js && !EDITING)
+					js.displaySelectedNodeInfo(this);
 			}
 			alpha = 255;
 			if(!EDITING)
@@ -167,35 +212,28 @@ class Node {
 		else {
 			if(isSelected) { // node not currently selected, but isSelected is true, means just became not selected
 				isSelected = false;
+				SOME_NODE_SELECTED = false;
 				if(js != null)
 					js.clearNodeInfo();
 			}
 		}
 
-		float half_width = getFlow()*SCALE/8;
-		float half_height = getFlow()*SCALE/2;
+		float half_width = getHalfWidth();
+		float half_height = getHalfHeight();
 
 		noStroke();
 		if(selectedForEditing && EDITING) {
 			stroke(ColorScheme.getEditingColor());
 			strokeWeight(2);
 			
-			/*
-			 * colorpicker returns string of hex representation, prefixed with #
-			 * processing cannot parse to an int a string with #, so split to extract hex chars, and convert to int
-			 * then, processing can only create colors from integer values, so using the colorToBe int as 
-			 * representation of the color, use shifts and masks to extract rgb values, and construct proper color
-			 */
-			String[] split = splitTokens(js.getColorPickerValue(), "#");
-			int colorToBe = unhex(split[0]);
-			int r = colorToBe  >> 16 & 0xFF;
-			int g = colorToBe >> 8 & 0xFF;
-			int b = colorToBe & 0xFF;
-			nodeBaseColor = color(r,g,b,255);
+			//colorpicker returns string of hex representation, prefixed with #
+			nodeCurrentColor = parseColorFromString(js.getColorPickerValue());
 		}
-		fill(nodeBaseColor, ColorScheme.getNodeAlpha(isSelected));
+		fill(nodeCurrentColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
-		translate(position.x, position.y, 0);
+		translate(position.x, position.y, 1);
+		rect(-half_width, -half_height, 2*half_width, 2*half_height);
+		/*
 		// draw a hexahedron to represent the node
 		//sides
 		beginShape(QUAD_STRIP);
@@ -224,6 +262,7 @@ class Node {
 		vertex(half_width, -half_height, half_width);	//6
 		vertex(-half_width, -half_height, half_width);	//8
 		endShape();
+		*/
 	
 		// label
 		textSize(12);

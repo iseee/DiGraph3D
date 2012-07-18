@@ -3,38 +3,61 @@ import string
 
 
 # level zero nodes
-fuelNamesWithMap = [	('Uranium',['urainium']), # note urainium is mispelles in current csv files
-							('Petroleum', ['crudeOil', 'refPetPrd', 'petroleum']),
-							('Coal',['coal']),
-							('Electricity', ['electricity']),
-							('NaturalGas/NGL',['naturalGas', 'NGL']),
-							('LiquidFuels',['hydrogen', 'otherLiqFuel']),
-							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar']),
-							('Hydro',['waterFall', 'waterTide', 'waterWave', 'inRiverFlow']) ]
+fuelNamesWithMap = [	('Uranium',['urainium'], '#ff0000'), # note urainium is mispelled in current csv files
+							('Crude Oil', ['crudeOil'] , '#ff00e0'),
+							('RefinedPetrol', ['refPetPrd', 'petroleum'], '#dd00ff'),
+							('Coal',['coal'], '#000000'),
+							('Electricity', ['electricity'], '#bd6534'),
+							('NaturalGas/NGL',['naturalGas', 'NGL'], '#5797c9'),
+							('Biomass/other',['biomass', 'geoSteam', 'wind', 'solar', 'hydrogen', 'otherLiqFuel'], '#367a2d'),
+							('Hydro',['waterFall', 'waterTide', 'waterWave', 'inRiverFlow'], '#5376b3') ]
 
 def findMappedNode(csvName):
-	for (node, list) in fuelNamesWithMap:
+	csvLower = string.lower(csvName)
+	for (node, list, color) in fuelNamesWithMap:
 		for l in list:
 			lLower = string.lower(l)
-			csvLower = string.lower(csvName)
 			if lLower == csvLower:
 				return node
 	print 'Could not find mapped node for %s' % csvName
 	return ""
 
+def findMappedColor(nodeName):
+	for (node, list, color) in fuelNamesWithMap:
+		lower = string.lower(node).strip()
+		nodeNameLower = string.lower(nodeName).strip()
+		if lower == nodeNameLower:
+				return color
+	print 'Could not find mapped color for %s' % nodeName
+	return "" 
 
+# for list representing history or flow between src and dst, increment every element
+# of list by corresponding item in values
+# src,dst string names of nodes
+# values, list of string values to add
+def accumulate(src,dst,values):
+	toAdd = [float(val)/1000 for val in values]
+	if arcTable[nodes[src]['id']][nodes[dst]['id']] is not None:
+		arcTable[nodes[src]['id']][nodes[dst]['id']] = map(lambda a,b: a+b, arcTable[nodes[src]['id']][nodes[dst]['id']], toAdd)
+	else:
+		arcTable[nodes[src]['id']][nodes[dst]['id']] = toAdd 
 
 nodes = dict() 
 arcs = list() 
 
+# initialize an 2d array, which will store cumulative flows between nodes, then arcs for each will 
+# added at the end. This eliminates multiple arcs between same two nodes, which is not needed currently
+arcTable = []
+TABLE_DIM = 100
+for i in range(TABLE_DIM):
+	arcTable.append([None for k in range(TABLE_DIM)])
+
 # manually create the fuel nodes
-for (fuel,list) in fuelNamesWithMap:
-	nodes[fuel] = {'id':len(nodes), 'level':1}
+for (fuel,list,color) in fuelNamesWithMap:
+	nodes[fuel] = {'id':len(nodes), 'level':1, 'color':color}
 # add the electricity node
 nodes['Electricity']['level'] = 6
-# modify fuels that have no disposition data
-nodes['Biomass/other']['level'] = 4 
-nodes['Hydro']['level'] = 4
+nodes['RefinedPetrol']['level']= 4
 
 # read and interpret data, by assigning arcs between the fuel nodes and electricity nodes
 # there are two csv files with the elec gen data
@@ -56,7 +79,7 @@ for line in renewableElecCsv:
 	# find correct node to assign data to
 	node = findMappedNode(csvName)
 	if node: 
-		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":[float(val)/1000 for val in split[1:]]})
+		accumulate(node,'Electricity',split[1:])
 
 renewableElecCsv.close()
 print "done"
@@ -77,7 +100,7 @@ for line in fuelUsedElecGenCsv:
 	# find correct node to assign data to
 	node = findMappedNode(csvName)
 	if node: 
-		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":[float(val)/1000 for val in split[1:]]})
+		accumulate(node,'Electricity',split[1:])
 
 fuelUsedElecGenCsv.close()
 print "done"
@@ -100,51 +123,62 @@ for line in finalDemandCsv:
 		nodes[useName] = {'id':len(nodes)+1, 'level':9}
 	srcNode = findMappedNode(fuelName)
 	if srcNode:
-		arcs.append({ 'srcid':nodes[srcNode]['id'], 'dstid':nodes[useName]['id'], 'flow':[float(val)/1000 for val in split[2:]]})
+		accumulate(srcNode,useName,split[2:])
 
 finalDemandCsv.close()
 print "done"
 
 
 # read disposition data #
-#print "reading fuelDisposition.csv"
-#fuelDispositionCsv = open('fuelDisposition.csv', 'r')
-#
-#line = fuelDispositionCsv.readline()
-#assert line == 'entity: /year\n', "entity is not correct in fuelDisposition.csv"
-#line = fuelDispositionCsv.readline()
-#assert line == 'unit of measure: petajoule\n', "unit of measure is not correct"
-#line = fuelDispositionCsv.readline() # read header line
-#
-#for line in fuelDispositionCsv:
-#	split = line.split(',')
-#	fuelName = split[0].strip('"')
-#	dispType = split[1].strip('"')
-#	fuelNode = findMappedNode(fuelName)
-#	# create a unique dispNode for each fuel, put production and import in level 0, export in level 4, ignore use
-#	if fuelNode:
-#		if string.lower(dispType) == 'imports':
-#			dispNode = string.join([fuelNode, ' Import'])
-#			if dispNode not in nodes:
-#				nodes[dispNode] = {'id':len(nodes)+1, 'level':0}
-#			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
-#		elif string.lower(dispType) == 'production':
-#			dispNode = string.join([fuelNode, ' Prod'])
-#			if dispNode not in nodes:
-#				nodes[dispNode] = {'id':len(nodes)+1, 'level':0}
-#			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
-#		elif string.lower(dispType) == 'exports':
-#			dispNode = string.join([fuelNode, ' Export'])
-#			if dispNode not in nodes:
-#				nodes[dispNode] = {'id':len(nodes)+1, 'level':4}
-#			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
-#
-#fuelDispositionCsv.close();
-#print 'done'
+print "reading fuelDisposition.csv..."
+fuelDispositionCsv = open('fuelDisposition.csv', 'r')
 
+line = fuelDispositionCsv.readline()
+assert line == 'entity: /year\n', "entity is not correct in fuelDisposition.csv"
+line = fuelDispositionCsv.readline()
+assert line == 'unit of measure: petajoule\n', "unit of measure is not correct"
+line = fuelDispositionCsv.readline() # read header line
+
+for line in fuelDispositionCsv:
+	split = line.split(',')
+	fuelName = split[0].strip('"')
+	dispType = split[1].strip('"')
+	fuelNode = findMappedNode(fuelName)
+	# create a unique dispNode for each fuel, ignore use for now
+	# use special negative levels for the import, export, production nodes
+	if fuelNode:
+		if string.lower(dispType) == 'imports':
+			dispNode = string.join([fuelName, ' Import'])
+			if dispNode not in nodes:
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-2, 'color':findMappedColor(fuelNode)}
+			accumulate(dispNode,fuelNode,split[2:])
+		elif string.lower(dispType) == 'production':
+			dispNode = string.join([fuelName, ' Prod'])
+			if dispNode not in nodes:
+				# refined petroleum production is a special case. It is produced from crude oil
+				if fuelName == 'refPetPrd':
+					dispNode = 'Crude Oil'		
+				else:
+					nodes[dispNode] = {'id':len(nodes)+1, 'level':-1, 'color':findMappedColor(fuelNode)}
+			accumulate(dispNode,fuelNode,split[2:])
+		elif string.lower(dispType) == 'exports':
+			dispNode = string.join([fuelName, ' Export'])
+			if dispNode not in nodes:
+				nodes[dispNode] = {'id':len(nodes)+1, 'level':-3, 'color':findMappedColor(fuelNode)}
+			accumulate(fuelNode,dispNode,split[2:])
+
+fuelDispositionCsv.close()
+print 'done'
+
+# create arcs from arcTable
+for i in range(len(arcTable)):
+	for j in range(len(arcTable[i])):
+		list = arcTable[i][j]
+		if list is not None:
+			arcs.append( {'srcid':i, 'dstid':j, 'flow':list} )
 
 # format data for export to json
-data = {'graph':{'nodes':[{'name':name,'id':info.get('id'),'level':info.get('level')} for (name,info) in nodes.items()], 'arcs':arcs}}
+data = {'graph':{'nodes':[{'name':name,'id':info.get('id'),'level':info.get('level'), 'color':info.get('color')} for (name,info) in nodes.items()], 'arcs':arcs}}
 
 # write to json file
 jsonFile = open('../assets/json/historicalData.json', 'w')

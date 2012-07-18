@@ -22,7 +22,7 @@ function loadGraphFromStaticJson() {
 			var nodes = data.graph.nodes;
 			for(i = 0; i < nodes.length; i++) {
 				var node = nodes[i];
-				graphObj.addNode(new pjs.Node(node.id, node.name, node.level));	
+				graphObj.addNode(new pjs.Node(node.id, node.name, node.level, node.color));	
 			}
 			var arcs = data.graph.arcs;
 			for(i = 0; i < arcs.length; i++) {
@@ -59,10 +59,37 @@ function bindJavascript() {
 		setTimeout(bindJavascript, 250);
 }
 
-function displaySelectedNodeInfo(name, flow, carbonFactor, waterFactor) {
-	htmlTitle = "<b>"+name + "</b>";
+function displaySelectedNodeInfo(node) {
+	htmlTitle = "<b>"+node.name + "</b>";
 	jQuery('#selectedNodeTitle').html(htmlTitle);
-	htmlContent = "<i>TotalFlow</i>=<b>"+flow.toFixed(2)+" </b> Exajoules <i>CarbonEmissions</i>="+(flow*carbonFactor).toFixed(2)+" <i>WaterEmissions</i>="+(flow*waterFactor).toFixed(2);
+	var flow = node.getFlow();
+	var htmlContent = '';
+	htmlContent += '<table class="table table-condensed"><thead><tr>';
+	htmlContent += '<th>Source</th><th>Amount (EJ)</th';
+	htmlContent += '</tr></thead>'
+	htmlContent += '<tbody>'
+	var inArcs = node.inArcs;
+	var totalIn = 0;
+	for(i = 0; i < inArcs.size(); i++) {
+		var arc = inArcs.get(i);
+		htmlContent += '<tr><td>'+arc.source.name+'</td><td>'+arc.flow.toFixed(2)+'</td></tr>';
+		totalIn += arc.flow;
+	}
+	htmlContent += "<tr><td>Total</td><td><b>"+totalIn.toFixed(2)+"</b></td></tr>";
+	htmlContent += "</tbody></table>";
+	htmlContent += '<table class="table table-condensed"><thead><tr>';
+	htmlContent += '<th>Dest</th><th>Amount (EJ)</th';
+	htmlContent += '</tr></thead>'
+	htmlContent += '<tbody>'
+	var outArcs = node.outArcs;
+	var totalOut = 0;
+	for(i = 0; i < outArcs.size(); i++) {
+		var arc = outArcs.get(i);
+		htmlContent += '<tr><td>'+arc.dest.name+'</td><td>'+arc.flow.toFixed(2)+'</td></tr>';
+		totalOut += arc.flow;
+	}
+	htmlContent += "<tr><td>Total</td><td><b>"+totalOut.toFixed(2)+"</b></td></tr>";
+	htmlContent += "</tbody></table>";
 	jQuery('#selectedNodeContent').html(htmlContent);
 	jQuery('#infoPopoverSrc').popover('show');
 }
@@ -191,6 +218,6 @@ window.onload = function loadScript() {
 		editCheckboxChange(!$(this).hasClass('active')); 
 	});
 	jQuery("button[rel=tooltip]").tooltip();
-	jQuery('#infoPopoverSrc').popover({trigger:'manual', placement:'top', title: function() {return getPopoverTitle();}, content: function() {return getPopoverContent();}});
+	jQuery('#infoPopoverSrc').popover({trigger:'manual', placement:'left', title: function() {return getPopoverTitle();}, content: function() {return getPopoverContent();}});
 //	renderIndividualControls();
 }

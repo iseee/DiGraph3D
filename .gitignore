@@ -1,3 +1,4 @@
+dataAnalysis.xlsx
 # Numerous always-ignore extensions
 *.diff
 *.err
@@ -49,3 +50,5 @@ build/config/buildinfo.properties
 
 #.csv
 *.csv
+*.old
+

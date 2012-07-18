@@ -5,6 +5,7 @@ int TEXT_Z = 50;
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;
 boolean EDITING = false;
+boolean SOME_NODE_SELECTED = false;
 int BAND_STEPS = 300;
 int PAN_DELTA = 10;
 
@@ -31,7 +32,7 @@ JavaScript js;
  * somewhere in your js, you can call it straight from processing code.
  */
 interface JavaScript {
-	void displaySelectedNodeInfo(String name, float flow, float carbonEmission, float waterEmission);	
+	void displaySelectedNodeInfo(Node node);	
 	void clearNodeInfo();
 	String getColorPickerValue();
 	void setColorPickerValue(String val);
@@ -56,7 +57,7 @@ void setup() {
 }
 
 void draw() {
-	lights();
+	ambientLight(255,255,255);
 	background(ColorScheme.getBgColor());
 
 	float cameraY = HEIGHT/2.0;
@@ -216,9 +217,9 @@ void resetAllNodeColors() {
 	Node n = null;
 	while(it.hasNext()) {
 		n = (Node) it.next();
-		n.nodeBaseColor = ColorScheme.getNodeBaseColor();
+		n.nodeCurrentColor = n.nodeBaseColor;
 	}
-	js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+	js.setColorPickerValue("#"+hex(n.nodeCurrentColor,6));
 }
 
 void resetSelectedNodeColor() {
@@ -227,8 +228,8 @@ void resetSelectedNodeColor() {
 	while(it.hasNext()) {
 		n = (Node) it.next();
 		if(n.selectedForEditing) {
-			n.nodeBaseColor = ColorScheme.getNodeBaseColor();
-			js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+			n.nodeCurrentColor = n.nodeBaseColor;
+			js.setColorPickerValue("#"+hex(n.nodeCurrentColor,6));
 			break;
 		}
 	}
@@ -270,7 +271,7 @@ static class ColorScheme {
 	 * Processing doesn't seem to currently support enums, so for the dark/light scheme we just
 	 * hack using ints for now, 0=dark, 1=light
 	 */
-	static int currentScheme = 0;
+	static int currentScheme = 1;
 
 	static void changeColorScheme() {
 		if(currentScheme == 0)
@@ -289,7 +290,7 @@ static class ColorScheme {
 			return darkSchemeColor;
 		if(currentScheme == 1)
 			return lightSchemeColor;
-		return darkSchemeColor; //default
+		return lightSchemeColor; //default
 	}
 
 	static color getBgColor() {
@@ -307,12 +308,15 @@ static class ColorScheme {
 	 */
 
 	static color getArcColor(float width, float min, float max, boolean selected) {
-		int alpha = selected?255:100;
+		int alpha = selected?100:255;
 		return color(0, map(width, min, max, 0, 255), 255, alpha);
 	}
 
 	static int getNodeAlpha(boolean selected) {
-		int alpha=selected?255:100;	
+		int alpha  = 255;	
+		if(SOME_NODE_SELECTED && !selected)
+			alpha = 100;
+		
 		return alpha;
 	}
 

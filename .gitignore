@@ -50,3 +50,5 @@ build/config/buildinfo.properties
 
 #.csv
 *.csv
+*.old
+

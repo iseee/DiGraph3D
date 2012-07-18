@@ -96,7 +96,7 @@ class Arc {
 			float steps = 150/rate;
 			float t = (frameCount % steps)/steps;
 			float x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
-			float y = bezierPoint(topOfBandSrc+_width/2, ctrlPt1.y, ctrlPt2.y, topOfBandDst+_width/2, t);
+			float y = bezierPoint(topOfBandSrc+_width/2, ctrlPt1.y+_width/2, ctrlPt2.y+_width/2, topOfBandDst+_width/2, t);
 			float z = 0; 
 			pushMatrix();
 			translate(x,y,z);

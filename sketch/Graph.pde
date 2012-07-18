@@ -81,6 +81,9 @@ class Graph {
 			// iterate over nodes in this level
 			while(it.hasNext()){
 				n = (Node)it.next();
+				// hack for level 4, where refined petrol is.
+				if(n.level == 4)
+					dy = height/float(n.level);
 				n.setPosition(-1*width/2+dx*n.level, -1*height/2+i*dy);
 				i++;
 			}

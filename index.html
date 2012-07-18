@@ -132,20 +132,22 @@
 			</div><!--/modal-->
 
 		</div><!--/editing-div-->
-		
-		<canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas>
-	
+
+			<div>
+				<span id="selectedNodeTitle" style="display:none"></span>
+				<span id="selectedNodeContent" style="display:none"></span>
+			</div>
+			<div class="row">
+				<div id="infoPopoverSrc" style="padding: 0px 0px 500px 0px; float: left;"></div>
+				<div class="span12"><canvas id="sketch" data-processing-sources="sketch/Graph.pde sketch/Node.pde sketch/Arc.pde sketch/sketch.pde"></canvas></div>
+			</div>	
+
 		<div class="row">
-			<div class="span6">
+			<div class="span12">
 				<span class="label">Year</span>
 				<span id="currentYear" style="font-size:1.5em; font-weight:bold">1978</span>
 				1978<input type="range" id="yearSlider" min="1978" max="2006" value="0" step="1" onchange="yearSliderChanged(this.value)" />2006
 				<a href="#" onclick="animControlClick();return false;"><i id="anim-icon" class="icon-play"></i></a>
-			</div>
-			<div class="span6">
-				<span id="selectedNodeTitle" style="display:none"></span>
-				<span id="selectedNodeContent" style="display:none"></span>
-				<span align="center" id="infoPopoverSrc" style="visibility:hidden"></span>
 			</div>
 		</div>
 		<div id="individualControls"></div>

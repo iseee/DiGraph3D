@@ -218,6 +218,6 @@ window.onload = function loadScript() {
 		editCheckboxChange(!$(this).hasClass('active')); 
 	});
 	jQuery("button[rel=tooltip]").tooltip();
-	jQuery('#infoPopoverSrc').popover({trigger:'manual', placement:'top', title: function() {return getPopoverTitle();}, content: function() {return getPopoverContent();}});
+	jQuery('#infoPopoverSrc').popover({trigger:'manual', placement:'left', title: function() {return getPopoverTitle();}, content: function() {return getPopoverContent();}});
 //	renderIndividualControls();
 }

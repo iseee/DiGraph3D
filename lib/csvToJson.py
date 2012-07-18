@@ -31,11 +31,26 @@ def findMappedColor(nodeName):
 	print 'Could not find mapped color for %s' % nodeName
 	return "" 
 
-
-
+# for list representing history or flow between src and dst, increment every element
+# of list by corresponding item in values
+# src,dst string names of nodes
+# values, list of string values to add
+def accumulate(src,dst,values):
+	toAdd = [float(val)/1000 for val in values]
+	if arcTable[nodes[src]['id']][nodes[dst]['id']] is not None:
+		arcTable[nodes[src]['id']][nodes[dst]['id']] = map(lambda a,b: a+b, arcTable[nodes[src]['id']][nodes[dst]['id']], toAdd)
+	else:
+		arcTable[nodes[src]['id']][nodes[dst]['id']] = toAdd 
 
 nodes = dict() 
 arcs = list() 
+
+# initialize an 2d array, which will store cumulative flows between nodes, then arcs for each will 
+# added at the end. This eliminates multiple arcs between same two nodes, which is not needed currently
+arcTable = []
+TABLE_DIM = 100
+for i in range(TABLE_DIM):
+	arcTable.append([None for k in range(TABLE_DIM)])
 
 # manually create the fuel nodes
 for (fuel,list,color) in fuelNamesWithMap:
@@ -64,7 +79,7 @@ for line in renewableElecCsv:
 	# find correct node to assign data to
 	node = findMappedNode(csvName)
 	if node: 
-		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":[float(val)/1000 for val in split[1:]]})
+		accumulate(node,'Electricity',split[1:])
 
 renewableElecCsv.close()
 print "done"
@@ -85,7 +100,7 @@ for line in fuelUsedElecGenCsv:
 	# find correct node to assign data to
 	node = findMappedNode(csvName)
 	if node: 
-		arcs.append({"srcid":nodes[node]['id'], "dstid":nodes['Electricity']['id'], "flow":[float(val)/1000 for val in split[1:]]})
+		accumulate(node,'Electricity',split[1:])
 
 fuelUsedElecGenCsv.close()
 print "done"
@@ -108,7 +123,7 @@ for line in finalDemandCsv:
 		nodes[useName] = {'id':len(nodes)+1, 'level':9}
 	srcNode = findMappedNode(fuelName)
 	if srcNode:
-		arcs.append({ 'srcid':nodes[srcNode]['id'], 'dstid':nodes[useName]['id'], 'flow':[float(val)/1000 for val in split[2:]]})
+		accumulate(srcNode,useName,split[2:])
 
 finalDemandCsv.close()
 print "done"
@@ -136,7 +151,7 @@ for line in fuelDispositionCsv:
 			dispNode = string.join([fuelName, ' Import'])
 			if dispNode not in nodes:
 				nodes[dispNode] = {'id':len(nodes)+1, 'level':-2, 'color':findMappedColor(fuelNode)}
-			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+			accumulate(dispNode,fuelNode,split[2:])
 		elif string.lower(dispType) == 'production':
 			dispNode = string.join([fuelName, ' Prod'])
 			if dispNode not in nodes:
@@ -145,16 +160,22 @@ for line in fuelDispositionCsv:
 					dispNode = 'Crude Oil'		
 				else:
 					nodes[dispNode] = {'id':len(nodes)+1, 'level':-1, 'color':findMappedColor(fuelNode)}
-			arcs.append( {'srcid':nodes[dispNode]['id'], 'dstid':nodes[fuelNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+			accumulate(dispNode,fuelNode,split[2:])
 		elif string.lower(dispType) == 'exports':
 			dispNode = string.join([fuelName, ' Export'])
 			if dispNode not in nodes:
 				nodes[dispNode] = {'id':len(nodes)+1, 'level':-3, 'color':findMappedColor(fuelNode)}
-			arcs.append( {'srcid':nodes[fuelNode]['id'], 'dstid':nodes[dispNode]['id'], 'flow':[float(val)/1000 for val in split[2:]] } )
+			accumulate(fuelNode,dispNode,split[2:])
 
 fuelDispositionCsv.close()
 print 'done'
 
+# create arcs from arcTable
+for i in range(len(arcTable)):
+	for j in range(len(arcTable[i])):
+		list = arcTable[i][j]
+		if list is not None:
+			arcs.append( {'srcid':i, 'dstid':j, 'flow':list} )
 
 # format data for export to json
 data = {'graph':{'nodes':[{'name':name,'id':info.get('id'),'level':info.get('level'), 'color':info.get('color')} for (name,info) in nodes.items()], 'arcs':arcs}}

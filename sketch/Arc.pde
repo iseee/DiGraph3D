@@ -109,15 +109,18 @@ class Arc {
 	void setControlPoints() {
 		// handle special source/dest nodes with negative levels
 		if(source.level < 0) {
-			if(source.level == -1)
+			if(source.level == -1) { // production
 				ctrlPt1.set(dest.getX()-40, dest.getInArcPosition(destOffset), 0);
-			else
-				ctrlPt1.set(dest.getX()-40, dest.getY()+dest.getHalfHeight()+10, 0);
-			ctrlPt2.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
+				ctrlPt2.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
+			}
+			else {// import
+				ctrlPt1.set(dest.getX()-10, dest.getY()+dest.getHalfHeight()+10, 0);
+				ctrlPt2.set(dest.getX()-50, dest.getInArcPosition(destOffset), 0);
+			}
 		}
-		else if(dest.level == -3) {
-			ctrlPt1.set(source.getX()+20, source.getOutArcPosition(sourceOffset), 0);
-			ctrlPt2.set(source.getX()+40, source.getY()+source.getHalfHeight()+10, 0);
+		else if(dest.level == -3) { // export
+			ctrlPt1.set(source.getX()+50, source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt2.set(source.getX()+10, source.getY()+source.getHalfHeight()+10, 0);
 		}
 		else {
 			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getOutArcPosition(sourceOffset), 0);

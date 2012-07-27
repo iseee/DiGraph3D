@@ -24,6 +24,9 @@ class Node {
 	color nodeBaseColor = ColorScheme.getNodeBaseColor();
 	color nodeCurrentColor;
 
+	float MIN_NODE_HEIGHT = 1.5;
+	int NODE_WIDTH = 24;
+
 	Node(int id, String name, int level) {
 		initialize(id, name, level);	
 	}
@@ -165,11 +168,13 @@ class Node {
 	}
 
 	float getHalfWidth() {
-		return 12; //getFlow()*SCALE/8;
+		return NODE_WIDTH/2; //getFlow()*SCALE/8;
 	}
 
 	float getHalfHeight() {
-		return getFlow()*SCALE/2;
+		float _flow = getFlow();
+		_flow = _flow<MIN_NODE_HEIGHT ? MIN_NODE_HEIGHT : _flow; // min node height
+		return _flow*SCALE/2;
 	}
 
 	/*
@@ -288,10 +293,11 @@ class Node {
 	 * returns	true if mouse over node, false otherwise
 	 */
 	boolean selected() {
-		float _width = getFlow()*SCALE/2;
+		float half_width = getHalfWidth();
+		float half_height = getHalfHeight(); 
 		float screen_x = screenX(position.x, position.y, position.z);
 		float screen_y = screenY(position.x, position.y, position.z);
-		return ( (mouseX > screen_x-_width && mouseX < screen_x+_width) && (mouseY < screen_y+_width && mouseY > screen_y-_width) );
+		return ( (mouseX > screen_x-half_width && mouseX < screen_x+half_width) && (mouseY < screen_y+half_height && mouseY > screen_y-half_height) );
 	}
 
 	void drawEmissions() {

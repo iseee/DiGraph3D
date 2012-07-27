@@ -1,6 +1,6 @@
 int WIDTH = 1200;
 int HEIGHT = 800;
-int SCALE = 20;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
+int SCALE = 10;		// used throughout to scale the visualization, ie the flow may be 2.5, but the arc will be drawn scale*2.5
 int TEXT_Z = 50; 
 color BG_COLOR = #000000;
 color TEXT_COLOR = #FFFFFF;

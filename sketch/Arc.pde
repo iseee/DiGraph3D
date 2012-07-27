@@ -8,6 +8,7 @@ class Arc {
 	int sourceOffset, destOffset;
 	float rate = 5;
 	boolean selectedForEditing = false;
+	float MIN_ARC_WIDTH = 0.2;
 	
 	float[] flowByYears;
 
@@ -53,7 +54,7 @@ class Arc {
 
 	void draw() {
 		setControlPoints();
-		float _width = SCALE * flow;
+		float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0?MIN_ARC_WIDTH:flow);
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end
 		float topOfBandSrc;
@@ -196,7 +197,7 @@ class Arc {
 		float dst_screen_x = screenX(dest.getX(), dest.getY(), dest.getZ());	
 
 		if(mouseX < dst_screen_x && mouseX > src_screen_x) {
-			float _width = SCALE * flow;
+			float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0?MIN_ARC_WIDTH:flow);
 			float srcTop = source.getOutArcPosition(sourceOffset);	
 			float dstTop = dest.getInArcPosition(destOffset);
 			float t = (mouseX - src_screen_x) / (dst_screen_x - src_screen_x);

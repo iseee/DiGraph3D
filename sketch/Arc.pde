@@ -54,7 +54,7 @@ class Arc {
 
 	void draw() {
 		setControlPoints();
-		float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0?MIN_ARC_WIDTH:flow);
+		float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0.01?MIN_ARC_WIDTH:flow);
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end
 		float topOfBandSrc;
@@ -92,7 +92,7 @@ class Arc {
 		drawBand(_width, topOfBandSrc, topOfBandDst, source_x+8, dest_x-8);
 
 		// if the source or destination or the arc is selected, draw a sphere 'flowing' along the arc
-		if( (source.isSelected || dest.isSelected) && !EDITING && source.level>0 && dest.level>0) {
+		if( (source.isSelected || dest.isSelected) && !EDITING && source.level>0 && dest.level>0 && _width>=MIN_ARC_WIDTH) {
 			fill(ColorScheme.getArcColor(_width,5,25,false));
 			float steps = 150/rate;
 			float t = (frameCount % steps)/steps;

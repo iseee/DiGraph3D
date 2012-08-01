@@ -60,6 +60,7 @@ function bindJavascript() {
 }
 
 function displaySelectedNodeInfo(node) {
+	var precision = 2;
 	htmlTitle = "<b>"+node.name + "</b>";
 	jQuery('#selectedNodeTitle').html(htmlTitle);
 	var flow = node.getFlow();
@@ -72,10 +73,10 @@ function displaySelectedNodeInfo(node) {
 	var totalIn = 0;
 	for(i = 0; i < inArcs.size(); i++) {
 		var arc = inArcs.get(i);
-		htmlContent += '<tr><td>'+arc.source.name+'</td><td>'+arc.flow.toFixed(2)+'</td></tr>';
+		htmlContent += '<tr><td>'+arc.source.name+'</td><td>'+arc.flow.toFixed(precision)+'</td></tr>';
 		totalIn += arc.flow;
 	}
-	htmlContent += "<tr><td>Total</td><td><b>"+totalIn.toFixed(2)+"</b></td></tr>";
+	htmlContent += "<tr><td>Total</td><td><b>"+totalIn.toFixed(precision)+"</b></td></tr>";
 	htmlContent += "</tbody></table>";
 	htmlContent += '<table class="table table-condensed"><thead><tr>';
 	htmlContent += '<th>Dest</th><th>Amount (EJ)</th';
@@ -85,10 +86,10 @@ function displaySelectedNodeInfo(node) {
 	var totalOut = 0;
 	for(i = 0; i < outArcs.size(); i++) {
 		var arc = outArcs.get(i);
-		htmlContent += '<tr><td>'+arc.dest.name+'</td><td>'+arc.flow.toFixed(2)+'</td></tr>';
+		htmlContent += '<tr><td>'+arc.dest.name+'</td><td>'+arc.flow.toFixed(precision)+'</td></tr>';
 		totalOut += arc.flow;
 	}
-	htmlContent += "<tr><td>Total</td><td><b>"+totalOut.toFixed(2)+"</b></td></tr>";
+	htmlContent += "<tr><td>Total</td><td><b>"+totalOut.toFixed(precision)+"</b></td></tr>";
 	htmlContent += "</tbody></table>";
 	jQuery('#selectedNodeContent').html(htmlContent);
 	jQuery('#infoPopoverSrc').popover('show');

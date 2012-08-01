@@ -51,7 +51,8 @@ void bindJavascript(JavaScript jscript) {
 
 void setup() {
 	size(WIDTH, HEIGHT, P3D);
-	font = createFont("Arial", 10);
+	font = createFont("sans-serif");
+	textFont(font);
 	sphereDetail(15);
 	_graph = new Graph(); 
 }

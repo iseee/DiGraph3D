@@ -87,6 +87,33 @@ class Graph {
 				n.setPosition(-1*width/2+dx*n.level, -1*height/2+i*dy);
 				i++;
 			}
+
+		}
+
+		// check spacing of nodes in first level for crowding
+		int buffer = 50;
+		if(nodes.get(1) != null) {
+			int numElem = nodes.get(1).size();
+			Node[] levelOneNodes = nodes.get(1).values().toArray();
+			Node cur, prev;
+			// start at second element
+			for(int i = 1; i < numElem; ++i) {
+				cur = levelOneNodes[i];
+				prev = levelOneNodes[i-1];
+				// if cur is inside prev bounding box, they overlap, cur should be moved down
+				PVector[] curBoundBox = cur.getBoundingBox();
+				PVector[] prevBoundBox = prev.getBoundingBox();
+				float prevBottomY = prevBoundBox[1].y;
+				float curTopY = curBoundBox[0].y;
+				if(curTopY < prevBottomY+buffer+prev.getHalfHeight())  { // overlap, with pixel buffer
+					float newBottomY = prevBottomY+buffer+cur.getHalfHeight()*2;
+					if(newBottomY > height/2) {
+						newBottomY = height/2;
+						SCALE = SCALE - 1;
+					}
+					cur.setPosition(cur.position.x, newBottomY-cur.getHalfHeight());
+				}
+			}
 		}
 	}
 	
@@ -168,6 +195,7 @@ class Graph {
 			a = (Arc) it.next();
 			a.updateYear(year, lerpVal);
 		}
+		updateNodePositions();
 	}
 
 	void toggle_timelineAnimPlaying() {

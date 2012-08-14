@@ -201,6 +201,7 @@ class Arc {
 		rate = newRate;
 	}
 
+	// determine if user clicked on this arc
 	boolean selected() {
 		float src_screen_x = screenX(source.getX(), source.getY(), source.getZ());	
 		float dst_screen_x = screenX(dest.getX(), dest.getY(), dest.getZ());	
@@ -211,12 +212,17 @@ class Arc {
 			float srcTop = source.getOutArcPosition(sourceOffset);	
 			float dstTop = dest.getInArcPosition(destOffset);
 			float t = (mouseX - src_screen_x) / (dst_screen_x - src_screen_x);
-			int topY = bezierPoint(srcTop, ctrlPt1.y-_width/2, ctrlPt2.y-_width/2, dstTop, t);
-			int botY = bezierPoint(srcTop+_width, ctrlPt1.y+_width/2, ctrlPt2.y+_width/2, dstTop+_width, t);
-			float top_screen_y = screenY(0, topY, 0);
-			float bot_screen_y = screenY(0, botY, 0);
-			if(mouseY > top_screen_y && mouseY < bot_screen_y)
+			float topArcY = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+			float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+			float tx = bezierTangent(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
+			float a = atan2(ty,tx);
+			a += HALF_PI;
+			float botArcY = topArcY + sin(a)*_width;
+			float topArc_screen_y = screenY(0, topArcY, 0);
+			float botArc_screen_y = screenY(0, botArcY, 0);
+			if(mouseY > topArc_screen_y && mouseY < botArc_screen_y){
 				return true;
+			}
 		}
 
 		return false;

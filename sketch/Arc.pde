@@ -164,8 +164,11 @@ class Arc {
 			y = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
 			z = 0;
 			vertex(x,y,z);
-			y = bezierPoint(srcTop+_width, ctrlPt1.y+_width, ctrlPt2.y+_width, dstTop+_width, t);
-			vertex(x,y,z);
+			float tx = bezierTangent(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
+			float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+			float a = atan2(ty, tx);
+			a += HALF_PI;
+			vertex(x+cos(a)*_width, y+sin(a)*_width, z);
 		}
 		endShape();
 		
@@ -174,14 +177,20 @@ class Arc {
 			stroke(ColorScheme.getEditingColor());
 			strokeWeight(2);
 			// top line
-			beginShape();
-			vertex(source_x,srcTop,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y,ctrlPt2.z, dest_x,dstTop,0); // cp1,cp2,end
-			endShape();
+			bezier(source_x, srcTop, 0, ctrlPt1.x,ctrlPt1.y,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y,ctrlPt2.z, dest_x,dstTop,0);
 			// bottom line
-			beginShape();
-			vertex(source_x,srcTop+_width,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width,ctrlPt2.z, dest_x,dstTop+_width,0); // cp1,cp2,end
+			beginShape(LINES);
+			for(int i = 0; i < steps; i++) {
+				t = i/float(steps);	
+				x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
+				y = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+				z = 0;
+				float tx = bezierTangent(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
+				float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+				float a = atan2(ty, tx);
+				a += HALF_PI;
+				vertex(x+cos(a)*_width, y+sin(a)*_width, z);
+			}
 			endShape();
 			stroke(100);
 			noStroke();
@@ -196,6 +205,7 @@ class Arc {
 		float src_screen_x = screenX(source.getX(), source.getY(), source.getZ());	
 		float dst_screen_x = screenX(dest.getX(), dest.getY(), dest.getZ());	
 
+		// if click is between the source and destination of this arc, based on x
 		if(mouseX < dst_screen_x && mouseX > src_screen_x) {
 			float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0?MIN_ARC_WIDTH:flow);
 			float srcTop = source.getOutArcPosition(sourceOffset);	

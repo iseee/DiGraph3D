@@ -50,7 +50,6 @@ class Graph {
 		}
 		// add the node, indexed by id, into the hashmap for its corresponding level
 		nodes.get(node.level).put(node.id, node);
-		updateNodePositions();
 	}
 
 	boolean addArc(int srcID, int dstID, float[] flowData) {

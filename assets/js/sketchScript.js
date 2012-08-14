@@ -17,7 +17,7 @@ function loadGraphFromStaticJson() {
 		// jquery ajax call to getJSON, function is the callback on success, eliminate caching
 		var noCache = new Date().getTime();
 		jQuery.getJSON(url, {"noCache":noCache}, function (data) {  
-			console.log(data);
+			//console.log(data);
 			var graphObj = pjs.getGraph();	
 			var nodes = data.graph.nodes;
 			for(i = 0; i < nodes.length; i++) {
@@ -29,6 +29,7 @@ function loadGraphFromStaticJson() {
 				var arc = arcs[i];
 				graphObj.addArc(arc.srcid, arc.dstid, arc.flow);
 			}
+			graphObj.updateNodePositions();
 		})  
 		.error(function(jqXHR, textStatus, errorThrown) {
 			console.log("error " + textStatus);

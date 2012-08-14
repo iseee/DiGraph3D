@@ -78,11 +78,11 @@ class Arc {
 		float source_x, dest_x;
 		if(source.level < 0) {
 			dest_x = dest.getX();
-			source_x = dest_x - 60;
+			source_x = dest_x - (flow>1 && source.level==-2?60*flow:60);
 		}
 		else if(dest.level < 0) {
 			source_x = source.getX();
-			dest_x = source_x + 60;
+			dest_x = source_x + (flow>1?60*flow:60);
 		}
 		else {
 			source_x = source.getX();
@@ -115,15 +115,15 @@ class Arc {
 				ctrlPt2.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
 			}
 			else {// import
-				ctrlPt1.set(dest.getX()-10, dest.getY()+dest.getHalfHeight()+10, 0);
-				ctrlPt2.set(dest.getX()-50, dest.getInArcPosition(destOffset), 0);
+				ctrlPt1.set(dest.getX()-(flow>1?10*flow:10), dest.getY()+dest.getHalfHeight()+10, 0);
+				ctrlPt2.set(dest.getX()-(flow>1?50*flow:50), dest.getInArcPosition(destOffset), 0);
 			}
 		}
 		else if(dest.level == -3) { // export
-			ctrlPt1.set(source.getX()+50, source.getOutArcPosition(sourceOffset), 0);
-			ctrlPt2.set(source.getX()+10, source.getY()+source.getHalfHeight()+10, 0);
+			ctrlPt1.set(source.getX()+(flow>1?50*flow:50), source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt2.set(source.getX()+(flow>1?10*flow:10), source.getY()+source.getHalfHeight()+10, 0);
 		}
-		else {
+		else { // standard arc between two nodes in regular levels
 			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getOutArcPosition(sourceOffset), 0);
 			ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getInArcPosition(destOffset), 0);
 		}

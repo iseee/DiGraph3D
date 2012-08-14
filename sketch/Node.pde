@@ -63,6 +63,8 @@ class Node {
 
 	void setPosition(float x, float y) {
 		position.set(x,y,0);
+
+		// animation set up
 		inStartX = position.x+(position.x/2);
 		PVector start = new PVector();
 		start.set(position);
@@ -96,10 +98,10 @@ class Node {
 		inFlow+=flowIncrease;	
 		if(assocInArcPositions.size() > 0) {
 			float prevElem = (Float) assocInArcPositions.get(assocInArcPositions.size()-1);
-			assocInArcPositions.add(prevElem+flowIncrease*SCALE);
+			assocInArcPositions.add(prevElem+flowIncrease);
 		}
 		else {
-			assocInArcPositions.add(flowIncrease*SCALE);	
+			assocInArcPositions.add(flowIncrease);	
 		}
 		
 		// add arc to the incident in arc list
@@ -113,10 +115,10 @@ class Node {
 		outFlow+=flowIncrease;
 		if(assocOutArcPositions.size() > 0) {
 			float prevElem = (Float) assocOutArcPositions.get(assocOutArcPositions.size()-1);
-			assocOutArcPositions.add(prevElem+flowIncrease*SCALE);
+			assocOutArcPositions.add(prevElem+flowIncrease);
 		}
 		else {
-			assocOutArcPositions.add(flowIncrease*SCALE);	
+			assocOutArcPositions.add(flowIncrease);	
 		}
 
 		// add arc to the incident out arc list
@@ -128,32 +130,32 @@ class Node {
 	float getInArcPosition(int index) {
 		// should give the value in index -1, or zero if first arc
 		if(index == 0) {
-			return position.y-(getFlow()*SCALE/2);
+			return position.y-getHalfHeight();
 		}
 
 		if(index < 0 || index > assocInArcPositions.size()-1) {
 			return -1;
 		}
 
-		return position.y-(getFlow()*SCALE/2)+((Float) assocInArcPositions.get(index-1));
+		return position.y-getHalfHeight()+((Float) assocInArcPositions.get(index-1)*SCALE);
 	}
 
 	float getOutArcPosition(int index) {
 		// should give the value in index -1, or zero if first arc
 		if(index == 0) {
-			return position.y-(getFlow()*SCALE/2);
+			return position.y-getHalfHeight();
 		}
 
 		if(index < 0 || index > assocOutArcPositions.size()-1) {
 			return -1;
 		}
 
-		return position.y-(getFlow()*SCALE/2)+((Float) assocOutArcPositions.get(index-1));
+		return position.y-getHalfHeight()+((Float) assocOutArcPositions.get(index-1)*SCALE);
 	}
 
 	void updateInArcPositions(int index, float flowDelta) {
 		inFlow+=flowDelta;
-		float delta = SCALE*flowDelta;
+		float delta = flowDelta;
 		for(int i = index; i < assocInArcPositions.size(); i++) {
 			assocInArcPositions.set(i, (Float) assocInArcPositions.get(i)+delta);
 		}
@@ -161,7 +163,7 @@ class Node {
 
 	void updateOutArcPositions(int index, float flowDelta) {
 		outFlow+=flowDelta;
-		float delta = SCALE*flowDelta;
+		float delta = flowDelta;
 		for(int i = index; i < assocOutArcPositions.size(); i++) {
 			assocOutArcPositions.set(i, (Float) assocOutArcPositions.get(i)+delta);
 		}

@@ -54,7 +54,7 @@ class Arc {
 
 	void draw() {
 		setControlPoints();
-		float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0.01?MIN_ARC_WIDTH:flow);
+		float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0.001?MIN_ARC_WIDTH:flow);
 		// calculate the offsets of the arc, based on total arcs of the node, so that
 		// multiple arcs don't overlap at the beginning/end
 		float topOfBandSrc;

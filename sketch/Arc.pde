@@ -78,11 +78,11 @@ class Arc {
 		float source_x, dest_x;
 		if(source.level < 0) {
 			dest_x = dest.getX();
-			source_x = dest_x - 60;
+			source_x = dest_x - (flow>1 && source.level==-2?60*flow:60);
 		}
 		else if(dest.level < 0) {
 			source_x = source.getX();
-			dest_x = source_x + 60;
+			dest_x = source_x + (flow>1?60*flow:60);
 		}
 		else {
 			source_x = source.getX();
@@ -115,15 +115,15 @@ class Arc {
 				ctrlPt2.set(dest.getX()-20, dest.getInArcPosition(destOffset), 0);
 			}
 			else {// import
-				ctrlPt1.set(dest.getX()-10, dest.getY()+dest.getHalfHeight()+10, 0);
-				ctrlPt2.set(dest.getX()-50, dest.getInArcPosition(destOffset), 0);
+				ctrlPt1.set(dest.getX()-(flow>1?10*flow:10), dest.getY()+dest.getHalfHeight()+10, 0);
+				ctrlPt2.set(dest.getX()-(flow>1?50*flow:50), dest.getInArcPosition(destOffset), 0);
 			}
 		}
 		else if(dest.level == -3) { // export
-			ctrlPt1.set(source.getX()+50, source.getOutArcPosition(sourceOffset), 0);
-			ctrlPt2.set(source.getX()+10, source.getY()+source.getHalfHeight()+10, 0);
+			ctrlPt1.set(source.getX()+(flow>1?50*flow:50), source.getOutArcPosition(sourceOffset), 0);
+			ctrlPt2.set(source.getX()+(flow>1?10*flow:10), source.getY()+source.getHalfHeight()+10, 0);
 		}
-		else {
+		else { // standard arc between two nodes in regular levels
 			ctrlPt1.set(source.getX()+(dest.getX()-source.getX())/3, source.getOutArcPosition(sourceOffset), 0);
 			ctrlPt2.set(source.getX()+2*(dest.getX()-source.getX())/3, dest.getInArcPosition(destOffset), 0);
 		}
@@ -164,8 +164,11 @@ class Arc {
 			y = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
 			z = 0;
 			vertex(x,y,z);
-			y = bezierPoint(srcTop+_width, ctrlPt1.y+_width, ctrlPt2.y+_width, dstTop+_width, t);
-			vertex(x,y,z);
+			float tx = bezierTangent(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
+			float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+			float a = atan2(ty, tx);
+			a += HALF_PI;
+			vertex(x+cos(a)*_width, y+sin(a)*_width, z);
 		}
 		endShape();
 		
@@ -174,14 +177,20 @@ class Arc {
 			stroke(ColorScheme.getEditingColor());
 			strokeWeight(2);
 			// top line
-			beginShape();
-			vertex(source_x,srcTop,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y,ctrlPt2.z, dest_x,dstTop,0); // cp1,cp2,end
-			endShape();
+			bezier(source_x, srcTop, 0, ctrlPt1.x,ctrlPt1.y,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y,ctrlPt2.z, dest_x,dstTop,0);
 			// bottom line
-			beginShape();
-			vertex(source_x,srcTop+_width,0); // start
-			bezierVertex(ctrlPt1.x,ctrlPt1.y+_width,ctrlPt1.z, ctrlPt2.x,ctrlPt2.y+_width,ctrlPt2.z, dest_x,dstTop+_width,0); // cp1,cp2,end
+			beginShape(LINES);
+			for(int i = 0; i < steps; i++) {
+				t = i/float(steps);	
+				x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
+				y = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+				z = 0;
+				float tx = bezierTangent(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
+				float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+				float a = atan2(ty, tx);
+				a += HALF_PI;
+				vertex(x+cos(a)*_width, y+sin(a)*_width, z);
+			}
 			endShape();
 			stroke(100);
 			noStroke();
@@ -192,21 +201,28 @@ class Arc {
 		rate = newRate;
 	}
 
+	// determine if user clicked on this arc
 	boolean selected() {
 		float src_screen_x = screenX(source.getX(), source.getY(), source.getZ());	
 		float dst_screen_x = screenX(dest.getX(), dest.getY(), dest.getZ());	
 
+		// if click is between the source and destination of this arc, based on x
 		if(mouseX < dst_screen_x && mouseX > src_screen_x) {
 			float _width = SCALE * (flow<MIN_ARC_WIDTH&&flow>0?MIN_ARC_WIDTH:flow);
 			float srcTop = source.getOutArcPosition(sourceOffset);	
 			float dstTop = dest.getInArcPosition(destOffset);
 			float t = (mouseX - src_screen_x) / (dst_screen_x - src_screen_x);
-			int topY = bezierPoint(srcTop, ctrlPt1.y-_width/2, ctrlPt2.y-_width/2, dstTop, t);
-			int botY = bezierPoint(srcTop+_width, ctrlPt1.y+_width/2, ctrlPt2.y+_width/2, dstTop+_width, t);
-			float top_screen_y = screenY(0, topY, 0);
-			float bot_screen_y = screenY(0, botY, 0);
-			if(mouseY > top_screen_y && mouseY < bot_screen_y)
+			float topArcY = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+			float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
+			float tx = bezierTangent(source.getX(), ctrlPt1.x, ctrlPt2.x, dest.getX(), t);
+			float a = atan2(ty,tx);
+			a += HALF_PI;
+			float botArcY = topArcY + sin(a)*_width;
+			float topArc_screen_y = screenY(0, topArcY, 0);
+			float botArc_screen_y = screenY(0, botArcY, 0);
+			if(mouseY > topArc_screen_y && mouseY < botArc_screen_y){
 				return true;
+			}
 		}
 
 		return false;

@@ -90,7 +90,7 @@ void mousePressed() {
 			n = (Node) it.next();
 			if(n.isSelected) {
 				// colorpicker needs the # to preface the hex string
-				js.setColorPickerValue("#"+hex(n.nodeBaseColor,6));
+				js.setColorPickerValue("#"+hex(n.nodeCurrentColor,6));
 				n.toggleEditing();	
 				nodeSelected = true;
 			}

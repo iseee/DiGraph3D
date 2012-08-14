@@ -236,10 +236,13 @@ class Node {
 			//colorpicker returns string of hex representation, prefixed with #
 			nodeCurrentColor = parseColorFromString(js.getColorPickerValue());
 		}
+		else {
+			stroke(100);
+			strokeWeight(1);
+		}
 		fill(nodeCurrentColor, ColorScheme.getNodeAlpha(isSelected));
 		pushMatrix();
 		translate(position.x, position.y, 1);
-		stroke(100);
 		rect(-half_width, -half_height, 2*half_width, 2*half_height);
 		noStroke();
 		/*

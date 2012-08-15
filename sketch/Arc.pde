@@ -166,6 +166,16 @@ class Arc {
 			x = bezierPoint(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
 			y = bezierPoint(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);
 			z = 0;
+			/*
+			 * If this is an export arc, push is back a little so it does not obscure other parts
+			 * of the graph
+			 * Also, if this arc is part of a selected flow, ie if its source or dest is selected
+			 * then push it forward so non important arcs do not obscure it.
+			 */
+			if(dest.level<0)
+				z = -0.1;
+			if(source.isSelected || dest.isSelected)
+				z = 0.1;
 			vertex(x,y,z);
 			float tx = bezierTangent(source_x, ctrlPt1.x, ctrlPt2.x, dest_x, t);
 			float ty = bezierTangent(srcTop, ctrlPt1.y, ctrlPt2.y, dstTop, t);

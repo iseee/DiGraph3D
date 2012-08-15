@@ -82,7 +82,7 @@ void draw() {
 void mousePressed() {
 	setLastMouse();
 	if(EDITING) {
-
+		// Determine if user clicked on a node, select for editing if so
 		Iterator it = _graph.getNodes().iterator();
 		Node n = null;
 		boolean nodeSelected = false;
@@ -100,21 +100,23 @@ void mousePressed() {
 					n.toggleEditing();
 			}
 		}
-			it = _graph.getArcs().iterator();
-			Arc a = null;
-			boolean arcSelected = false; // avoid overlapping arcs being simultaneously selected
-			while(it.hasNext()) {
-				a = (Arc) it.next();
-				//println("checking between "+a.source.name+" and "+a.dest.name); 
-				if(a.selected() && !nodeSelected && !arcSelected) {
-					a.toggleEditing();
-					arcSelected = true;
-				}
-				else {
-					if(a.selectedForEditing)
-						a.toggleEditing();
-				}
+		/* Arc selection disabled for now
+		it = _graph.getArcs().iterator();
+		Arc a = null;
+		boolean arcSelected = false; // avoid overlapping arcs being simultaneously selected
+		while(it.hasNext()) {
+			a = (Arc) it.next();
+			//println("checking between "+a.source.name+" and "+a.dest.name); 
+			if(a.selected() && !nodeSelected && !arcSelected) {
+				a.toggleEditing();
+				arcSelected = true;
 			}
+			else {
+				if(a.selectedForEditing)
+					a.toggleEditing();
+			}
+		}
+		*/
 
 	} // editing
 }

@@ -54,20 +54,45 @@
     <div class="container">
 
       <h1>Interactive Sankey Diagram</h1>
-      <p>Click and drag to rotate the scene. Hover over nodes to see node information.
-		<br>Press 'r' to reset rotation</p>
+      <p>Hover over nodes to see breakdown</p>
 		<br>
 
+		<button class="btn btn-inverse btn-mini" type="button" href="#generalHelp" data-toggle="modal"><i class="icon-question-sign icon-white"></i> Help</button>
 		<button class="btn btn-primary btn-mini" id="editCheckBox" data-toggle="button" rel="tooltip" title="Click to show/hide the editing pane"><i class="icon-pencil icon-white"></i> Edit</button>
-		<button class="btn btn-inverse btn-mini" id="zoomOutButton" rel="tooltip" title="Zoom Out" onclick="zoomOut()"><i class="icon-minus-sign icon-white"></i></button>
-		<button class="btn btn-inverse btn-mini" id="zoomInButton" rel="tooltip" title="Zoom In" onclick="zoomIn()"><i class="icon-plus-sign icon-white"></i></button>
+
+		<!--Hidden div for general help madal-->
+		<div class="modal hide fade" id="generalHelp" style="display: none;">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button">×</button>
+				<h2>Help</h2>
+			</div>
+			<div class="modal-body">
+				<h3>General</h3>
+				<p>Press <strong>r</strong> to reset rotation, zoom and pan</p>
+				<p>Use <strong>, and .</strong> to zoom out and in</p>
+				<p>Use <strong>arrow keys</strong> to pan</p>
+				<p>Click and drag to rotate</p>
+				<hr>
+				<h3>Animation</h3>
+				<p>Use the <strong>slider</strong> below the graph to change the year data is shown for.</p>
+				<p>Click the <strong>play</strong> button to the right of the slider to start the animation. Click pause to stop.</p>
+				<hr>
+				<h3>Editing</h3>
+				<p>To edit the diagram, click the blue edit button next to the help button you just clicked. There is an editing specific help section there for more guidance.</p>
+			</div>
+			<div class="modal-footer">
+				<a data-dismiss="modal" class="btn" href="#">Close</a>
+			</div>
+		</div><!--/modal-->
+
+
 		<div id="editing-div" style="display:none">
 			<div class="btn-toolbar">
 				<div class="btn-group">
 					<button class="btn btn-inverse btn-mini" type="button" onclick="changeColorScheme()" rel="tooltip" title="Switch between dark and light themes">Change color theme</button>
 				</div>
 				<div class="btn-group">
-					<button class="btn btn-inverse btn-mini" type="button" href="#editHelp" data-toggle="modal"><i class="icon-question-sign icon-white"></i> Help</button>
+					<button class="btn btn-inverse btn-mini" type="button" href="#editHelp" data-toggle="modal"><i class="icon-question-sign icon-white"></i> Editing Help</button>
 				</div>
 			</div><!--/btn-toolbar-->
 
@@ -75,6 +100,8 @@
 				<li class="active"><a data-toggle="tab" href="#nodeEditing">Nodes</a></li>
 				<li><a data-toggle="tab" href="#arcEditing">Arcs</a></li>
 			</ul>
+
+
 			<div id="editingTabContent" class="tab-content">
 				<div id="nodeEditing" class="tab-pane fade in active">
 					<div class="btn-group">
@@ -95,8 +122,7 @@
 					<p>Coming soon!</p>
 				</div>
 			</div><!--/editingTabContent-->
-	
-			<!--Hidden div for help madal-->
+				<!--Hidden div for editing help madal-->
 			<div class="modal hide fade" id="editHelp" style="display: none;">
 				<div class="modal-header">
 					<button data-dismiss="modal" class="close" type="button">×</button>

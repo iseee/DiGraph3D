@@ -155,8 +155,11 @@ class Arc {
 		int steps = BAND_STEPS;
 		float t;
 		float x, y, z;
-		
-		fill(source.nodeCurrentColor, ColorScheme.getNodeAlpha(source.isSelected || dest.isSelected));
+	
+		Color arcColor = source.nodeCurrentColor;
+		if(source.level<0)
+			arcColor = dest.nodeCurrentColor;
+		fill(arcColor, ColorScheme.getNodeAlpha(source.isSelected || dest.isSelected));
 		beginShape(QUAD_STRIP);
 		for(int i = 0; i < steps; i++) {
 			t = i/float(steps);	

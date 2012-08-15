@@ -163,8 +163,11 @@ void updateArcFlow(int arcIndex, float multiplier){
 }
 
 void keyPressed() {
-	if(key == 'r' || key == 'R')
+	if(key == 'r' || key == 'R') {
 		resetRotation();
+		resetZoom();
+		resetPan();
+	}
 	else if(key == ',')
 		zoomOut();
 	else if(key == '.')
@@ -244,9 +247,18 @@ void zoomOut() {
 	zoom -= 10;
 }
 
+void resetZoom() {
+	zoom = 0;
+}
+
 void pan(int dx, int dy) {
 	panX += dx;
 	panY += dy;
+}
+
+void resetPan() {
+	panX = 0;
+	panY = 0;
 }
 
 static class ColorScheme {

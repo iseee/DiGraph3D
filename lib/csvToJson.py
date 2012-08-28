@@ -146,6 +146,7 @@ for line in fuelDispositionCsv:
 	fuelNode = findMappedNode(fuelName)
 	# create a unique dispNode for each fuel, ignore use for now
 	# use special negative levels for the import, export, production nodes
+	# production -1, import -2, export -3
 	if fuelNode:
 		if string.lower(dispType) == 'imports':
 			dispNode = string.join([fuelName, ' Import'])

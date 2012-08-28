@@ -49,6 +49,5 @@ build/config/buildinfo.properties
 *.gz
 
 #.csv
-*.csv
 *.old
 
